@@ -1,2 +1,19 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+*/Library/
+*/*.csproj
+*.csproj
+Temp/*
+.DS_Store
+.sln
+*.sln
+*./sln
+*.vs
+*.idea
+*/*.vs
+*/*.idea
+*/obj
+*/ProjectSettings/ProjectVersion.txt
+*/Packages/packages-lock.json
+*/ClientFramework.sln
+*.sln
