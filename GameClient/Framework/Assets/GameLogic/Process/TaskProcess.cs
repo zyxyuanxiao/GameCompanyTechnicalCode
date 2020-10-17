@@ -45,6 +45,7 @@ public partial class ProcessManager
     public void AddExecuteTasks(byte layer)
     {
         AddTaskProcessAndExecute(layer);
+        GameManager.Instance.StartCoroutine(UpdateTaskProcess());
     }
 
     /// <summary>
@@ -67,7 +68,6 @@ public partial class ProcessManager
                 }
             }
         }
-        GameManager.Instance.StartCoroutine(UpdateTaskProcess());
     }
     
     
@@ -95,6 +95,5 @@ public partial class ProcessManager
             process.Reset();
         }
         tasks.Clear();
-        UnityEngine.Debug.Log("==========测试");
     }
 }
