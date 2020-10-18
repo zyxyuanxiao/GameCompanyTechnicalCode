@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
-using UnityEngine;
 
 
 /// <summary>
@@ -15,10 +14,10 @@ public interface IProcess
 
     //延迟几帧执行
     byte DelayFrame { get; }
-    
+
     //任务流的层次,为 0 表示需要在初始化的时候执行,其他时候需要执行其他层次的任务流,下一个层级进行加 1
     byte layer { get; }
-    
+
     //工作方法
     void Work();
 
@@ -69,8 +68,8 @@ public partial class ProcessManager
             }
         }
     }
-    
-    
+
+
     private IEnumerator UpdateTaskProcess()
     {
         yield return GameManager.OneFrame;
@@ -88,12 +87,14 @@ public partial class ProcessManager
             }
             yield return GameManager.OneFrame;
         }
-        
-        //清除所有任务
+        yield return GameManager.OneFrame;
+        //重置所有任务
         foreach (IProcess process in values)
         {
             process.Reset();
         }
+        yield return GameManager.OneFrame;
         tasks.Clear();
+        yield return GameManager.OneFrame;
     }
 }

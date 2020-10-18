@@ -22,3 +22,5 @@ ProjectSettings/ProjectVersion.txt
 Packages/packages-lock.json
 ClientFramework.sln
 */*.sln
+GameClient/Framework/ProjectSettings/ProjectVersion.txt
+GameClient/Framework/ProjectSettings/ProjectVersion.txt
