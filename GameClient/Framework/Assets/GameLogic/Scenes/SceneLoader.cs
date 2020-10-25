@@ -31,13 +31,13 @@ public partial class SceneManager
 
     //场景加载类型
     public SceneLoadingType SceneLoadingType;
-    
+
     //当前激活的场景
     public string _activeSceneName = string.Empty;
 
     //加载是否结束
     private Action<SceneLoadingType> _aoCompleted;
-    
+
     //加载下一个场景
     private string _cacheSceneName = string.Empty;
 
@@ -47,15 +47,15 @@ public partial class SceneManager
     //过渡帧,当Progress执行到1的时候,过渡10帧再执行下一个任务
     private byte _transitionFrame;
 
-    
 
-    
+
+
     public string QueryName()
     {
         return _activeSceneName;
     }
 
-    public void Load(string name,Action<SceneLoadingType> action = null)
+    public void Load(string name, Action<SceneLoadingType> action = null)
     {
         _cacheSceneName = name;
         _aoCompleted = action;

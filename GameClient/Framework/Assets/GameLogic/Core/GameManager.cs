@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 
 
 /// <summary>
@@ -13,7 +12,6 @@ public sealed class GameManager : BaseManager
 
     #endregion
 
-    
     #region 生命周期
 
     protected override void Awake()
@@ -46,8 +44,6 @@ public sealed class GameManager : BaseManager
         base.OnApplicationQuit();
     }
 
-    #endregion
-
     public void Quit()
     {
 #if UNITY_EDITOR
@@ -56,6 +52,8 @@ public sealed class GameManager : BaseManager
         Application.Quit();
 #endif
     }
+
+    #endregion
 
     #region 初始化运行逻辑
 

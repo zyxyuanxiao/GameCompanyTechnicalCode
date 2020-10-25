@@ -24,5 +24,4 @@ public partial class SceneManager : IManager
     {
         UpdateProgress();
     }
-
 }
