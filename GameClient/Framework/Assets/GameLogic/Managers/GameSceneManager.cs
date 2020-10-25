@@ -16,7 +16,7 @@ public partial class GameSceneManager : IManager
 
     public void Start()
     {
-        Load(Scene_Empty);
+        Load(Scene_GameManager);
     }
 
     public void OnDestroy()
