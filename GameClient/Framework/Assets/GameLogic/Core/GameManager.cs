@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using SM = UnityEngine.SceneManagement.SceneManager;
 
 
 /// <summary>
@@ -76,8 +77,11 @@ public sealed class GameManager : BaseManager
             };
             Instance = go.AddComponent<GameManager>();
         }
-        DontDestroyOnLoad(go);//游戏开启后,有2个未显示在Hierarchy的游戏物体,一个是GameManager,一个是HTTP Update Delegator
+        //游戏开启后,有2个未显示在Hierarchy的游戏物体,一个是GameManager,一个是HTTP Update Delegator
+        DontDestroyOnLoad(go);
     }
+
+
 
 #if UNITY_EDITOR
     private static void OnPlayModeStateChanged(UnityEditor.PlayModeStateChange playMode)

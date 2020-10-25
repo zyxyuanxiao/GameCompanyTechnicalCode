@@ -3,10 +3,10 @@ using UnityEditor.SceneManagement;
 
 public class SceneEditor : Editor
 {
-    [MenuItem("Scenes/OpenScene/GameStart")]
-    private static void OpenGameStart()
+    [MenuItem("Scenes/OpenScene/GameManager")]
+    private static void OpenGameManager()
     {
-        OpenScene("Assets/Resources/Scenes/GameStart.unity");
+        OpenScene("Assets/Resources/Scenes/GameManager.unity");
     }
 
     private static void OpenScene(string name)
