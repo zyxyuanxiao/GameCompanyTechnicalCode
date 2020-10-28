@@ -1,0 +1,1 @@
+TexturePacker --smart-update --texture-format png --format "phaser-json-array" --dither-type "FloydSteinbergAlpha" --data "%2\%3".json.txt --sheet "%2\%3".png --maxrects-heuristics best --scale 1 --shape-padding 1 --max-size 2048 --opt "RGBA4444" --size-constraints AnySize %1
