@@ -32,6 +32,7 @@ namespace Common
             version = SVNHelper.GetSvnVersion();
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
             return version;
         }
         

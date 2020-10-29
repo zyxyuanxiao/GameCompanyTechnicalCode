@@ -12,4 +12,84 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06b4da31767bf4da0882e24515e0ddcd, type: 3}
   m_Name: AssetsConfig
   m_EditorClassIdentifier: 
-  Rules: []
+  LocalFiles:
+  - name: Txt
+    SearchPattern: '*.txt'
+    LocalFilePaths: []
+  - name: Bytes
+    SearchPattern: '*.bytes'
+    LocalFilePaths: []
+  - name: Json
+    SearchPattern: '*.json'
+    LocalFilePaths:
+    - /_BuildAsset/Text/json/Test.json
+  - name: CSV
+    SearchPattern: '*.csv'
+    LocalFilePaths: []
+  - name: XML
+    SearchPattern: '*.xml'
+    LocalFilePaths: []
+  - name: Png
+    SearchPattern: '*.png'
+    LocalFilePaths:
+    - /_BuildAsset/Shader/UIEffect/Default-Transition.png
+    - /_BuildAsset/Texture/Png/Brown Stony Light.png
+    - /_BuildAsset/Texture/Png/Brown Stony.png
+    - /_BuildAsset/Texture/Png/Grass.png
+    - /_BuildAsset/Texture/Png/Grey Stones.png
+    - /_BuildAsset/Texture/Png/Sandy Orange.png
+    - /_BuildAsset/Texture/Png/Sandy.png
+    - /_BuildAsset/Texture/Png/Water Deep Blue.png
+    - /_BuildAsset/Texture/Png/Water Light Blue.png
+  - name: TTF
+    SearchPattern: '*.ttf'
+    LocalFilePaths:
+    - /_BuildAsset/Font/SY1.ttf
+  - name: Asset
+    SearchPattern: '*.asset'
+    LocalFilePaths: []
+  - name: Hdr
+    SearchPattern: '*.hdr'
+    LocalFilePaths:
+    - /_BuildAsset/Cubemap/Skybox/daytime.hdr
+    - /_BuildAsset/Cubemap/Skybox/sunset.hdr
+  - name: Shader
+    SearchPattern: '*.shader'
+    LocalFilePaths:
+    - /_BuildAsset/Shader/UIEffect/UIDissolve.shader
+    - /_BuildAsset/Shader/UIEffect/UIEffect.shader
+    - /_BuildAsset/Shader/UIEffect/UIHsvModifier.shader
+    - /_BuildAsset/Shader/UIEffect/UIShiny.shader
+    - /_BuildAsset/Shader/UIEffect/UITtransition.shader
+  - name: Controller
+    SearchPattern: '*.controller'
+    LocalFilePaths: []
+  - name: Mat
+    SearchPattern: '*.mat'
+    LocalFilePaths:
+    - /_BuildAsset/Material/Skybox/Skybox_Daytime.mat
+    - /_BuildAsset/Material/Skybox/Skybox_Sunset.mat
+    - /_BuildAsset/Material/Surface/Brown Stony Light.mat
+    - /_BuildAsset/Material/Surface/Brown Stony.mat
+    - /_BuildAsset/Material/Surface/Grass.mat
+    - /_BuildAsset/Material/Surface/Grey Stones.mat
+    - /_BuildAsset/Material/Surface/Sandy Orange.mat
+    - /_BuildAsset/Material/Surface/Sandy.mat
+    - /_BuildAsset/Material/Surface/Water Deep Blue.mat
+    - /_BuildAsset/Material/Surface/Water Light Blue.mat
+  - name: Prefab
+    SearchPattern: '*.prefab'
+    LocalFilePaths:
+    - /_BuildAsset/Prefab/Model/Ekard.prefab
+    - /_BuildAsset/Prefab/UI/UIRootLogin.prefab
+    - /_BuildAsset/Scene/SceneCamera.prefab
+  - name: Unity
+    SearchPattern: '*.unity'
+    LocalFilePaths:
+    - /_BuildAsset/Scene/LoginScene.unity
+    - /_BuildAsset/Scene/SceneLevel1.unity
+  - name: Spriteatlas
+    SearchPattern: '*.spriteatlas'
+    LocalFilePaths:
+    - /_BuildAsset/Texture/Spriteatlas/Test.spriteatlas
+  AssetBundleBuilds: []

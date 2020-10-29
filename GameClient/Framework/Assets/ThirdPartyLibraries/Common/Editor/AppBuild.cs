@@ -143,17 +143,16 @@ namespace Common
         static void BuildForAndroidProject()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
-
             PlayerSettings.Android.keystorePass = "xlcw123";
             PlayerSettings.Android.keyaliasPass = "xlcw123";
-
-            string path = Application.dataPath;
-            path = path.Replace("Assets", "") + projectName + ".apk";
-            DeleteExit(path);
+            // string path = Application.dataPath;
+            // path = path.Replace("Assets", "") + projectName + ".apk";
+            // DeleteExit(path);
             EditorUserBuildSettings.androidBuildSystem = AndroidBuildSystem.Gradle;
             EditorUserBuildSettings.exportAsGoogleAndroidProject = true;
-            BuildPipeline.BuildPlayer(GetBuildScenes(), path, BuildTarget.Android,
-                BuildOptions.AcceptExternalModificationsToPlayer);
+            BuildPlatformPlayer(BuildTarget.Android, BuildOptions.AcceptExternalModificationsToPlayer);
+            // BuildPipeline.BuildPlayer(GetBuildScenes(), path, BuildTarget.Android,
+            //     BuildOptions.AcceptExternalModificationsToPlayer);
             EditorUserBuildSettings.exportAsGoogleAndroidProject = false;
         }
 
@@ -187,10 +186,12 @@ namespace Common
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone,
                 BuildTarget.StandaloneWindows64);
-            string path = Application.dataPath;
-            path = path.Replace("Assets", "UnityWindows/main.exe");
-            BuildPipeline.BuildPlayer(GetBuildScenes(), path, BuildTarget.StandaloneWindows64,
-                BuildOptions.Development);
+            BuildPlatformPlayer(BuildTarget.StandaloneWindows64, BuildOptions.Development);
+
+            // string path = Application.dataPath;
+            // path = path.Replace("Assets", "UnityWindows/main.exe");
+            // BuildPipeline.BuildPlayer(GetBuildScenes(), path, BuildTarget.StandaloneWindows64,
+            //     BuildOptions.Development);
         }
 
         /// <summary>
@@ -200,9 +201,57 @@ namespace Common
         public static void BuildForMacOS_DEV()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneOSX);
-            string path = Application.dataPath;
-            path = path.Replace("Assets", "UnityMacOS/main.app");
-            BuildPipeline.BuildPlayer(GetBuildScenes(), path, BuildTarget.StandaloneOSX, BuildOptions.Development);
+            BuildPlatformPlayer(BuildTarget.StandaloneOSX, BuildOptions.Development);
+
+            
+            // string path = Application.dataPath;
+            // path = path.Replace("Assets", "UnityMacOS/main.app");
+            // BuildPipeline.BuildPlayer(GetBuildScenes(), path, BuildTarget.StandaloneOSX, BuildOptions.Development);
+        }
+
+
+        /// <summary>
+        /// 打包基础函数
+        /// </summary>
+        public static void BuildPlatformPlayer(BuildTarget target,BuildOptions options)
+        {
+            string path = "Assets/_BuildAsset/Config/ABManifest.asset";
+            if (!File.Exists(path))
+            {
+                Debug.LogError("ABManifest文件不存在");
+                return;
+            }
+            BuildPlayerOptions bpo = new BuildPlayerOptions()
+            {
+                scenes = GetBuildScenes(),
+                locationPathName = GetBuildTargetPath(target),
+                target = EditorUserBuildSettings.activeBuildTarget,
+                options = options,
+                assetBundleManifestPath = path,
+            };
+            BuildPipeline.BuildPlayer(bpo);
+        }
+
+        private static string GetBuildTargetPath(BuildTarget target)
+        {
+            string time = DateTime.Now.ToString("yyyyMMdd-HHmmss");
+            string name = PlayerSettings.productName + "_" + PlayerSettings.bundleVersion;
+            string prefix = Application.dataPath.Replace("Assets", "");
+            switch (target)
+            {
+                case BuildTarget.Android:
+                    return prefix + string.Format("{0}_{1}_{2}.apk", name, SVNHelper.GetSvnVersion(), time);
+                case BuildTarget.StandaloneWindows64:
+                    return prefix + string.Format("{0}_{1}_{2}/UnityWindows.exe", name, SVNHelper.GetSvnVersion(),
+                        time);
+                case BuildTarget.StandaloneOSX:
+                    return prefix + "UnityMacOS/" + PlayerSettings.productName + ".app";
+                case BuildTarget.iOS:
+                    return prefix + "UnityXcode/";
+                default:
+                    Debug.Log("Target not support.");
+                    return null;
+            }
         }
 
         static void DeleteExit(string path)

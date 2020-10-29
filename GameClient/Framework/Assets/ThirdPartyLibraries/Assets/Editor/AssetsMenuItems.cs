@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using Common;
 using UnityEngine;
@@ -12,7 +13,6 @@ namespace GameAssets
         private static void InitAssetsConfig()
         {
             AssetsConfig assetsConfig = AssetsConfig.QueryAssetsConfig();
-            assetsConfig.Reset();
             assetsConfig.InitRules();
             Selection.activeObject = assetsConfig;
         }
@@ -20,28 +20,21 @@ namespace GameAssets
         [MenuItem("Builder/3 Build Assets For App", priority = 1003)]
         private static void BuildDefaultStreamingAssets()
         {
-           
+            AssetsHelper.BuildDefaultStreamingAssets();
         }
         
         [MenuItem("Builder/4 Build Assets For HotUpdate", priority = 1004)]
         private static void BuildHotUpdateAsset()
         {
-           
+            AssetsHelper.BuildHotUpdateAsset();
         }
-        
+
         [MenuItem("Builder/5 Build All Asset", priority = 1005)]
         private static void BuildAllStreamingAssets()
         {
-            if (!Directory.Exists(AssetsHelper.AssetBundlesDirectory))
-                Directory.CreateDirectory(AssetsHelper.AssetBundlesDirectory);
-            const BuildAssetBundleOptions options = BuildAssetBundleOptions.ChunkBasedCompression | 
-                                                    BuildAssetBundleOptions.DisableWriteTypeTree  |
-                                                    BuildAssetBundleOptions.DeterministicAssetBundle;
-            var targetPlatform = EditorUserBuildSettings.activeBuildTarget;
-            AssetsConfig assetsConfig = AssetsConfig.QueryAssetsConfig();
-
+            AssetsHelper.BuildAllStreamingAssets();
         }
-        
+
         [MenuItem("Builder/Add Asset To Rule", false, 3000)]
         private static void AddAssetToRule()
         {
