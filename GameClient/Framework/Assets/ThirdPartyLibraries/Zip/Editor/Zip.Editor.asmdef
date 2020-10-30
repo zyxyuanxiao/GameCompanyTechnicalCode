@@ -1,0 +1,17 @@
+{
+    "name": "Zip.Editor",
+    "references": [
+        "GUID:64db44c30a4e5454ca73b62ef0d127a5"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

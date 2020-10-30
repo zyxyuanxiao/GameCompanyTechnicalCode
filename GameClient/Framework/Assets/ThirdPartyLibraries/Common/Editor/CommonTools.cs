@@ -2,12 +2,13 @@ using System;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
+using Common;
 
 namespace Common
 {
     public class CommonTools
     {
-        [MenuItem("Tools/Security/CRC",priority = 20001)]
+        [MenuItem("Tools/Security/CRC", priority = 20001)]
         private static void GetCRC()
         {
             var path = EditorUtility.OpenFilePanel("OpenFile", Environment.CurrentDirectory, "");
@@ -23,7 +24,7 @@ namespace Common
             }
         }
 
-        [MenuItem("Tools/Security/MD5",priority = 20002)]
+        [MenuItem("Tools/Security/MD5", priority = 20002)]
         private static void GetMD5()
         {
             var path = EditorUtility.OpenFilePanel("OpenFile", Environment.CurrentDirectory, "");
@@ -39,7 +40,7 @@ namespace Common
             }
         }
 
-        [MenuItem("Tools/截屏",priority = 40003)]
+        [MenuItem("Tools/截屏", priority = 40003)]
         private static void Screenshot()
         {
             var path = EditorUtility.SaveFilePanel("截屏", null, "screenshot_", "png");
@@ -47,8 +48,8 @@ namespace Common
             {
                 return;
             }
+
             ScreenCapture.CaptureScreenshot(path);
         }
-
     }
 }

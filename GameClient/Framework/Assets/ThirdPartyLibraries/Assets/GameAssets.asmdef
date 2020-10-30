@@ -1,7 +1,8 @@
 {
-    "name": "Assets",
+    "name": "GameAssets",
     "references": [
-        "GUID:8c08cd3b08dd4894980e53c63c714136"
+        "GUID:8c08cd3b08dd4894980e53c63c714136",
+        "GUID:64db44c30a4e5454ca73b62ef0d127a5"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

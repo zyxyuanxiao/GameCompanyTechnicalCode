@@ -6,7 +6,7 @@ using System.IO;
 
 namespace Common
 {
-    public class AppBuild : Editor
+    public class AppBuild : UnityEditor.Editor
     {
 
         //在这里找出你当前工程所有的场景文件，假设你只想把部分的scene文件打包 那么这里可以写你的条件判断 总之返回一个字符串数组。
@@ -95,7 +95,7 @@ namespace Common
             return op;
         }
 
-        
+
         [MenuItem("Builder/Build Android.apk", priority = 2000)]
         static void BuildForAndroid()
         {
@@ -203,7 +203,7 @@ namespace Common
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneOSX);
             BuildPlatformPlayer(BuildTarget.StandaloneOSX, BuildOptions.Development);
 
-            
+
             // string path = Application.dataPath;
             // path = path.Replace("Assets", "UnityMacOS/main.app");
             // BuildPipeline.BuildPlayer(GetBuildScenes(), path, BuildTarget.StandaloneOSX, BuildOptions.Development);
@@ -213,7 +213,7 @@ namespace Common
         /// <summary>
         /// 打包基础函数
         /// </summary>
-        public static void BuildPlatformPlayer(BuildTarget target,BuildOptions options)
+        public static void BuildPlatformPlayer(BuildTarget target, BuildOptions options)
         {
             string path = "Assets/_BuildAsset/Config/ABManifest.asset";
             if (!File.Exists(path))
@@ -221,6 +221,7 @@ namespace Common
                 Debug.LogError("ABManifest文件不存在");
                 return;
             }
+
             BuildPlayerOptions bpo = new BuildPlayerOptions()
             {
                 scenes = GetBuildScenes(),

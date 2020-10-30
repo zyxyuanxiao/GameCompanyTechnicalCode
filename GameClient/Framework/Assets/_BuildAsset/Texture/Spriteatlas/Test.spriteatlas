@@ -42,11 +42,15 @@ SpriteAtlas:
       enableTightPacking: 1
     variantMultiplier: 1
     packables:
-    - {fileID: 102900000, guid: e182701a866e8415ea2e61f1b6b00e2e, type: 3}
-    totalSpriteSurfaceArea: 0
+    - {fileID: 102900000, guid: e9d8442391c3e2140b4dcdedafa49ffc, type: 3}
+    totalSpriteSurfaceArea: 98304
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites: []
-  m_PackedSpriteNamesToIndex: []
+  m_PackedSprites:
+  - {fileID: 21300000, guid: 5f256795dc4da154d820c9a9262e8048, type: 3}
+  - {fileID: 21300000, guid: 4622ae0f8369c7c4ca9025114aa3baed, type: 3}
+  m_PackedSpriteNamesToIndex:
+  - Ekard_Skill_01
+  - Ekard
   m_Tag: Test
   m_IsVariant: 0

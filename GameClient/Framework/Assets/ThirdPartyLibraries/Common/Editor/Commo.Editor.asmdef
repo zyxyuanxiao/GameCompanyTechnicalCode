@@ -1,0 +1,18 @@
+{
+    "name": "Commo.Editor",
+    "references": [
+        "GUID:8c08cd3b08dd4894980e53c63c714136",
+        "GUID:279f9055f30974a8e93a531f87ae9396"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -2,95 +2,99 @@
 using System.Text;
 using UnityEngine;
 
-public class SVNHelper
+namespace Common
 {
-	public static string GetSvnVersion()
+	public class SVNHelper
 	{
+		public static string GetSvnVersion()
+		{
 #if UNITY_EDITOR && UNITY_EDITOR_OSX
-		return SvnInfoUpdateOSX();
+			return SvnInfoUpdateOSX();
 #elif UNITY_EDITOR && !UNITY_EDITOR_OSX
 		return SvnInfoUpdateWIN();
 #endif
-		return "0";
-	}
-public static string GetSvnBlame(string filepath)
-	{
+			return "0";
+		}
+
+		public static string GetSvnBlame(string filepath)
+		{
 #if UNITY_EDITOR && UNITY_EDITOR_OSX
-		return SvnBlameOSX(filepath);
+			return SvnBlameOSX(filepath);
 #elif UNITY_EDITOR && !UNITY_EDITOR_OSX
 		return SvnBlameWIN(filepath);
 #endif
-		return "0";
-	}
+			return "0";
+		}
 
 #if UNITY_EDITOR_OSX
-	/// <summary>
-	/// 刷新svn版本信息
-	/// </summary>
-	[UnityEditor.MenuItem("Tools/SVN/SVN Version")]
-	static string SvnInfoUpdateOSX()
-	{
-		string cmd = Application.dataPath + "/../shell/svn_info.command";
-		System.Diagnostics.Process process = new System.Diagnostics.Process();
-		process.StartInfo.UseShellExecute = false;
-		process.StartInfo.FileName = cmd;
-		process.StartInfo.Arguments = Application.dataPath + "/../";
-		process.StartInfo.RedirectStandardOutput = true;
-
-		process.Start();
-		StringBuilder q = new StringBuilder();
-		while (!process.HasExited)
+		/// <summary>
+		/// 刷新svn版本信息
+		/// </summary>
+		[UnityEditor.MenuItem("Tools/SVN/SVN Version")]
+		static string SvnInfoUpdateOSX()
 		{
-			string s = process.StandardOutput.ReadToEnd();
-			q.Append(s);
+			string cmd = Application.dataPath + "/../shell/svn_info.command";
+			System.Diagnostics.Process process = new System.Diagnostics.Process();
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.FileName = cmd;
+			process.StartInfo.Arguments = Application.dataPath + "/../";
+			process.StartInfo.RedirectStandardOutput = true;
+
+			process.Start();
+			StringBuilder q = new StringBuilder();
+			while (!process.HasExited)
+			{
+				string s = process.StandardOutput.ReadToEnd();
+				q.Append(s);
+			}
+
+			string result = q.ToString();
+			result = result.Replace("\r\n", "");
+			result = result.Replace("\n", "");
+			Debug.Log("svn:" + result);
+			return result;
 		}
 
-		string result = q.ToString();
-		result = result.Replace("\r\n", "");
-		result = result.Replace("\n", "");
-		Debug.Log("svn:" + result);
-		return result;
-	}
-	
-	
-	/// <summary>
-	/// svn信息
-	/// </summary>
-	static string SvnBlameOSX(string filePath)
-	{
-		string cmd = Application.dataPath + "/../shell/svn_blame.command";
-		System.Diagnostics.Process process = new System.Diagnostics.Process();
-		process.StartInfo.UseShellExecute = false;
-		process.StartInfo.FileName = cmd;
-		process.StartInfo.Arguments = filePath;
-		process.StartInfo.RedirectStandardOutput = true;
 
-		process.Start();
-		StringBuilder q = new StringBuilder();
-		while (!process.HasExited)
+		/// <summary>
+		/// svn信息
+		/// </summary>
+		static string SvnBlameOSX(string filePath)
 		{
-			string s = process.StandardOutput.ReadToEnd();
-			q.Append(s);
-		}
-		string result = q.ToString();
-		// Debug.Log(result);
-		return result;
-	}
+			string cmd = Application.dataPath + "/../shell/svn_blame.command";
+			System.Diagnostics.Process process = new System.Diagnostics.Process();
+			process.StartInfo.UseShellExecute = false;
+			process.StartInfo.FileName = cmd;
+			process.StartInfo.Arguments = filePath;
+			process.StartInfo.RedirectStandardOutput = true;
 
-	/// <summary>
-	/// 刷新svn版本信息
-	/// </summary>
-	[UnityEditor.MenuItem("Tools/SVN/Open UserPath")]
-	static void OpenUserPath()
-	{
-		string cmd = Application.dataPath + "/../shell/open_userpath.command";
-		System.Diagnostics.Process sh = new System.Diagnostics.Process();
-		sh.StartInfo.UseShellExecute = true;
-		sh.StartInfo.FileName = cmd;
-		sh.StartInfo.Arguments = "\"" + Application.persistentDataPath + "\"";
-		sh.Start();
-		sh.WaitForExit();
-	}
+			process.Start();
+			StringBuilder q = new StringBuilder();
+			while (!process.HasExited)
+			{
+				string s = process.StandardOutput.ReadToEnd();
+				q.Append(s);
+			}
+
+			string result = q.ToString();
+			// Debug.Log(result);
+			return result;
+		}
+
+		/// <summary>
+		/// 刷新svn版本信息
+		/// </summary>
+		[UnityEditor.MenuItem("Tools/SVN/Open UserPath")]
+		static void OpenUserPath()
+		{
+			string cmd = Application.dataPath + "/../shell/open_userpath.command";
+			System.Diagnostics.Process sh = new System.Diagnostics.Process();
+			sh.StartInfo.UseShellExecute = true;
+			sh.StartInfo.FileName = cmd;
+			sh.StartInfo.Arguments = "\"" + Application.persistentDataPath + "\"";
+			sh.Start();
+			sh.WaitForExit();
+		}
 #endif
 
 #if UNITY_EDITOR && !UNITY_EDITOR_OSX
@@ -167,23 +171,23 @@ public static string GetSvnBlame(string filepath)
 #endif
 
 #if UNITY_EDITOR_OSX
-	/// <summary>
-	/// 更新svn
-	/// </summary>
-	[UnityEditor.MenuItem("Tools/SVN/SVN Update(OSX) %#u")]
-	public static void SvnUpdateOSX()
-	{
-		string cmd = Application.dataPath + "/../shell/svn_update.command";
-		System.Diagnostics.Process sh = new System.Diagnostics.Process();
-		sh.StartInfo.UseShellExecute = true;
-		sh.StartInfo.FileName = cmd;
-		sh.StartInfo.Arguments = Application.dataPath + "/../";
-		sh.Start();
-		sh.WaitForExit();
+		/// <summary>
+		/// 更新svn
+		/// </summary>
+		[UnityEditor.MenuItem("Tools/SVN/SVN Update(OSX) %#u")]
+		public static void SvnUpdateOSX()
+		{
+			string cmd = Application.dataPath + "/../shell/svn_update.command";
+			System.Diagnostics.Process sh = new System.Diagnostics.Process();
+			sh.StartInfo.UseShellExecute = true;
+			sh.StartInfo.FileName = cmd;
+			sh.StartInfo.Arguments = Application.dataPath + "/../";
+			sh.Start();
+			sh.WaitForExit();
 
-		string log = File.ReadAllText(Application.dataPath + "/StreamingAssets/packVersionInfo");
-		Debug.Log(log);
-	}
+			string log = File.ReadAllText(Application.dataPath + "/StreamingAssets/packVersionInfo");
+			Debug.Log(log);
+		}
 
 #endif
 
@@ -216,5 +220,6 @@ public static string GetSvnBlame(string filepath)
 		Debug.Log(log);
 	}
 #endif
-}
+	}
 
+}

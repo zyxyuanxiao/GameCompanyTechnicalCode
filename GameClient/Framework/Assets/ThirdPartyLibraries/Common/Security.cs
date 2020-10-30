@@ -49,6 +49,7 @@ namespace Common
 
         static string ToHash(byte[] data)
         {
+            sb.Clear();
             foreach (var t in data)
                 sb.Append(t.ToString("x2"));
             return sb.ToString();

@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,10 +7,8 @@ namespace Common
     public class GameConfig : ScriptableObject
     {
         //根据 svn 版本号获取
-        [SerializeField]
-        [Tooltip("当前游戏的版本")]
-        private string version = string.Empty;
-        
+        [SerializeField] [Tooltip("当前游戏的版本")] private string version = string.Empty;
+
         [Tooltip("是否在编辑器下开启加载AssetBundle的模式,开启后需要先打AssetBundle,否则使用编辑器模式加载")]
         public bool UseAssetBundles;
 
@@ -22,10 +18,9 @@ namespace Common
         [Tooltip("使用的是 HTTP ,本地搭建的 web 服务器,测试使用,默认:http://127.0.0.1:80/AssetBundles/")]
         public string LocalWebServerAddress = "http://127.0.0.1:80/AssetBundles/";
 
-        [Tooltip("使用的是 HTTP ,正式搭建的 web 服务器")]
-        public string[] RemoteWebServerAddress;
+        [Tooltip("使用的是 HTTP ,正式搭建的 web 服务器")] public string[] RemoteWebServerAddress;
 
-        
+
 
         public string QueryVersion()
         {
@@ -35,7 +30,7 @@ namespace Common
             AssetDatabase.Refresh();
             return version;
         }
-        
+
         public void Reset()
         {
             UseAssetBundles = false;
@@ -44,9 +39,9 @@ namespace Common
             RemoteWebServerAddress = null;
             QueryVersion();
         }
-        
-        
-        [MenuItem("Builder/1 Init GameConfig",priority = 1000)]
+
+
+        [MenuItem("Builder/1 Init GameConfig", priority = 1000)]
         private static void CreateGameConfig()
         {
             GameConfig buildConfig = Resources.Load<GameConfig>("Configs/GameConfig");

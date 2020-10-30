@@ -1,0 +1,17 @@
+{
+    "name": "LogSystem.Editor",
+    "references": [
+        "GUID:f3373c75fa3c9ca4e8e0dae85e46f66f"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
