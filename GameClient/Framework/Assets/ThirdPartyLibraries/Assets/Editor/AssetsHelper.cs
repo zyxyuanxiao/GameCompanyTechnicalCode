@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
+using LitJson;
 using UnityEditor;
 using UnityEngine;
 
@@ -14,15 +16,14 @@ namespace GameAssets
             get
             {  
                 string path = Application.dataPath.Replace("Assets", "AssetBundles/") + 
-                              GetPlatform(EditorUserBuildSettings.activeBuildTarget) + "/";
+                              Common.Tool.GetPlatform() + "/";
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 return path;
             }
         }
-            
         
-
+        
         /// <summary>
         /// 打所有的包,最新的包,包括 ab 包与 app (执行程序)
         /// </summary>
@@ -53,6 +54,8 @@ namespace GameAssets
                 Debug.LogError("打包失败");
                 return;
             }
+            
+            BuildVersionConfig(assetBundleManifest);
             
             // //将所有的 AB 包的名字记录下来
             // string[] abNames = assetBundleManifest.GetAllAssetBundles();
@@ -135,38 +138,36 @@ namespace GameAssets
 
         }
 
-        public static string GetPlatform(BuildTarget target)
+        /// <summary>
+        /// 根据打AB包生成的AssetBundleManifest,设置 VersionConfig
+        /// </summary>
+        private static void BuildVersionConfig(AssetBundleManifest assetBundleManifest)
         {
-            if (target == BuildTarget.Android)
+            VersionConfig vc = new VersionConfig()
             {
-                return "Android";
-            }
-            else if (target == BuildTarget.iOS)
+                OS = Common.Tool.GetPlatform(),
+                SVNVersion = Common.SVNHelper.GetSvnVersion(),
+                AppVersion = Application.version,
+            };
+            vc.ABInfos = new Dictionary<string, AB_V_MD5>();
+
+            string[] abNames = assetBundleManifest.GetAllAssetBundles();
+            foreach (string name in abNames)
             {
-                return "iOS";
-            }
-            else if (target == BuildTarget.WebGL)
-            {
-                return "WebGL";
-            }
-            else if (target == BuildTarget.StandaloneWindows || target == BuildTarget.StandaloneWindows64)
-            {
-                return "Windows";
-            }
-            else if (target == BuildTarget.StandaloneOSX || target == BuildTarget.StandaloneOSXIntel64)
-            {
-                return "OSX";
+                string abPath = AssetsHelper.AssetBundlesDirectory + name;
+                Debug.Log(abPath);
+                vc.ABInfos[name] = new AB_V_MD5()
+                    {Version = Common.SVNHelper.GetSvnVersion(), Md5Hash = Common.SecurityTools.GetMD5Hash(abPath)};
             }
 
-            Debug.LogError("没有这个平台的设置");
-            return "UnKnow";
+            string vcPath = AssetsHelper.AssetBundlesDirectory + AssetBundleConfig.VersionConfig;
+            if (!File.Exists(vcPath))
+            {
+                using (File.Create(vcPath)) ;
+            }
+
+            File.WriteAllText(vcPath, JsonMapper.ToJson(vc), Encoding.UTF8);
         }
 
-
-        private static void BuildVersionConfig()
-        {
-            
-        }
-        
     }
 }
