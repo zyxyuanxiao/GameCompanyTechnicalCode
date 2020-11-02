@@ -21,25 +21,7 @@ namespace GameAssets
             }
         }
             
-            
-
-        /// <summary>
-        /// 获取所有 AB 文件的配置
-        /// </summary>
-        /// <returns></returns>
-        public static ABManifest QueryAssetsConfig()
-        {
-            string path = "Assets/_BuildAsset/Config/ABManifest.asset";
-            ABManifest abManifest = AssetDatabase.LoadAssetAtPath<ABManifest>(path);
-            if (null == abManifest)
-            {
-                abManifest = ScriptableObject.CreateInstance<ABManifest>();
-                AssetDatabase.CreateAsset(abManifest, path);
-                AssetDatabase.SaveAssets();
-            }
-
-            return abManifest;
-        }
+        
 
         /// <summary>
         /// 打所有的包,最新的包,包括 ab 包与 app (执行程序)
@@ -72,73 +54,73 @@ namespace GameAssets
                 return;
             }
             
-            //将所有的 AB 包的名字记录下来
-            string[] abNames = assetBundleManifest.GetAllAssetBundles();
-            Dictionary<string, int> abNameToIndex = new Dictionary<string, int>();
-            for (var index = 0; index < abNames.Length; index++)
-            {
-                string abName = abNames[index];
-                abNameToIndex[abName] = index;
-            }
-            
-            
-            List<ABInfo> abInfos = new List<ABInfo>();
-            for (var index = 0; index < abNames.Length; index++)
-            {
-                string abName = abNames[index];
-                string[] deps = assetBundleManifest.GetAllDependencies(abName);//获取资产包的所有依赖
-                FileInfo fileInfo = new FileInfo(AssetsHelper.AssetBundlesDirectory + abName);
-                abInfos.Add(new ABInfo()
-                {
-                    Name = abName,
-                    Id = index,
-                    Dependencies = deps,
-                    Length = fileInfo.Length,
-                    Hash = assetBundleManifest.GetAssetBundleHash(abName).ToString(),
-                });
-            }
-            
-            HashSet<string> localDirectorys = new HashSet<string>();
-            List<LocalFileInfo> assets = new List<LocalFileInfo>();
-            foreach (AssetBundleBuild item in assetsConfig.QueryAssetBundleBuilds())
-            {
-                foreach (string path in item.assetNames)//路径
-                {
-                    string dir = Path.GetDirectoryName(path).Replace("\\", "/");
-                    localDirectorys.Add(dir);
-                    assets.Add(new LocalFileInfo()
-                    {
-                        Name = Path.GetFileName(path),
-                        ABName = item.assetBundleName,
-                        LocalDirectory = dir
-                    });
-                }
-            }
-            
-            //将单个资源的文件夹,本地单个文件的信息,AB 包的信息,展示出依赖关系
-            ABManifest manifest = QueryAssetsConfig();
-            manifest.LocalDirectorys = localDirectorys.ToArray();
-            manifest.LocalFileInfos = assets.ToArray();
-            manifest.ABInfos = abInfos.ToArray();
-            EditorUtility.SetDirty(manifest);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-            Selection.activeObject = manifest;
-            
-            //将这个依赖关系打包到AB包里面,属于增量更新包体
-            string manifestBundleName = "ABManifest".ToLower() + AssetBundleConfig.Extension;
-            AssetBundleBuild[] mabb = new[]
-            {
-                new AssetBundleBuild
-                {
-                    assetNames = new[] {AssetDatabase.GetAssetPath(manifest),},
-                    assetBundleName = manifestBundleName
-                }
-            };
-            
-            BuildPipeline.BuildAssetBundles(
-                AssetsHelper.AssetBundlesDirectory, mabb, options, targetPlatform);
-            ArrayUtility.Add(ref abNames, manifestBundleName);
+            // //将所有的 AB 包的名字记录下来
+            // string[] abNames = assetBundleManifest.GetAllAssetBundles();
+            // Dictionary<string, int> abNameToIndex = new Dictionary<string, int>();
+            // for (var index = 0; index < abNames.Length; index++)
+            // {
+            //     string abName = abNames[index];
+            //     abNameToIndex[abName] = index;
+            // }
+            //
+            //
+            // List<ABInfo> abInfos = new List<ABInfo>();
+            // for (var index = 0; index < abNames.Length; index++)
+            // {
+            //     string abName = abNames[index];
+            //     string[] deps = assetBundleManifest.GetAllDependencies(abName);//获取资产包的所有依赖
+            //     FileInfo fileInfo = new FileInfo(AssetsHelper.AssetBundlesDirectory + abName);
+            //     abInfos.Add(new ABInfo()
+            //     {
+            //         Name = abName,
+            //         Id = index,
+            //         Dependencies = deps,
+            //         Length = fileInfo.Length,
+            //         Hash = assetBundleManifest.GetAssetBundleHash(abName).ToString(),
+            //     });
+            // }
+            //
+            // HashSet<string> localDirectorys = new HashSet<string>();
+            // List<LocalFileInfo> assets = new List<LocalFileInfo>();
+            // foreach (AssetBundleBuild item in assetsConfig.QueryAssetBundleBuilds())
+            // {
+            //     foreach (string path in item.assetNames)//路径
+            //     {
+            //         string dir = Path.GetDirectoryName(path).Replace("\\", "/");
+            //         localDirectorys.Add(dir);
+            //         assets.Add(new LocalFileInfo()
+            //         {
+            //             Name = Path.GetFileName(path),
+            //             ABName = item.assetBundleName,
+            //             LocalDirectory = dir
+            //         });
+            //     }
+            // }
+            //
+            // //将单个资源的文件夹,本地单个文件的信息,AB 包的信息,展示出依赖关系
+            // ABManifest manifest = QueryAssetsConfig();
+            // manifest.LocalDirectorys = localDirectorys.ToArray();
+            // manifest.LocalFileInfos = assets.ToArray();
+            // manifest.ABInfos = abInfos.ToArray();
+            // EditorUtility.SetDirty(manifest);
+            // AssetDatabase.SaveAssets();
+            // AssetDatabase.Refresh();
+            // Selection.activeObject = manifest;
+            //
+            // //将这个依赖关系打包到AB包里面,属于增量更新包体
+            // string manifestBundleName = "ABManifest".ToLower() + AssetBundleConfig.Extension;
+            // AssetBundleBuild[] mabb = new[]
+            // {
+            //     new AssetBundleBuild
+            //     {
+            //         assetNames = new[] {AssetDatabase.GetAssetPath(manifest),},
+            //         assetBundleName = manifestBundleName
+            //     }
+            // };
+            //
+            // BuildPipeline.BuildAssetBundles(
+            //     AssetsHelper.AssetBundlesDirectory, mabb, options, targetPlatform);
+            // ArrayUtility.Add(ref abNames, manifestBundleName);
             
             EditorUtility.OpenWithDefaultApp(AssetsHelper.AssetBundlesDirectory);
         }
@@ -180,5 +162,11 @@ namespace GameAssets
             return "UnKnow";
         }
 
+
+        private static void BuildVersionConfig()
+        {
+            
+        }
+        
     }
 }
