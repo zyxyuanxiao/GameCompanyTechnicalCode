@@ -49,7 +49,7 @@ namespace GameAssets
     }
 
     [Serializable]
-    public class ABInfo
+    public class ABBuildInfo
     {
         //整个 AB 包的名字
         public string assetBundleName;
@@ -139,7 +139,7 @@ namespace GameAssets
 
         [Header("Serach Asset Rule")] public List<LocalFile> LocalFiles;
 
-        [Header("Asset Bundle")] public List<ABInfo> AssetBundleBuilds;
+        [Header("Asset Bundle")] public List<ABBuildInfo> AssetBundleBuilds;
 
 
 
@@ -313,11 +313,11 @@ namespace GameAssets
         private void CombineABWithAssets()
         {
             AssetBundleBuilds?.Clear();
-            if (AssetBundleBuilds == null) AssetBundleBuilds = new List<ABInfo>();
+            if (AssetBundleBuilds == null) AssetBundleBuilds = new List<ABBuildInfo>();
             Dictionary<string, List<string>> abMap = QueryABMap();
             foreach (var item in abMap)
             {
-                AssetBundleBuilds.Add(new ABInfo()
+                AssetBundleBuilds.Add(new ABBuildInfo()
                 {
                     assetBundleName = item.Key,
                     assetNames = item.Value.ToArray() //必须是以 Asset 开头
@@ -341,8 +341,8 @@ namespace GameAssets
                 md5Hash = SecurityTools.GetMD5Hash("shaderlibs") + ABHelper.Extension;
             }
 
-            md5Hash = Regex.Split(fullPath,"Assets",RegexOptions.IgnoreCase).Last();
-            md5Hash = md5Hash.Replace("/", "_");
+            // md5Hash = Regex.Split(fullPath,"Assets",RegexOptions.IgnoreCase).Last();
+            // md5Hash = md5Hash.Replace("/", "_");
             return md5Hash;
         }
 
@@ -353,7 +353,7 @@ namespace GameAssets
         public AssetBundleBuild[] QueryAssetBundleBuilds()
         {
             var builds = new List<AssetBundleBuild>();
-            foreach (ABInfo ab in AssetBundleBuilds)
+            foreach (ABBuildInfo ab in AssetBundleBuilds)
             {
                 builds.Add(new AssetBundleBuild
                 {

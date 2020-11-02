@@ -84,114 +84,106 @@ MonoBehaviour:
     LocalFilePaths:
     - /_BuildAsset/Texture/Spriteatlas/Test.spriteatlas
   AssetBundleBuilds:
-  - assetBundleName: __BuildAsset_Text_Text.zip
+  - assetBundleName: a51914f22431e941931fddbde5086d0c.unity3d
     assetNames:
     - Assets/_BuildAsset/Text/Text.zip
-  - assetBundleName: __BuildAsset_Shader_UIEffect_Default-Transition.png
+  - assetBundleName: 9560fefce5e5fd5953e2402f460daf14.unity3d
     assetNames:
     - Assets/_BuildAsset/Shader/UIEffect/Default-Transition.png
-  - assetBundleName: __BuildAsset_Texture_Png_Brown Stony Light.png
+  - assetBundleName: d14d2fff1664b8cdde5cae36a678384a.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Brown Stony Light.png
-  - assetBundleName: __BuildAsset_Texture_Png_Brown Stony.png
+  - assetBundleName: bdad1b2f62d45bbbb715ad80a038521c.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Brown Stony.png
-  - assetBundleName: __BuildAsset_Texture_Png_Grass.png
+  - assetBundleName: a78a229a9e7be6489b182f4b2c0574f2.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Grass.png
-  - assetBundleName: __BuildAsset_Texture_Png_Grey Stones.png
+  - assetBundleName: f752dd0e308e656717d1fea09b1c71fc.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Grey Stones.png
-  - assetBundleName: __BuildAsset_Texture_Png_Sandy Orange.png
+  - assetBundleName: cef67d738d37d8daaba0e4a916b1b2b7.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Sandy Orange.png
-  - assetBundleName: __BuildAsset_Texture_Png_Sandy.png
+  - assetBundleName: 4b603feb4841341ab90f3da0cc8afd33.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Sandy.png
-  - assetBundleName: __BuildAsset_Texture_Png_Water Deep Blue.png
+  - assetBundleName: 6e6d2d4faef8740bdd9389250de30760.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Water Deep Blue.png
-  - assetBundleName: __BuildAsset_Texture_Png_Water Light Blue.png
+  - assetBundleName: 4133e74849aab90a77010469f57ac59f.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Water Light Blue.png
-  - assetBundleName: __BuildAsset_Font_FZBZ.ttf
+  - assetBundleName: b62f78148eb8da83292ddbbcb9312b34.unity3d
     assetNames:
     - Assets/_BuildAsset/Font/FZBZ.ttf
-  - assetBundleName: __BuildAsset_Font_SOURCEHANSANSCN_MEDIUM_0.ttf
+  - assetBundleName: 1498b4567a0702f3b2d55fd23ac82563.unity3d
     assetNames:
     - Assets/_BuildAsset/Font/SOURCEHANSANSCN_MEDIUM_0.ttf
-  - assetBundleName: __BuildAsset_Font_SY1.ttf
+  - assetBundleName: e454377e6b3d419bf6b9e6f216c45aa6.unity3d
     assetNames:
     - Assets/_BuildAsset/Font/SY1.ttf
-  - assetBundleName: __BuildAsset_Font_SZ.ttf
+  - assetBundleName: 386ddac528ba0766e27a192bc883321a.unity3d
     assetNames:
     - Assets/_BuildAsset/Font/SZ.ttf
-  - assetBundleName: __BuildAsset_Cubemap_Skybox_daytime.hdr
+  - assetBundleName: b8970c83fed325b9114433b6a97b85ac.unity3d
     assetNames:
     - Assets/_BuildAsset/Cubemap/Skybox/daytime.hdr
-  - assetBundleName: __BuildAsset_Cubemap_Skybox_sunset.hdr
+  - assetBundleName: de9849e306510ec54355ea131132bc36.unity3d
     assetNames:
     - Assets/_BuildAsset/Cubemap/Skybox/sunset.hdr
-  - assetBundleName: __BuildAsset_Shader_UIEffect_UIDissolve.shader
+  - assetBundleName: 4c0e380f7746fc26aba39cead90c6862.unity3d
     assetNames:
     - Assets/_BuildAsset/Shader/UIEffect/UIDissolve.shader
-  - assetBundleName: __BuildAsset_Shader_UIEffect_UIEffect.shader
-    assetNames:
     - Assets/_BuildAsset/Shader/UIEffect/UIEffect.shader
-  - assetBundleName: __BuildAsset_Shader_UIEffect_UIHsvModifier.shader
-    assetNames:
     - Assets/_BuildAsset/Shader/UIEffect/UIHsvModifier.shader
-  - assetBundleName: __BuildAsset_Shader_UIEffect_UIShiny.shader
-    assetNames:
     - Assets/_BuildAsset/Shader/UIEffect/UIShiny.shader
-  - assetBundleName: __BuildAsset_Shader_UIEffect_UITtransition.shader
-    assetNames:
     - Assets/_BuildAsset/Shader/UIEffect/UITtransition.shader
-  - assetBundleName: __BuildAsset_Material_Skybox_Skybox_Daytime.mat
+  - assetBundleName: 5d29dce026ad18754d402dc186f0aef5.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Skybox/Skybox_Daytime.mat
-  - assetBundleName: __BuildAsset_Material_Skybox_Skybox_Sunset.mat
+  - assetBundleName: 7b703a0e733f1276c85adf48c9326f2c.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Skybox/Skybox_Sunset.mat
-  - assetBundleName: __BuildAsset_Material_Surface_Brown Stony Light.mat
+  - assetBundleName: 6a685a70d027a3c9be922d852da2ab67.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Surface/Brown Stony Light.mat
-  - assetBundleName: __BuildAsset_Material_Surface_Brown Stony.mat
+  - assetBundleName: e425bf54b214277d92858d40652f5a69.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Surface/Brown Stony.mat
-  - assetBundleName: __BuildAsset_Material_Surface_Grass.mat
+  - assetBundleName: 8a439a8967523b8be991ec9011ab53de.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Surface/Grass.mat
-  - assetBundleName: __BuildAsset_Material_Surface_Grey Stones.mat
+  - assetBundleName: 037d2a3aec3fe9092904252e27ce48c6.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Surface/Grey Stones.mat
-  - assetBundleName: __BuildAsset_Material_Surface_Sandy Orange.mat
+  - assetBundleName: 0917b9c30107fb4e5f397614956ee40b.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Surface/Sandy Orange.mat
-  - assetBundleName: __BuildAsset_Material_Surface_Sandy.mat
+  - assetBundleName: 3410289c34a1f4dc5d1287737bcc9c98.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Surface/Sandy.mat
-  - assetBundleName: __BuildAsset_Material_Surface_Water Deep Blue.mat
+  - assetBundleName: 95044290da82c4635dad2d026ce75b64.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Surface/Water Deep Blue.mat
-  - assetBundleName: __BuildAsset_Material_Surface_Water Light Blue.mat
+  - assetBundleName: fd866dfae430dbace04c262f04071380.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Surface/Water Light Blue.mat
-  - assetBundleName: __BuildAsset_Prefab_Model_Ekard.prefab
+  - assetBundleName: 5ba3d896225e5d29a1f8a75bbce4b51a.unity3d
     assetNames:
     - Assets/_BuildAsset/Prefab/Model/Ekard.prefab
-  - assetBundleName: __BuildAsset_Prefab_Scene_SceneCamera.prefab
+  - assetBundleName: eabc7745a0745377181669fde56d4eca.unity3d
     assetNames:
     - Assets/_BuildAsset/Prefab/Scene/SceneCamera.prefab
-  - assetBundleName: __BuildAsset_Prefab_UI_UIRootLogin.prefab
+  - assetBundleName: afadcdb4e739cdc74f023d7f17ddec19.unity3d
     assetNames:
     - Assets/_BuildAsset/Prefab/UI/UIRootLogin.prefab
-  - assetBundleName: __BuildAsset_Scene_LoginScene.unity
+  - assetBundleName: 151f34c5e3598a237f77fb93b3f9f713.unity3d
     assetNames:
     - Assets/_BuildAsset/Scene/LoginScene.unity
-  - assetBundleName: __BuildAsset_Scene_SceneLevel1.unity
+  - assetBundleName: fec12405a4dd7372e3c9ae120d43fe0e.unity3d
     assetNames:
     - Assets/_BuildAsset/Scene/SceneLevel1.unity
-  - assetBundleName: __BuildAsset_Texture_Spriteatlas_Test.spriteatlas
+  - assetBundleName: 1ec5abd3bc56d39ecdf5182e6a2ae40e.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Spriteatlas/Test.spriteatlas
