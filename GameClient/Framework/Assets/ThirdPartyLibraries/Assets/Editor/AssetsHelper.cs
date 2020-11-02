@@ -9,7 +9,19 @@ namespace GameAssets
 {
     public static class AssetsHelper
     {
-        public static string AssetBundlesDirectory = Application.dataPath.Replace("Assets", "AssetBundles/");
+        public static string AssetBundlesDirectory
+        {
+            get
+            {  
+                string path = Application.dataPath.Replace("Assets", "AssetBundles/") + 
+                              GetPlatform(EditorUserBuildSettings.activeBuildTarget) + "/";
+                if (!Directory.Exists(path))
+                    Directory.CreateDirectory(path);
+                return path;
+            }
+        }
+            
+            
 
         /// <summary>
         /// 获取所有 AB 文件的配置
@@ -34,20 +46,26 @@ namespace GameAssets
         /// </summary>
         public static void BuildAllStreamingAssets()
         {
+            //配置路径
+            if (Directory.Exists(AssetsHelper.AssetBundlesDirectory))
+                Directory.Delete(AssetsHelper.AssetBundlesDirectory, true);
+            
             //根据配置文件进行初始化 AB 包的名字以及资源
             BuildAssetsConfig assetsConfig = BuildAssetsConfig.QueryAssetsConfig();
             assetsConfig.BuildAllAB();
             AssetDatabase.Refresh();
-            if (Directory.Exists(AssetsHelper.AssetBundlesDirectory))
-                Directory.Delete(AssetsHelper.AssetBundlesDirectory, true);
-            if (!Directory.Exists(AssetsHelper.AssetBundlesDirectory))
-                Directory.CreateDirectory(AssetsHelper.AssetBundlesDirectory);
+            
+            //设置打包压缩格式
             const BuildAssetBundleOptions options = BuildAssetBundleOptions.ChunkBasedCompression |
                                                     BuildAssetBundleOptions.DisableWriteTypeTree |
                                                     BuildAssetBundleOptions.DeterministicAssetBundle;
             var targetPlatform = EditorUserBuildSettings.activeBuildTarget;
+            //开始打包
             AssetBundleManifest assetBundleManifest = BuildPipeline.BuildAssetBundles(
-                AssetsHelper.AssetBundlesDirectory, assetsConfig.QueryAssetBundleBuilds(), options, targetPlatform);
+                AssetsHelper.AssetBundlesDirectory, 
+                assetsConfig.QueryAssetBundleBuilds(), 
+                options, 
+                targetPlatform);
             if (assetBundleManifest == null)
             {
                 Debug.LogError("打包失败");
@@ -108,7 +126,7 @@ namespace GameAssets
             Selection.activeObject = manifest;
             
             //将这个依赖关系打包到AB包里面,属于增量更新包体
-            string manifestBundleName = "ABManifest".ToLower() + ABHelper.Extension;
+            string manifestBundleName = "ABManifest".ToLower() + AssetBundleConfig.Extension;
             AssetBundleBuild[] mabb = new[]
             {
                 new AssetBundleBuild
@@ -122,11 +140,12 @@ namespace GameAssets
                 AssetsHelper.AssetBundlesDirectory, mabb, options, targetPlatform);
             ArrayUtility.Add(ref abNames, manifestBundleName);
             
+            EditorUtility.OpenWithDefaultApp(AssetsHelper.AssetBundlesDirectory);
         }
 
         public static void BuildDefaultStreamingAssets()
         {
-
+            
         }
 
         public static void BuildHotUpdateAsset()

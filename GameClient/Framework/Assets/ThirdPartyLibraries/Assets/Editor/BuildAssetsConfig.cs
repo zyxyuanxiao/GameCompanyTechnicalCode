@@ -11,104 +11,6 @@ using Common;
 
 namespace GameAssets
 {
-
-    /// <summary>
-    /// 文件夹的搜索模式,
-    /// 搜索文件夹及其子文件夹的所有内容,根据文件搜索模式过滤不属于的文件
-    /// 打包规则:搜索  _BuildAsset  文件夹下的所有类型的文件,对这些类型的文件进行打包
-    /// 某些类型的文件,必定可以成为一个 AB 包,比如  Hdr Asset  TTF  Shader  Prefab  Spriteatlas  Unity
-    /// 剩下类型的文件根据其大小进行 AB 包的融合
-    /// 
-    /// 所有的 Bytes Json XML (文本)文件将其压缩到一个压缩包,再将压缩包打进一个 AB 包里面,
-    /// 使用时加载 AB 包并且解压到项目本地,使用解压过后的文件,直接使用 bytes json xml 为后缀的名字,不再使用压缩包
-    /// 此类型在初始化的时候与 Shader 统一加载
-    /// </summary> 
-    public static class FileSearchPattern
-    {
-        public static string Zip = "*.zip";
-        public static string Png = "*.png";
-        public static string Hdr = "*.hdr"; //一个 Hdr(大型图片) 必定是一个 AB 包
-        public static string Asset = "*.asset"; //一个 asset(配置文件) 必定是一个 AB 包
-        public static string TTF = "*.ttf"; //一个 ttf 必定是一个 AB 包
-        public static string Shader = "*.shader"; //所有的 shader 必定是一个 AB 包
-        public static string Controller = "*.controller";
-        public static string Material = "*.mat";
-        public static string Prefab = "*.prefab"; //一个 prefab 必定是一个 AB 包
-        public static string Spriteatlas = "*.spriteatlas"; //一个图集必定是一个 AB 包
-        public static string Unity = "*.unity"; //一个scene(后缀名为.unity)场景必定是一个 AB 包
-
-
-        public static string BuildAsset = "_BuildAsset"; //一个scene(后缀名为.unity)场景必定是一个 AB 包
-
-        //验证此资源不属于以下类型的资源,才可以被打进游戏包内
-        public static bool ValidateAsset(string file)
-        {
-            var ext = Path.GetExtension(file).ToLower();
-            return ext != ".dll" && ext != ".cs" && ext != ".meta" && ext != ".js" && ext != ".boo";
-        }
-    }
-
-    [Serializable]
-    public class ABBuildInfo
-    {
-        //整个 AB 包的名字
-        public string assetBundleName;
-
-        //AB 包内部的资源的名字,多个资源可以合并一个 AB 包
-        public string[] assetNames;
-    }
-
-    /// <summary>
-    /// 在本地Assets/的路径之后,游戏文件夹内的一些文件资源,被统一抽象化为  LocalFile
-    /// </summary>
-    [Serializable]
-    public class LocalFile
-    {
-        public string name = string.Empty;
-
-        [Tooltip("搜索当前文件夹下的通配符")] public string SearchPattern;
-
-        [Tooltip("在本地Assets/的路径,从其中进行查找文件资源进行打热更包,初始化后需要自行设置")]
-        public string[] LocalFilePaths;
-
-        //获取文件夹内的所有文件资源        
-        public static string[] QueryFilePath(string searchPattern)
-        {
-            string path = Application.dataPath.Replace("\\", "/") + "/" + FileSearchPattern.BuildAsset + "/";
-            string[] localFilePaths = Directory.GetFiles(path, searchPattern, SearchOption.AllDirectories);
-            List<string> filePaths = new List<string>();
-            foreach (string item in localFilePaths)
-            {
-                if (Directory.Exists(item)) continue; //如果是文件夹则跳出
-                if (!FileSearchPattern.ValidateAsset(item)) continue; //不通过则跳出
-                var ext = Path.GetExtension(item).ToLower();
-                if ((ext == ".fbx" || ext == ".anim") && !item.Contains(ext)) continue; //fbx或者anim都不打进游戏内
-                string temp = item.Replace(Application.dataPath, "");
-                filePaths.Add(temp.Replace("\\", "/"));
-            }
-
-            return filePaths.ToArray();
-        }
-
-        public static Dictionary<string, string> QueryRules()
-        {
-            Dictionary<string, string> assetTypes = new Dictionary<string, string>();
-            assetTypes.Add("Zip", FileSearchPattern.Zip);
-            assetTypes.Add("Png", FileSearchPattern.Png);
-            assetTypes.Add("TTF", FileSearchPattern.TTF);
-            assetTypes.Add("Asset", FileSearchPattern.Asset);
-            assetTypes.Add("Hdr", FileSearchPattern.Hdr);
-            assetTypes.Add("Shader", FileSearchPattern.Shader);
-            assetTypes.Add("Controller", FileSearchPattern.Controller);
-            assetTypes.Add("Mat", FileSearchPattern.Material);
-            assetTypes.Add("Prefab", FileSearchPattern.Prefab);
-            assetTypes.Add("Unity", FileSearchPattern.Unity);
-            assetTypes.Add("Spriteatlas", FileSearchPattern.Spriteatlas);
-            return assetTypes;
-        }
-
-    }
-
     /// <summary>
     /// _BuildAsset 文件夹下的资源,
     /// 1:必定会被打进 AB 包里面;
@@ -137,9 +39,13 @@ namespace GameAssets
         /// </summary>
         private readonly Dictionary<string, HashSet<string>> _tracker = new Dictionary<string, HashSet<string>>();
 
-        [Header("Serach Asset Rule")] public List<LocalFile> LocalFiles;
-
-        [Header("Asset Bundle")] public List<ABBuildInfo> AssetBundleBuilds;
+        [Header("LocalFiles Path: Assets/_BuildAsset/")] 
+        public List<LocalFile> LocalFiles;
+        
+        
+        
+        [Header("Asset Bundle")] 
+        public List<ABBuildInfo> AssetBundleBuilds;
 
 
 
@@ -159,7 +65,7 @@ namespace GameAssets
                 {
                     LocalFiles.Add(new LocalFile()
                     {
-                        name = item.Key,
+                        FileType = item.Key,
                         LocalFilePaths = LocalFile.QueryFilePath(item.Value),
                         SearchPattern = item.Value
                     });
@@ -173,11 +79,11 @@ namespace GameAssets
 
         public void BuildAllAB()
         {
-            this.ZipAllTextFile(); //压缩所有的文本文件
             this.CollectAllAssets(); //收集所有可以打成 AB 包的资源
             this.AnalysisAssetsDependencies(); //分析 AB 包的所有资源依赖关系
             this.OptimizeAssets(); //对依赖关系进行优化
             this.CombineABWithAssets(); //将所有资源组合成 AB 包
+            this.ZipAllTextFile(); //压缩所有的文本文件
         }
 
 
@@ -190,7 +96,7 @@ namespace GameAssets
             string[] texts = new[] {"*.json", "*.bytes", "*.xml"};
             foreach (string searchPattern in texts)
             {
-                string[] filePaths = Directory.GetFiles(Application.dataPath + "/_BuildAsset/",
+                string[] filePaths = Directory.GetFiles(Application.dataPath + "/" + FileFilter.BuildAsset + "/",
                     searchPattern,
                     SearchOption.AllDirectories);
                 foreach (string filePath in filePaths) //把所有的文件抽出来进行压缩
@@ -199,8 +105,9 @@ namespace GameAssets
                 }
             }
 
-            string zipPath = Application.dataPath + "/_BuildAsset/Text/";
-            if (!LZ4Helper.CompressDirectory(zipPath, zipInfos.ToArray(), zipPath + "Text.zip"))
+            string dirPath = Application.dataPath.Replace("Assets","");
+            string zipFileName = AssetsHelper.AssetBundlesDirectory + FileFilter.AllText;
+            if (!LZ4Helper.CompressDirectory(dirPath, zipInfos.ToArray(), zipFileName))
             {
                 Debug.LogError("压缩包压缩失败");
             }
@@ -213,14 +120,22 @@ namespace GameAssets
         /// </summary>
         private void CollectAllAssets()
         {
+            _assetToAB?.Clear();
             foreach (LocalFile lf in LocalFiles)
             {
-                foreach (string item in lf.LocalFilePaths)
+                foreach (string path in lf.LocalFilePaths)
                 {
-                    string fullPath = Application.dataPath + item;
+                    if (!FileFilter.QueryFileToAB(path))continue;
+                    string fullPath = Application.dataPath + path;
                     //记录所有资源,多个资源对应一个 md5Hash,此时的颗粒度不是最小的,但是必定会被打进 AB 包里面,因为 AB 包是以此为基础创建每个 AB 包的
-                    _assetToAB[item] = QueryABName(fullPath);
-                    // Debug.Log(item + "    "  + _assetToAB[item]);
+                    if (!_assetToAB.TryGetValue(path,out string abname))
+                    {
+                        _assetToAB[path] = QueryABName(fullPath);
+                    }
+                    else
+                    {
+                        Debug.LogError("文件夹中已有一个相同类型,相同名字的资源,请先确定此资源是否正常,建议修改资源名字:" + abname);
+                    }
                 }
             }
         }
@@ -244,7 +159,7 @@ namespace GameAssets
                 }
 
                 //因为AssetDatabase.GetDependencies方法必须以Assets开头.所以必须要添加Assets
-                if (!list.Contains(item.Key)) list.Add("Assets" + item.Key);
+                if (!list.Contains(item.Key)) list.Add(item.Key);
             }
 
             return abMap;
@@ -264,23 +179,24 @@ namespace GameAssets
                 string[] dependencies = AssetDatabase.GetDependencies(item.Value.ToArray(), true);
                 if (dependencies.Length <= 0) continue;
                 //这个AB包对应的资源类型 有其他资源依赖,记录单个资产被多个 AB 包引用
-                foreach (string asset in dependencies) //asset 表示一种资源,asset可以是文件夹
+                foreach (string filePath in dependencies) //asset 表示一种资源,asset可以是文件夹
                 {
+                    if (!FileFilter.QueryFileToAB(filePath)) continue; //符合打包文件的设置
                     // Debug.Log(asset + " 依赖于 " + abName);
-                    if (!_tracker.TryGetValue(asset, out HashSet<string> hashABName))
+                    if (!_tracker.TryGetValue(filePath, out HashSet<string> hashABName))
                     {
                         hashABName = new HashSet<string>();
-                        _tracker.Add(asset, hashABName); //每个资源对应一个 HashSet(无序列表,插入元素快)
+                        _tracker.Add(filePath, hashABName); //每个资源对应一个 HashSet(无序列表,插入元素快)
                     }
 
                     hashABName.Add(abName); //记录这个asset(资源),被多少个 ab 包引用了
                     if (hashABName.Count <= 1) continue;
-                    _assetToAB.TryGetValue(asset.Replace("Assets", ""), out string md5Hash);
+                    _assetToAB.TryGetValue(filePath, out string md5Hash);
                     if (string.IsNullOrEmpty(md5Hash))
                     {
                         // Debug.Log(asset + " 被多个 AB 包依赖: " + abName + "    " + bundleName);
-                        _duplicated[asset.Replace("Assets", "")] =
-                            hashABName.Count; //这个资产并没有在 _BuildAsset 文件夹下面,是在其他文件夹下面的
+                        //这个资产并没有在 _BuildAsset 文件夹下面,是在其他文件夹下面的
+                        _duplicated[filePath] = hashABName.Count;
                     }
                 }
             }
@@ -296,7 +212,7 @@ namespace GameAssets
         {
             foreach (var item in _duplicated)
             {
-                string fullPath = Application.dataPath + item.Key;
+                string fullPath = Application.dataPath.Replace("Assets","") + item.Key;
                 FileInfo fileInfo = new FileInfo(fullPath);
                 // 如果依赖次数小于 5 次,并且其本身size 小于 5KB ,则无需单独打一个包,让其跟随其他 AB 包一起打,即允许资源冗余存在
                 if (item.Value < 5 && fileInfo.Length / 1024 < 5)
@@ -320,30 +236,37 @@ namespace GameAssets
                 AssetBundleBuilds.Add(new ABBuildInfo()
                 {
                     assetBundleName = item.Key,
-                    assetNames = item.Value.ToArray() //必须是以 Asset 开头
+                    assetNames = item.Value //必须是以 Asset 开头
                 });
             }
-
+            AssetBundleBuilds.Sort((a,b)=>a.assetBundleName.CompareTo(b.assetBundleName));
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
 
         /// <summary>
-        /// 根据文件类型进行编码,返回出一个 md5Hash
+        /// 根据文件类型进行编码,返回出一个 AssetBundle 的名字
         /// </summary>
-        /// <param name="filePath"></param>
+        /// <param name="fileType">文件类型</param>
+        /// <param name="fullPath">文件的完整路径</param>
+        /// <returns></returns>
         private string QueryABName(string fullPath)
         {
-            string md5Hash = SecurityTools.GetMD5Hash(fullPath) + ABHelper.Extension; //目前选择 hash 来进行编码名字
+            //Path.GetExtension(fullPath).ToLower() + "_" + 
+            string abName = Path.GetFileName(fullPath).ToLower() + AssetBundleConfig.Extension; 
             if (fullPath.EndsWith(".shader"))
             {
-                md5Hash = SecurityTools.GetMD5Hash("shaderlibs") + ABHelper.Extension;
+                return "shaderlibs" + AssetBundleConfig.Extension;
             }
+            return abName;
 
-            // md5Hash = Regex.Split(fullPath,"Assets",RegexOptions.IgnoreCase).Last();
-            // md5Hash = md5Hash.Replace("/", "_");
-            return md5Hash;
+            // string md5Hash = SecurityTools.GetMD5Hash(fullPath) + AssetBundleConfig.Extension; //选择 hash 来进行编码名字
+            // if (fullPath.EndsWith(".shader"))
+            // {
+            //     md5Hash = SecurityTools.GetMD5Hash("shaderlibs") + AssetBundleConfig.Extension;
+            // }
+            // return md5Hash;
         }
 
         /// <summary>
@@ -358,7 +281,7 @@ namespace GameAssets
                 builds.Add(new AssetBundleBuild
                 {
                     assetBundleName = ab.assetBundleName,
-                    assetNames = ab.assetNames
+                    assetNames = ab.assetNames.ToArray()
                 });
             }
 

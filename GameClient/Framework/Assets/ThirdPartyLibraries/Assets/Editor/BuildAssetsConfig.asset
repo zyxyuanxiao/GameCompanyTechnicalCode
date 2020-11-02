@@ -13,177 +13,174 @@ MonoBehaviour:
   m_Name: BuildAssetsConfig
   m_EditorClassIdentifier: 
   LocalFiles:
-  - name: Zip
-    SearchPattern: '*.zip'
-    LocalFilePaths:
-    - /_BuildAsset/Text/Text.zip
-  - name: Png
+  - FileType: Png
     SearchPattern: '*.png'
     LocalFilePaths:
-    - /_BuildAsset/Shader/UIEffect/Default-Transition.png
-    - /_BuildAsset/Texture/Png/Brown Stony Light.png
-    - /_BuildAsset/Texture/Png/Brown Stony.png
-    - /_BuildAsset/Texture/Png/Grass.png
-    - /_BuildAsset/Texture/Png/Grey Stones.png
-    - /_BuildAsset/Texture/Png/Sandy Orange.png
-    - /_BuildAsset/Texture/Png/Sandy.png
-    - /_BuildAsset/Texture/Png/Water Deep Blue.png
-    - /_BuildAsset/Texture/Png/Water Light Blue.png
-  - name: TTF
+    - Assets/_BuildAsset/Shader/UIEffect/Default-Transition.png
+    - Assets/_BuildAsset/Texture/Png/Brown Stony Light.png
+    - Assets/_BuildAsset/Texture/Png/Brown Stony.png
+    - Assets/_BuildAsset/Texture/Png/Grass.png
+    - Assets/_BuildAsset/Texture/Png/Grey Stones.png
+    - Assets/_BuildAsset/Texture/Png/Sandy Orange.png
+    - Assets/_BuildAsset/Texture/Png/Sandy.png
+    - Assets/_BuildAsset/Texture/Png/Water Deep Blue.png
+    - Assets/_BuildAsset/Texture/Png/Water Light Blue.png
+  - FileType: TTF
     SearchPattern: '*.ttf'
     LocalFilePaths:
-    - /_BuildAsset/Font/FZBZ.ttf
-    - /_BuildAsset/Font/SOURCEHANSANSCN_MEDIUM_0.ttf
-    - /_BuildAsset/Font/SY1.ttf
-    - /_BuildAsset/Font/SZ.ttf
-  - name: Asset
+    - Assets/_BuildAsset/Font/FZBZ.ttf
+    - Assets/_BuildAsset/Font/SOURCEHANSANSCN_MEDIUM_0.ttf
+    - Assets/_BuildAsset/Font/SY1.ttf
+    - Assets/_BuildAsset/Font/SZ.ttf
+  - FileType: Asset
     SearchPattern: '*.asset'
-    LocalFilePaths: []
-  - name: Hdr
+    LocalFilePaths:
+    - Assets/_BuildAsset/Config/ABManifest.asset
+  - FileType: Hdr
     SearchPattern: '*.hdr'
     LocalFilePaths:
-    - /_BuildAsset/Cubemap/Skybox/daytime.hdr
-    - /_BuildAsset/Cubemap/Skybox/sunset.hdr
-  - name: Shader
+    - Assets/_BuildAsset/Cubemap/Skybox/daytime.hdr
+    - Assets/_BuildAsset/Cubemap/Skybox/sunset.hdr
+  - FileType: Shader
     SearchPattern: '*.shader'
     LocalFilePaths:
-    - /_BuildAsset/Shader/UIEffect/UIDissolve.shader
-    - /_BuildAsset/Shader/UIEffect/UIEffect.shader
-    - /_BuildAsset/Shader/UIEffect/UIHsvModifier.shader
-    - /_BuildAsset/Shader/UIEffect/UIShiny.shader
-    - /_BuildAsset/Shader/UIEffect/UITtransition.shader
-  - name: Controller
+    - Assets/_BuildAsset/Shader/UIEffect/UIDissolve.shader
+    - Assets/_BuildAsset/Shader/UIEffect/UIEffect.shader
+    - Assets/_BuildAsset/Shader/UIEffect/UIHsvModifier.shader
+    - Assets/_BuildAsset/Shader/UIEffect/UIShiny.shader
+    - Assets/_BuildAsset/Shader/UIEffect/UITtransition.shader
+  - FileType: Controller
     SearchPattern: '*.controller'
     LocalFilePaths: []
-  - name: Mat
+  - FileType: Mat
     SearchPattern: '*.mat'
     LocalFilePaths:
-    - /_BuildAsset/Material/Skybox/Skybox_Daytime.mat
-    - /_BuildAsset/Material/Skybox/Skybox_Sunset.mat
-    - /_BuildAsset/Material/Surface/Brown Stony Light.mat
-    - /_BuildAsset/Material/Surface/Brown Stony.mat
-    - /_BuildAsset/Material/Surface/Grass.mat
-    - /_BuildAsset/Material/Surface/Grey Stones.mat
-    - /_BuildAsset/Material/Surface/Sandy Orange.mat
-    - /_BuildAsset/Material/Surface/Sandy.mat
-    - /_BuildAsset/Material/Surface/Water Deep Blue.mat
-    - /_BuildAsset/Material/Surface/Water Light Blue.mat
-  - name: Prefab
+    - Assets/_BuildAsset/Material/Skybox/Skybox_Daytime.mat
+    - Assets/_BuildAsset/Material/Skybox/Skybox_Sunset.mat
+    - Assets/_BuildAsset/Material/Surface/Brown Stony Light.mat
+    - Assets/_BuildAsset/Material/Surface/Brown Stony.mat
+    - Assets/_BuildAsset/Material/Surface/Grass.mat
+    - Assets/_BuildAsset/Material/Surface/Grey Stones.mat
+    - Assets/_BuildAsset/Material/Surface/Sandy Orange.mat
+    - Assets/_BuildAsset/Material/Surface/Sandy.mat
+    - Assets/_BuildAsset/Material/Surface/Water Deep Blue.mat
+    - Assets/_BuildAsset/Material/Surface/Water Light Blue.mat
+  - FileType: Prefab
     SearchPattern: '*.prefab'
     LocalFilePaths:
-    - /_BuildAsset/Prefab/Model/Ekard.prefab
-    - /_BuildAsset/Prefab/Scene/SceneCamera.prefab
-    - /_BuildAsset/Prefab/UI/UIRootLogin.prefab
-  - name: Unity
+    - Assets/_BuildAsset/Prefab/Model/Ekard.prefab
+    - Assets/_BuildAsset/Prefab/Scene/SceneCamera.prefab
+    - Assets/_BuildAsset/Prefab/UI/UIRootLogin.prefab
+  - FileType: Unity
     SearchPattern: '*.unity'
     LocalFilePaths:
-    - /_BuildAsset/Scene/LoginScene.unity
-    - /_BuildAsset/Scene/SceneLevel1.unity
-  - name: Spriteatlas
+    - Assets/_BuildAsset/Scene/LoginScene.unity
+    - Assets/_BuildAsset/Scene/SceneLevel1.unity
+  - FileType: Spriteatlas
     SearchPattern: '*.spriteatlas'
     LocalFilePaths:
-    - /_BuildAsset/Texture/Spriteatlas/Test.spriteatlas
+    - Assets/_BuildAsset/Texture/Spriteatlas/Test.spriteatlas
   AssetBundleBuilds:
-  - assetBundleName: a51914f22431e941931fddbde5086d0c.unity3d
+  - assetBundleName: abmanifest.asset.unity3d
     assetNames:
-    - Assets/_BuildAsset/Text/Text.zip
-  - assetBundleName: 9560fefce5e5fd5953e2402f460daf14.unity3d
+    - Assets/_BuildAsset/Config/ABManifest.asset
+  - assetBundleName: brown stony light.mat.unity3d
     assetNames:
-    - Assets/_BuildAsset/Shader/UIEffect/Default-Transition.png
-  - assetBundleName: d14d2fff1664b8cdde5cae36a678384a.unity3d
+    - Assets/_BuildAsset/Material/Surface/Brown Stony Light.mat
+  - assetBundleName: brown stony light.png.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Brown Stony Light.png
-  - assetBundleName: bdad1b2f62d45bbbb715ad80a038521c.unity3d
+  - assetBundleName: brown stony.mat.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Material/Surface/Brown Stony.mat
+  - assetBundleName: brown stony.png.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Png/Brown Stony.png
-  - assetBundleName: a78a229a9e7be6489b182f4b2c0574f2.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Texture/Png/Grass.png
-  - assetBundleName: f752dd0e308e656717d1fea09b1c71fc.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Texture/Png/Grey Stones.png
-  - assetBundleName: cef67d738d37d8daaba0e4a916b1b2b7.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Texture/Png/Sandy Orange.png
-  - assetBundleName: 4b603feb4841341ab90f3da0cc8afd33.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Texture/Png/Sandy.png
-  - assetBundleName: 6e6d2d4faef8740bdd9389250de30760.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Texture/Png/Water Deep Blue.png
-  - assetBundleName: 4133e74849aab90a77010469f57ac59f.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Texture/Png/Water Light Blue.png
-  - assetBundleName: b62f78148eb8da83292ddbbcb9312b34.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Font/FZBZ.ttf
-  - assetBundleName: 1498b4567a0702f3b2d55fd23ac82563.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Font/SOURCEHANSANSCN_MEDIUM_0.ttf
-  - assetBundleName: e454377e6b3d419bf6b9e6f216c45aa6.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Font/SY1.ttf
-  - assetBundleName: 386ddac528ba0766e27a192bc883321a.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Font/SZ.ttf
-  - assetBundleName: b8970c83fed325b9114433b6a97b85ac.unity3d
+  - assetBundleName: daytime.hdr.unity3d
     assetNames:
     - Assets/_BuildAsset/Cubemap/Skybox/daytime.hdr
-  - assetBundleName: de9849e306510ec54355ea131132bc36.unity3d
+  - assetBundleName: default-transition.png.unity3d
     assetNames:
-    - Assets/_BuildAsset/Cubemap/Skybox/sunset.hdr
-  - assetBundleName: 4c0e380f7746fc26aba39cead90c6862.unity3d
+    - Assets/_BuildAsset/Shader/UIEffect/Default-Transition.png
+  - assetBundleName: ekard.prefab.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Prefab/Model/Ekard.prefab
+  - assetBundleName: fzbz.ttf.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Font/FZBZ.ttf
+  - assetBundleName: grass.mat.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Material/Surface/Grass.mat
+  - assetBundleName: grass.png.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Texture/Png/Grass.png
+  - assetBundleName: grey stones.mat.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Material/Surface/Grey Stones.mat
+  - assetBundleName: grey stones.png.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Texture/Png/Grey Stones.png
+  - assetBundleName: loginscene.unity.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Scene/LoginScene.unity
+  - assetBundleName: sandy orange.mat.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Material/Surface/Sandy Orange.mat
+  - assetBundleName: sandy orange.png.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Texture/Png/Sandy Orange.png
+  - assetBundleName: sandy.mat.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Material/Surface/Sandy.mat
+  - assetBundleName: sandy.png.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Texture/Png/Sandy.png
+  - assetBundleName: scenecamera.prefab.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Prefab/Scene/SceneCamera.prefab
+  - assetBundleName: scenelevel1.unity.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Scene/SceneLevel1.unity
+  - assetBundleName: shaderlibs.unity3d
     assetNames:
     - Assets/_BuildAsset/Shader/UIEffect/UIDissolve.shader
     - Assets/_BuildAsset/Shader/UIEffect/UIEffect.shader
     - Assets/_BuildAsset/Shader/UIEffect/UIHsvModifier.shader
     - Assets/_BuildAsset/Shader/UIEffect/UIShiny.shader
     - Assets/_BuildAsset/Shader/UIEffect/UITtransition.shader
-  - assetBundleName: 5d29dce026ad18754d402dc186f0aef5.unity3d
+  - assetBundleName: skybox_daytime.mat.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Skybox/Skybox_Daytime.mat
-  - assetBundleName: 7b703a0e733f1276c85adf48c9326f2c.unity3d
+  - assetBundleName: skybox_sunset.mat.unity3d
     assetNames:
     - Assets/_BuildAsset/Material/Skybox/Skybox_Sunset.mat
-  - assetBundleName: 6a685a70d027a3c9be922d852da2ab67.unity3d
+  - assetBundleName: sourcehansanscn_medium_0.ttf.unity3d
     assetNames:
-    - Assets/_BuildAsset/Material/Surface/Brown Stony Light.mat
-  - assetBundleName: e425bf54b214277d92858d40652f5a69.unity3d
+    - Assets/_BuildAsset/Font/SOURCEHANSANSCN_MEDIUM_0.ttf
+  - assetBundleName: sunset.hdr.unity3d
     assetNames:
-    - Assets/_BuildAsset/Material/Surface/Brown Stony.mat
-  - assetBundleName: 8a439a8967523b8be991ec9011ab53de.unity3d
+    - Assets/_BuildAsset/Cubemap/Skybox/sunset.hdr
+  - assetBundleName: sy1.ttf.unity3d
     assetNames:
-    - Assets/_BuildAsset/Material/Surface/Grass.mat
-  - assetBundleName: 037d2a3aec3fe9092904252e27ce48c6.unity3d
+    - Assets/_BuildAsset/Font/SY1.ttf
+  - assetBundleName: sz.ttf.unity3d
     assetNames:
-    - Assets/_BuildAsset/Material/Surface/Grey Stones.mat
-  - assetBundleName: 0917b9c30107fb4e5f397614956ee40b.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Material/Surface/Sandy Orange.mat
-  - assetBundleName: 3410289c34a1f4dc5d1287737bcc9c98.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Material/Surface/Sandy.mat
-  - assetBundleName: 95044290da82c4635dad2d026ce75b64.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Material/Surface/Water Deep Blue.mat
-  - assetBundleName: fd866dfae430dbace04c262f04071380.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Material/Surface/Water Light Blue.mat
-  - assetBundleName: 5ba3d896225e5d29a1f8a75bbce4b51a.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Prefab/Model/Ekard.prefab
-  - assetBundleName: eabc7745a0745377181669fde56d4eca.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Prefab/Scene/SceneCamera.prefab
-  - assetBundleName: afadcdb4e739cdc74f023d7f17ddec19.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Prefab/UI/UIRootLogin.prefab
-  - assetBundleName: 151f34c5e3598a237f77fb93b3f9f713.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Scene/LoginScene.unity
-  - assetBundleName: fec12405a4dd7372e3c9ae120d43fe0e.unity3d
-    assetNames:
-    - Assets/_BuildAsset/Scene/SceneLevel1.unity
-  - assetBundleName: 1ec5abd3bc56d39ecdf5182e6a2ae40e.unity3d
+    - Assets/_BuildAsset/Font/SZ.ttf
+  - assetBundleName: test.spriteatlas.unity3d
     assetNames:
     - Assets/_BuildAsset/Texture/Spriteatlas/Test.spriteatlas
+  - assetBundleName: uirootlogin.prefab.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Prefab/UI/UIRootLogin.prefab
+  - assetBundleName: water deep blue.mat.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Material/Surface/Water Deep Blue.mat
+  - assetBundleName: water deep blue.png.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Texture/Png/Water Deep Blue.png
+  - assetBundleName: water light blue.mat.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Material/Surface/Water Light Blue.mat
+  - assetBundleName: water light blue.png.unity3d
+    assetNames:
+    - Assets/_BuildAsset/Texture/Png/Water Light Blue.png

@@ -13,7 +13,6 @@ namespace GameAssets
         {
             BuildAssetsConfig assetsConfig = BuildAssetsConfig.QueryAssetsConfig();
             assetsConfig.InitRules();
-            assetsConfig.BuildAllAB();
             Selection.activeObject = assetsConfig;
         }
 
@@ -35,6 +34,19 @@ namespace GameAssets
             AssetsHelper.BuildAllStreamingAssets();
         }
 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         // [MenuItem("Builder/Add Asset To Rule", false, 3000)]
         // private static void AddAssetToRule()
         // {
@@ -60,7 +72,7 @@ namespace GameAssets
         // }
 
 
-        [MenuItem("Builder/Open App AssetBundles", false, 3001)]
+        [MenuItem("Builder/Open PC_MacOS AssetBundles Path", false, 3001)]
         private static void OpenAppAssetBundles()
         {
             EditorUtility.OpenWithDefaultApp(Application.persistentDataPath);
