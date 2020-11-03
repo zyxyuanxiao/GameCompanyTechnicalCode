@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using Common;
+using GameAssets;
+using UnityEngine;
 
 public class GUIManager : IManager
 {
@@ -12,16 +14,22 @@ public class GUIManager : IManager
 
     public void Start()
     {
-
+        AssetsNotification.AssetsMessageReceived += AssetsMessageReceived;
     }
 
     public void OnDestroy()
     {
-
+        AssetsNotification.AssetsMessageReceived -= AssetsMessageReceived;
     }
 
     public void Update()
     {
 
+    }
+    
+    private void AssetsMessageReceived(IAssetsNotificationType notificationType, string messageInfo)
+    {
+        if (notificationType == IAssetsNotificationType.Info) return;
+        //UI 展示弹窗,弹出资源加载,下载,网络,等一系列问题
     }
 }

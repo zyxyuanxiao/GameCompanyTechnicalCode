@@ -4,9 +4,9 @@
 // public sealed class LoadGameStart : IProcess
 // {
 //     public byte ID => 0;
-//     public byte layer => 0;
+//     public ProcessLayer Layer => ProcessLayer.HotUpdate;
 //     public byte DelayFrame => 1;
-//     public void Work()
+//     public IEnumerator Work()
 //     {
 //         this.isDone = false;
 //         SceneManager sm = GameManager.Instance.QueryManager<SceneManager>();
@@ -35,9 +35,9 @@
 // public sealed class LoadUIRoot : IProcess
 // {
 //     public byte ID => 1;
-//     public byte layer => 0;
+//     public ProcessLayer Layer => ProcessLayer.HotUpdate;
 //     public byte DelayFrame => 1;
-//     public void Work()
+//     public IEnumerator Work()
 //     {
 //         this.isDone     = false;
 //         GameObject uiRes = Resources.Load<GameObject>("UI/UIRoot");//这个不是实例化的GameObject,只能作为资源使用

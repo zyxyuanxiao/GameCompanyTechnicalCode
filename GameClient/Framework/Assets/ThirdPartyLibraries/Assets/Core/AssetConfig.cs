@@ -2,10 +2,8 @@ using UnityEngine;
 
 namespace GameAssets
 {
-    public class AssetBundleConfig
+    public class AssetConfig
     {
-        public static readonly string ManifestAsset = "Assets/Manifest.asset";
-        
         /// <summary>
         /// 本次打包的配置版本文件,
         ///
@@ -15,14 +13,17 @@ namespace GameAssets
         /// 如果是热更包,是跟随热更情况,先下载此热更配置文件,然后根据热更配置文件进行下载 AB 包
         /// 
         /// </summary>
-        public static readonly string VersionConfig = "VersionConfig.json";
+        public static readonly string VersionConfigName = "VersionConfig.json";
         
         /// <summary>
         /// AssetBundle 的后缀名
         /// </summary>
         public static readonly string Extension = ".unity3d";
 
-
+        
+        public static VersionConfig VersionConfig = new VersionConfig();
+        
+        
         public static void Test()
         {
             

@@ -34,7 +34,15 @@ namespace GameAssets
         /// AB包 在 APP 内的路径对应的版本号以及 MD5,不是在本地的路径
         /// </summary>
         public Dictionary<string, AB_V_MD5> ABInfos;
+
         
+        /// <summary>
+        /// 读本地数据生成一个对象
+        /// </summary>
+        public static void ReadLocalFile()
+        {
+            
+        }
         
         
     }
