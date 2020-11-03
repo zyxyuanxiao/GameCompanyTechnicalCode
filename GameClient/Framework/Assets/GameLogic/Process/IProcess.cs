@@ -1,5 +1,11 @@
 using System.Collections;
 
+public enum ProcessLayer
+{
+    Init = 0, //初始化的任务流程
+    HotUpdate = 2, //热更新任务流程
+}
+
 /// <summary>
 /// 流程接口,所有的流程需要自行创建继承此接口
 /// layer > ID
@@ -19,7 +25,7 @@ public interface IProcess
     IEnumerator Work();
 
     //任务执行完毕的标志位
-    bool isDone { get; set; }
+    bool IsDone { get; set; }
 
     //将所有任务数据进行充值
     void Reset();

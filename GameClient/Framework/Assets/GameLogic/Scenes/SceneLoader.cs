@@ -153,7 +153,7 @@ public partial class GameSceneManager
 
     private static void MonitoringSceneLoad(Scene scene, LoadSceneMode mode)
     {
-        GameSceneManager sceneManager = GameManager.Instance.QueryManager<GameSceneManager>();
+        GameSceneManager sceneManager = GameManager.QueryManager<GameSceneManager>();
         sceneManager._activeSceneName = scene.name;
     }
 }

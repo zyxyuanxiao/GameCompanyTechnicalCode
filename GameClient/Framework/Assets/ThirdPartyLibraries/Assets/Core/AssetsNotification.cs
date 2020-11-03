@@ -5,9 +5,13 @@ namespace GameAssets
 {
     public enum IAssetsNotificationType
     {
-        Info = 0,//信息
+        None = 0,//信息
+        Info ,//信息
         UIPopUpInfo,//弹窗正常信息
         UIPopUpError,//弹窗错误信息
+        BeginReadConfig,//开始读取配置文件
+        ReadConfigFailed,//读取配置失败了
+        ReadConfigSucceed,//读取配置成功了
     }
     
     /// <summary>
@@ -25,9 +29,10 @@ namespace GameAssets
         
         /// <summary>
         /// 广播本模块的信息
+        /// json = {"message":"信息"}
         /// </summary>
-        /// <param name="messageType"></param>
-        /// <param name="info"></param>
+        /// <param name="notificationType"></param>
+        /// <param name="json"></param>
         public static void Broadcast(IAssetsNotificationType notificationType = IAssetsNotificationType.Info, string json = "")
         {
             AssetsMessageReceived?.Invoke(notificationType,json);

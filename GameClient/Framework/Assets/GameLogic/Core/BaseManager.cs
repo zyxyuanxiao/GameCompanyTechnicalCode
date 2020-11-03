@@ -13,8 +13,8 @@ using UnityEngine;
 /// </summary>
 public abstract class BaseManager : MonoBehaviour
 {
-    private Dictionary<Type, IManager> dictManager;
-    private IManager[] _managers; 
+    private static Dictionary<Type, IManager> dictManager;
+    private static IManager[] _managers; 
 
     //一帧,协程中使用
     public static WaitForEndOfFrame OneFrame = new WaitForEndOfFrame();
@@ -85,7 +85,7 @@ public abstract class BaseManager : MonoBehaviour
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns></returns>
-    public T QueryManager<T>() where T : IManager
+    public static T QueryManager<T>() where T : IManager
     {
         if (dictManager.TryGetValue(typeof(T), out IManager manager))
         {

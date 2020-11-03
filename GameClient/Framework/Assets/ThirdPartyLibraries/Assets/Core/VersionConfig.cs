@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Common;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace GameAssets
     
     public class VersionConfig
     {
+        public string Md5Hash = string.Empty;//本身文件的 MD5
         public string OS = string.Empty;//操作平台
         public string SVNVersion = string.Empty;//SVN版本号
         public string AppVersion = string.Empty;//游戏版本号
@@ -35,15 +37,5 @@ namespace GameAssets
         /// </summary>
         public Dictionary<string, AB_V_MD5> ABInfos;
 
-        
-        /// <summary>
-        /// 读本地数据生成一个对象
-        /// </summary>
-        public static void ReadLocalFile()
-        {
-            
-        }
-        
-        
     }
 }
