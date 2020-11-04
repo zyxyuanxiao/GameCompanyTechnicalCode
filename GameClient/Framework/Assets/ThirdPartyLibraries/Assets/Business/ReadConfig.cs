@@ -25,40 +25,26 @@ namespace GameAssets
             //判断一下配置文件是否已经从网络上面下载到本地了,
             //如果没有从网络上面下载到本地,则需要先从 StreamingAssets 路径下进行读取
             //如果下载到本地了,则需要从persistentDataPath路径下进行读取
-
+            string vcPath = AssetConfig.VersionConfigPersistentDataPath;
             if (!File.Exists(AssetConfig.VersionConfigPersistentDataPath))
             {
-                string json = File.ReadAllText(AssetConfig.VersionConfigStreamingAssetsPath);
-                if (string.IsNullOrEmpty(json))
-                {
-                    jsonData["message"] = "读取 " + AssetConfig.VersionConfigStreamingAssetsPath + " 失败了";
-                    t = IAssetsNotificationType.ReadConfigFailed;
-                }
-                else
-                {
-                    jsonData["message"] = "读取 " + AssetConfig.VersionConfigStreamingAssetsPath + " 成功了";
-                    AssetConfig.VersionConfig = JsonMapper.ToObject<VersionConfig>(json);
-                    t = IAssetsNotificationType.ReadConfigSucceed;
-                }
-                AssetsNotification.Broadcast(t,jsonData.ToJson());
-                Progress = 100;
-                yield break;
+                vcPath = AssetConfig.VersionConfigStreamingAssetsPath;
             }
-            
-            UnityWebRequest unityWebRequest = UnityWebRequest.Get(AssetConfig.VersionConfigPersistentDataPath);
+            UnityWebRequest unityWebRequest = UnityWebRequest.Get(vcPath);
             yield return unityWebRequest.SendWebRequest();
             if (unityWebRequest.isHttpError||unityWebRequest.isNetworkError)
             {
-                jsonData["message"] = "读取 " + AssetConfig.VersionConfigPersistentDataPath + " 失败了";
+                jsonData["message"] = "读取 " + vcPath + " 失败了  ";
                 t = IAssetsNotificationType.ReadConfigFailed;
             }
             else
             {
-                jsonData["message"] = "读取 " + AssetConfig.VersionConfigPersistentDataPath + " 成功了";
+                jsonData["message"] = "读取 " + vcPath + " 成功了";
                 AssetConfig.VersionConfig = JsonMapper.ToObject<VersionConfig>(unityWebRequest.downloadHandler.text);
                 t = IAssetsNotificationType.ReadConfigSucceed;
             }
             AssetsNotification.Broadcast(t,jsonData.ToJson());
+            Progress = 100;
             yield return AssetConfig.OneFrame;
         }
     }

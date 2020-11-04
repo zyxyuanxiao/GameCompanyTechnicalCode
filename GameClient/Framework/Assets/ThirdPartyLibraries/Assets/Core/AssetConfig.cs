@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace GameAssets
@@ -33,14 +34,29 @@ namespace GameAssets
 
         //在 streamingAssetsPath 路径下,随包的版本文件
         public static readonly string VersionConfigStreamingAssetsPath =
-            Application.streamingAssetsPath.Replace("\\","/") + "/VersionConfig.json";
+            LOCAL_PATH_TO_URL(Application.streamingAssetsPath.Replace("\\","/") + "/VersionConfig.json");
         //在 persistentDataPath 路径下,由网络下载后的文件
         public static readonly string VersionConfigPersistentDataPath =
-            Application.persistentDataPath.Replace("\\","/") + "/VersionConfig.json";
+            LOCAL_PATH_TO_URL(Application.persistentDataPath.Replace("\\","/") + "/VersionConfig.json");
         
-        public static void Test()
+        public static string LOCAL_PATH_TO_URL(string path)
         {
-            
+            //#if (UNITY_ANDROID && !UNITY_EDITOR) || (UNITY_EDITOR_WIN && !UNITY_ANDROID)//未来win上测试android ab出错检查这里
+            //        return path;
+            //#else
+            //        return "file:///" + path;
+            //#endif
+            string url =
+#if UNITY_ANDROID && !UNITY_EDITOR
+        path;
+#elif UNITY_IPHONE && !UNITY_EDITOR
+        "file://" + path;
+#elif UNITY_STANDALONE||UNITY_EDITOR
+                "file:///" + path;
+#else
+        string.Empty;
+#endif
+            return Uri.EscapeUriString(url);
         }
     }
 }

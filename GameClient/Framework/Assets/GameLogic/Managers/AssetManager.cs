@@ -33,7 +33,7 @@ public class AssetManager : IManager
     {
         // if (notificationType != IAssetsNotificationType.Info) return;
         JsonData jsonData = JsonMapper.ToObject(json);
-        Log.Debug(notificationType.ToString() + "    " + jsonData["message"]);
+        Debug.Log(notificationType.ToString() + "    " + jsonData["message"]);
     }
     
     
