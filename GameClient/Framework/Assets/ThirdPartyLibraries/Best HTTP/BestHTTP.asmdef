@@ -1,8 +1,6 @@
 {
     "name": "BestHTTP",
-    "references": [
-        "GUID:981022a2f47254f27b80f8d35c3ebaef"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,

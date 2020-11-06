@@ -116,9 +116,10 @@ namespace BestHTTP.Examples.ServerSentEvents
 
         private void OnDateTime(EventSource eventSource, Message message)
         {
-            DateTimeData dtData = LitJson.JsonMapper.ToObject<DateTimeData>(message.Data);
+            // DateTimeData dtData = LitJson.JsonMapper.ToObject<DateTimeData>(message.Data);
 
-            AddText(string.Format("OnDateTime: <color=yellow>{0}</color>", dtData.ToString()));
+            // AddText(string.Format("OnDateTime: <color=yellow>{0}</color>", dtData.ToString()));
+            AddText(string.Format("OnDateTime: <color=yellow>{0}</color>", ""));
         }
 
         private void SetButtons(bool start, bool close)

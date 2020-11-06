@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-using LitJson;
+// using LitJson;
 
 namespace BestHTTP.SignalR.JsonEncoders
 {
@@ -10,17 +10,19 @@ namespace BestHTTP.SignalR.JsonEncoders
     {
         public string Encode(object obj)
         {
-            JsonWriter writer = new JsonWriter();
-            JsonMapper.ToJson(obj, writer);
-
-            return writer.ToString();
+            return "";
+            // JsonWriter writer = new JsonWriter();
+            // JsonMapper.ToJson(obj, writer);
+            //
+            // return writer.ToString();
         }
 
         public IDictionary<string, object> DecodeMessage(string json)
         {
-            JsonReader reader = new JsonReader(json);
-
-            return JsonMapper.ToObject<Dictionary<string, object>>(reader);
+            return null;
+            // JsonReader reader = new JsonReader(json);
+            //
+            // return JsonMapper.ToObject<Dictionary<string, object>>(reader);
         }
     }
 }
