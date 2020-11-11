@@ -16,4 +16,4 @@ MonoBehaviour:
   UseAssetBundles: 0
   UseLocalServer: 0
   LocalWebServerAddress: http://127.0.0.1:80/AssetBundles/
-  RemoteWebServerAddress: []
+  _remoteWebServerAddress: []

@@ -26,7 +26,7 @@ public partial class ProcessManager
     }
     
     /// <summary>
-    /// 当用户不停的向 任务队列 里面添加 任务流, 需要使用队列做好规划,先进先出,必须在主线程中
+    /// 当用户不停的向 任务流队列 里面添加 任务流, 需要使用队列做好规划,先进先出,必须在主线程中
     /// 任务流不应该很多,目前的定义是任务流是同步执行的
     /// </summary>
     private static Queue<TaskAction> taskQueue = new Queue<TaskAction>(5);

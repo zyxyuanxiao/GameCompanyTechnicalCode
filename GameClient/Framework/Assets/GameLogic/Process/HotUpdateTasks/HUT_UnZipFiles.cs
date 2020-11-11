@@ -9,8 +9,8 @@ using GameAssets;
  * 4:加载本地文件
  * 5:检查所有本地文件
  *
- * HPT : HotUpdate Process Task 热更流程任务
- * 所有类以 PTH 开头
+ * HUT : Hot Update Task 热更流程任务
+ * 所有类以 HUT 开头
  */
 //解压文件
 public sealed class HUT_UnZipFiles : ITaskProcess

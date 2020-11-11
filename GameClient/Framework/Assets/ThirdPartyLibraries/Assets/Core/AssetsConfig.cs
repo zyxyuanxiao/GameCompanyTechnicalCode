@@ -9,6 +9,30 @@ namespace GameAssets
     public class AssetsConfig
     {
         /// <summary>
+        /// 一帧
+        /// </summary>
+        public static WaitForEndOfFrame OneFrame = new WaitForEndOfFrame();
+        
+        /// <summary>
+        /// AssetBundle 的后缀名
+        /// </summary>
+        public static readonly string Extension = ".unity3d";
+        
+        /// <summary>
+        /// 下载VersionConfig的 URL,下载完毕之后,有一系列数据,包括VersionConfig对象文本,需要下载的资源URL配置
+        /// </summary>
+        public static string DownloadURL = string.Empty;
+        
+
+        #region VersionConfig
+                
+        /// <summary>
+        /// 从本地加载的VersionConfig数据,全局使用这一份即可
+        /// </summary>
+        public static VersionConfig VersionConfig;
+        
+        
+        /// <summary>
         /// 本次打包的配置版本文件,
         ///
         /// 编辑器下运行,路径是:Assets/StreamingAssets/VersionConfig.json,
@@ -18,22 +42,6 @@ namespace GameAssets
         /// 
         /// </summary>
         public static readonly string VersionConfigName = "VersionConfig.json";
-        
-        /// <summary>
-        /// AssetBundle 的后缀名
-        /// </summary>
-        public static readonly string Extension = ".unity3d";
-
-        /// <summary>
-        /// VersionConfig唯一对象,项目里面所有的类只需要使用到这一个类对象即可
-        /// </summary>
-        public static VersionConfig VersionConfig;
-        
-        /// <summary>
-        /// 一帧
-        /// </summary>
-        public static WaitForEndOfFrame OneFrame = new WaitForEndOfFrame();
-
 
         //在 streamingAssetsPath 路径下,随包的版本文件
         public static readonly string VersionConfigStreamingAssetsPath =
@@ -61,5 +69,6 @@ namespace GameAssets
 #endif
             return Uri.EscapeUriString(url);
         }
+        #endregion
     }
 }
