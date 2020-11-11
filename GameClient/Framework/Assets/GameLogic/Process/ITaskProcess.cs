@@ -1,6 +1,6 @@
 using System.Collections;
 
-public enum ProcessLayer
+public enum TaskProcessLayer
 {
     Init = 0, //初始化的任务流程
     HotUpdate = 2, //热更新任务流程
@@ -10,10 +10,10 @@ public enum ProcessLayer
 /// 流程接口,所有的流程需要自行创建继承此接口
 /// layer > ID
 /// </summary>
-public interface IProcess
+public interface ITaskProcess
 {
     //任务流的层次,为 0 表示需要在初始化的时候执行,其他时候需要执行其他层次的任务流,下一个层级进行加 1
-    ProcessLayer Layer { get; }
+    TaskProcessLayer Layer { get; }
 
     //此 ID 表示任务的优先级,从 0 开始,逐步加 1
     byte ID { get; }

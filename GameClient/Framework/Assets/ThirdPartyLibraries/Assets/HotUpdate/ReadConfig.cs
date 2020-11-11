@@ -20,15 +20,15 @@ namespace GameAssets
             JsonData jsonData = new JsonData();
             jsonData["message"] = "开始读取 VersionConfig.json 并转成 VersionConfig 对象";
             AssetsNotification.Broadcast(t,jsonData.ToJson());
-            yield return AssetConfig.OneFrame;
+            yield return AssetsConfig.OneFrame;
             Progress = 1;
             //判断一下配置文件是否已经从网络上面下载到本地了,
             //如果没有从网络上面下载到本地,则需要先从 StreamingAssets 路径下进行读取
             //如果下载到本地了,则需要从persistentDataPath路径下进行读取
-            string vcPath = AssetConfig.VersionConfigPersistentDataPath;
-            if (!File.Exists(AssetConfig.VersionConfigPersistentDataPath))
+            string vcPath = AssetsConfig.VersionConfigPersistentDataPath;
+            if (!File.Exists(AssetsConfig.VersionConfigPersistentDataPath))
             {
-                vcPath = AssetConfig.VersionConfigStreamingAssetsPath;
+                vcPath = AssetsConfig.VersionConfigStreamingAssetsPath;
             }
             UnityWebRequest unityWebRequest = UnityWebRequest.Get(vcPath);
             yield return unityWebRequest.SendWebRequest();
@@ -40,12 +40,12 @@ namespace GameAssets
             else
             {
                 jsonData["message"] = "读取 " + vcPath + " 成功了";
-                AssetConfig.VersionConfig = JsonMapper.ToObject<VersionConfig>(unityWebRequest.downloadHandler.text);
+                AssetsConfig.VersionConfig = JsonMapper.ToObject<VersionConfig>(unityWebRequest.downloadHandler.text);
                 t = IAssetsNotificationType.ReadConfigSucceed;
             }
             AssetsNotification.Broadcast(t,jsonData.ToJson());
             Progress = 100;
-            yield return AssetConfig.OneFrame;
+            yield return AssetsConfig.OneFrame;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace GameAssets
         public int Progress { get; set; }
         public IEnumerator Work()
         {
-            yield return AssetConfig.OneFrame;
+            yield return AssetsConfig.OneFrame;
         }
     }
 }

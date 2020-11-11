@@ -3,7 +3,10 @@ using UnityEngine;
 
 namespace GameAssets
 {
-    public class AssetConfig
+    /// <summary>
+    /// 路径,后缀,配置,辅助
+    /// </summary>
+    public class AssetsConfig
     {
         /// <summary>
         /// 本次打包的配置版本文件,

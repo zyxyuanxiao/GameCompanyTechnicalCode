@@ -160,7 +160,7 @@ namespace GameAssets
                     {Version = Common.SVNHelper.GetSvnVersion(), Md5Hash = Common.SecurityTools.GetMD5Hash(abPath)};
             }
 
-            string vcPath = AssetsHelper.AssetBundlesDirectory + AssetConfig.VersionConfigName;
+            string vcPath = AssetsHelper.AssetBundlesDirectory + AssetsConfig.VersionConfigName;
             if (!File.Exists(vcPath))
             {
                 using (File.Create(vcPath)) ;

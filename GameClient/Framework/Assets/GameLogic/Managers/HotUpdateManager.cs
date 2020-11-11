@@ -9,7 +9,7 @@ public class HotUpdateManager : IManager
 
     public void Start()
     {
-        GameManager.QueryManager<ProcessManager>().AddExecuteTasks(ProcessLayer.HotUpdate);
+        GameManager.QueryManager<ProcessManager>().AddExecute(TaskProcessLayer.HotUpdate);
     }
 
     public void OnDestroy()

@@ -13,7 +13,7 @@ public partial class ProcessManager : IManager
     public void Awake()
     {
         //初始化流程任务,次流程只限于在启动 APP 的时候初始化使用,启动游戏-结束/重启游戏之间只会启动一次
-        AddExecuteTasks(ProcessLayer.Init);
+        AddExecute(TaskProcessLayer.Init);
     }
 
     public void Start()
@@ -28,20 +28,16 @@ public partial class ProcessManager : IManager
 
     public void Update()
     {
-        if (taskActions == null || taskActions.Count <= 0) return;
-        TaskAction ta = taskActions[0];
-        if (ta.Status == 1)
+        if (taskQueue == null || taskQueue.Count <= 0) return;
+        TaskAction ta = taskQueue.Peek();
+        if (ta.Status == ETasksStatus.Add)//执行任务流
         {
-            ta.Status = 2;
-            ta.TAction?.Invoke();
+            ta.Status = ETasksStatus.Executing;
+            ta.CoroutineAction?.Invoke();
         }
-        else if (ta.Status == 2)
+        else if (ta.Status == ETasksStatus.End)//任务流结束
         {
-            
-        }
-        else if (ta.Status == 3)
-        {
-            taskActions.Remove(ta);
+            taskQueue.Dequeue();
             ta.EndAction?.Invoke();
         }
     }

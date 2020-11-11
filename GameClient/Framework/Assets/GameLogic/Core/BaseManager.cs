@@ -23,6 +23,8 @@ public abstract class BaseManager : MonoBehaviour
 
     protected virtual void Awake()
     {
+        //当前线程的地区设置为美国，避免因为切换不同地区，数字，日期时间，字符串匹配的结果不一样
+        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
         dictManager= new Dictionary<Type, IManager>();
         this.AddInitManager();
         //使用数组,提高查询效率

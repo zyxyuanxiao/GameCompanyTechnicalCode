@@ -9,7 +9,7 @@ namespace GameAssets
     /// </summary>
     public class HotUpdate
     {
-        private static List<IBusiness> _huBusiness = new List<IBusiness>()
+        private static List<IBusiness> huBusiness = new List<IBusiness>()
         {
             new ReadConfig(),
             new DownloadAssets(),
@@ -40,7 +40,7 @@ namespace GameAssets
 
         public static IBusiness QueryBusiness(int index)
         {
-            return _huBusiness[index];
+            return huBusiness[index];
         }
         
     }
