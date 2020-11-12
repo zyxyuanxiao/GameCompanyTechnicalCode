@@ -16,10 +16,10 @@ namespace GameAssets
         public IEnumerator Work()
         {
             Progress = 0;
-            IAssetsNotificationType t = IAssetsNotificationType.BeginReadConfig;
-            JsonData jsonData = new JsonData();
-            jsonData["message"] = "开始读取 VersionConfig.json 并转成 VersionConfig 对象";
-            AssetsNotification.Broadcast(t,jsonData.ToJson());
+
+            AssetsNotification.Broadcast(IAssetsNotificationType.BeginReadConfig,
+                "开始读取 VersionConfig.json 并转成 VersionConfig 对象");
+            
             yield return AssetsConfig.OneFrame;
             Progress = 1;
             //判断一下配置文件是否已经从网络上面下载到本地了,
@@ -34,16 +34,15 @@ namespace GameAssets
             yield return unityWebRequest.SendWebRequest();
             if (unityWebRequest.isHttpError||unityWebRequest.isNetworkError)
             {
-                jsonData["message"] = "读取 " + vcPath + " 失败了  ";
-                t = IAssetsNotificationType.ReadConfigFailed;
+                AssetsNotification.Broadcast(IAssetsNotificationType.ReadConfigFailed,
+                    "读取 " + vcPath + " 失败了  ");
             }
             else
             {
-                jsonData["message"] = "读取 " + vcPath + " 成功了";
                 AssetsConfig.VersionConfig = JsonMapper.ToObject<VersionConfig>(unityWebRequest.downloadHandler.text);
-                t = IAssetsNotificationType.ReadConfigSucceed;
+                AssetsNotification.Broadcast(IAssetsNotificationType.ReadConfigSucceed,
+                    "读取 " + vcPath + " 成功了  ");
             }
-            AssetsNotification.Broadcast(t,jsonData.ToJson());
             Progress = 100;
             yield return AssetsConfig.OneFrame;
         }

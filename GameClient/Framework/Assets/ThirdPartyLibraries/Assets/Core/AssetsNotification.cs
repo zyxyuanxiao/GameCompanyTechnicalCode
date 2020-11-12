@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using LitJson;
 
 namespace GameAssets
 {
@@ -12,6 +13,12 @@ namespace GameAssets
         BeginReadConfig,//开始读取配置文件
         ReadConfigFailed,//读取配置失败了
         ReadConfigSucceed,//读取配置成功了
+        BeginRequestVersionConfig,//请求版本配置文件
+        RequestVersionConfigFailed,//请求版本配置文件
+        RequestVersionConfigSucceed,//请求版本配置文件
+        BeginDownloadAB,//开始下载所有 AB
+        DownloadABFailed,//下载一个 AB失败
+        DownloadABSucceed,//下载 所有AB成功
     }
     
     /// <summary>
@@ -28,6 +35,11 @@ namespace GameAssets
         public static event MessageCallback AssetsMessageReceived;
         
         /// <summary>
+        /// 发送通知的对象
+        /// </summary>
+        private static JsonData jsonData = new JsonData();
+
+        /// <summary>
         /// 广播本模块的信息
         /// json = {"message":"信息"}
         /// </summary>
@@ -35,7 +47,8 @@ namespace GameAssets
         /// <param name="json"></param>
         public static void Broadcast(IAssetsNotificationType notificationType = IAssetsNotificationType.Info, string json = "")
         {
-            AssetsMessageReceived?.Invoke(notificationType,json);
+            jsonData["message"] = json;
+            AssetsMessageReceived?.Invoke(notificationType,jsonData.ToJson());
         }
     }
 }

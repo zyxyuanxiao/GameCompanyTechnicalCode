@@ -23,13 +23,6 @@ namespace Common
 
         [Tooltip("是否在编辑器下开启加载AssetBundle的模式,开启后需要先打AssetBundle,否则使用编辑器模式加载")]
         public bool UseAssetBundles;
-
-        // [Tooltip("使用本地服务器,Mac 下使用的是 Apache,windows 下需要自己搭建")]
-        // public bool UseLocalServer;
-        //
-        // [Tooltip("使用的是 HTTP ,本地搭建的 web 服务器,测试使用,默认:http://127.0.0.1:80/AssetBundles/")]
-        // public string LocalWebServerAddress = "http://127.0.0.1:80/AssetBundles/";
-
         
         [SerializeField][Tooltip("web 服务器的 URL 列表")]
         private string[] RemoteWebServerAddress;
@@ -39,8 +32,8 @@ namespace Common
         public string[] QueryAddress()
         {
             if (BuildConfig == GameBuildConfig.Local || RemoteWebServerAddress == null || RemoteWebServerAddress.Length <= 0)
-            {
-                RemoteWebServerAddress = new string[] {"http://127.0.0.1:80/AssetBundles/"};
+            {//使用的是 HTTP ,本地搭建的 web 服务器,测试使用,默认:http://127.0.0.1:80/DownloadAssets/" 请本地搭建.
+                RemoteWebServerAddress = new string[] {"http://127.0.0.1/DownloadAssets"};
             }
             return RemoteWebServerAddress;
         }

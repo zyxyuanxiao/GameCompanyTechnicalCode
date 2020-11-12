@@ -34,5 +34,15 @@
 
             return 0;
         }
+        
+        public static int ToInt(this string s)
+        {
+            int result = default(int);
+            if (!string.IsNullOrEmpty(s))
+            {
+                int.TryParse(s, out result);
+            }
+            return result;
+        }
     }
 }

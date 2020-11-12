@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 
 namespace GameAssets
@@ -22,7 +23,45 @@ namespace GameAssets
         /// 下载VersionConfig的 URL,下载完毕之后,有一系列数据,包括VersionConfig对象文本,需要下载的资源URL配置
         /// </summary>
         public static string DownloadURL = string.Empty;
-        
+
+        /// <summary>
+        /// 远程ab包的配置路径,需要拼接
+        /// </summary>
+        public static string QueryRemoteABURL(string abName)
+        {
+            return DownloadURL + "/AssetBundles/" + abName;
+        }
+
+        public static string QueryPlatform()
+        {
+            switch (Application.platform)
+            {
+                case RuntimePlatform.Android:
+                    return "Android";
+                case RuntimePlatform.IPhonePlayer:
+                    return "iOS";
+                case RuntimePlatform.OSXPlayer:
+                    return "OSX";
+                case RuntimePlatform.WindowsPlayer:
+                    return "Windows";
+                default:
+                    return "Unknown";
+            }
+        }
+
+        /// <summary>
+        /// 远程ab包的路径,需要拼接
+        /// </summary>
+        public static string QueryDownloadABPath(string abName)
+        {
+            string path = LOCAL_PATH_TO_URL(Application.persistentDataPath.Replace("\\", "/"))
+                          + "/AssetBundles/"
+                          + QueryPlatform() + "/"
+                          + abName;
+            if (File.Exists(path)) return path;
+            Debug.LogError("下载路径报错" + abName +"\n" + path);
+            return "";
+        }
 
         #region VersionConfig
                 

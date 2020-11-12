@@ -77,14 +77,14 @@ namespace BestHTTP
             {
                 if (!IsCreated)
                 {
-                    GameObject go = GameObject.Find("HTTP Update Delegator");
+                    GameObject go = GameObject.Find("HTTPUpdateDelegator");
 
                     if (go != null)
                         Instance = go.GetComponent<HTTPUpdateDelegator>();
 
                     if (Instance == null)
                     {
-                        go = new GameObject("HTTP Update Delegator");
+                        go = new GameObject("HTTPUpdateDelegator");
                         go.hideFlags = HideFlags.HideAndDontSave;
 
                         Instance = go.AddComponent<HTTPUpdateDelegator>();
