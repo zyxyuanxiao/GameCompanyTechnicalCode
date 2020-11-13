@@ -15,6 +15,7 @@ public abstract class BaseManager : MonoBehaviour
 {
     private static Dictionary<Type, IManager> dictManager;
     private static IManager[] _managers; 
+    private static IUpdate[] _updates; 
 
     //一帧,协程中使用
     public static WaitForEndOfFrame OneFrame = new WaitForEndOfFrame();
@@ -25,17 +26,8 @@ public abstract class BaseManager : MonoBehaviour
     {
         //当前线程的地区设置为美国，避免因为切换不同地区，数字，日期时间，字符串匹配的结果不一样
         System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-        dictManager= new Dictionary<Type, IManager>();
         this.AddInitManager();
-        //使用数组,提高查询效率
-        _managers = new IManager[dictManager.Count];
-        int i = 0;
-        foreach (var item in dictManager)
-        {
-            item.Value.Awake();
-            _managers[i] = item.Value;
-            i++;
-        }
+        for (int i = 0; i < _managers.Length; i++) _managers[i].Awake();
     }
 
 
@@ -47,7 +39,7 @@ public abstract class BaseManager : MonoBehaviour
     protected virtual void Update()
     {
         // yield return GameManager.OneFrame;
-        for (int i = 0; i < _managers.Length; i++) _managers[i].Update();
+        for (int i = 0; i < _updates.Length; i++) _updates[i].Update();
     }
 
     protected virtual void OnDestroy()
@@ -69,6 +61,8 @@ public abstract class BaseManager : MonoBehaviour
     /// </summary>
     private void AddInitManager()
     {
+        dictManager= new Dictionary<Type, IManager>();
+        Dictionary<Type, IUpdate> dictUpdate= new Dictionary<Type, IUpdate>();
         Assembly assembly = typeof(BaseManager).Assembly;
         foreach (Type type in assembly.GetTypes())
         {
@@ -78,7 +72,29 @@ public abstract class BaseManager : MonoBehaviour
                 IManager manager = Activator.CreateInstance(type) as IManager;
                 //manager.ID = IdGenerater.GenerateId();
                 dictManager.Add(type, manager);
+                if (typeof(IUpdate).IsAssignableFrom(type))
+                {
+                    dictUpdate.Add(type,manager as IUpdate);
+                }
             }
+        }
+
+        int count = 0;
+        //使用数组,提高查询效率,统计所有IManager
+        _managers = new IManager[dictManager.Count];
+        foreach (IManager item in dictManager.Values)
+        {
+            _managers[count] = item;
+            count++;
+        }
+        
+        count = 0;
+        //使用数组,提高查询效率,统计所有_updates
+        _updates = new IUpdate[dictUpdate.Count];
+        foreach (IUpdate item in dictUpdate.Values)
+        {
+            _updates[count] = item;
+            count++;
         }
     }
 

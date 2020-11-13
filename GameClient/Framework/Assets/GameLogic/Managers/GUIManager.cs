@@ -10,11 +10,12 @@ public class GUIManager : IManager
         GameObject uiRes = Resources.Load<GameObject>("UI/UIRoot"); //这个不是实例化的GameObject,只能作为资源使用
         UIRoot = GameObject.Instantiate(uiRes, Vector3.zero, Quaternion.identity);
         GameObject.DontDestroyOnLoad(UIRoot);
+        AssetsNotification.AssetsMessageReceived += AssetsMessageReceived;
     }
 
     public void Start()
     {
-        AssetsNotification.AssetsMessageReceived += AssetsMessageReceived;
+        
     }
 
     public void OnDestroy()

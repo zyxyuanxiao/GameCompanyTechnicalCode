@@ -4,7 +4,10 @@
 
     void Start();
 
-    void Update();
-
     void OnDestroy();
+}
+
+public interface IUpdate : IManager
+{
+    void Update();
 }
