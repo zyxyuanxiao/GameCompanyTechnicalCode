@@ -60,12 +60,13 @@ namespace GameAssets
             
             Progress = 75;
             
+            //沙盒空间不存在这个文件,则生成一个文件,下次从沙盒空间里面去拿
+            //下载之后的版本配置文件,也是和这个配置文件进行对比
             if (!AssetsConfig.FileExists(AssetsConfig.QueryLocalFilePath(AssetsConfig.VersionConfigName)))
             {
-                Debug.Log("=======================================");
                 AssetsConfig.WriteVersionConfigToFile();
             }
-            
+            yield return AssetsConfig.OneFrame;
             
             Progress = 100;
             yield return AssetsConfig.OneFrame;
