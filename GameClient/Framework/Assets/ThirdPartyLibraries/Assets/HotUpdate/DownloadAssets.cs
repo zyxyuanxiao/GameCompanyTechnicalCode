@@ -39,8 +39,11 @@ namespace GameAssets
             Progress = 15;
             yield return DownloadFiles();
             Progress = 95;
-            yield return WriteToLocal();
+            yield return AssetsConfig.OneFrame;
+            AssetsConfig.WriteVersionConfigToFile();
             Progress = 100;
+            AssetsNotification.Broadcast(IAssetsNotificationType.Info,
+                "<color=cyan>========================>DownloadAssets 结束<========================</color>");
         }
         
         /// <summary>
@@ -49,19 +52,17 @@ namespace GameAssets
         /// <returns></returns>
         public IEnumerator DownloadVersionConfig()
         {
-            
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginRequestVersionConfig,
-                "开始下载 VersionConfig.json 并转成 VersionConfig 对象");
+                "开始下载");
             
             //目前使用的是本地的 URL,具体到项目上面部署的情况下,再重新编写此类
-            string versionConfigURL = AssetsConfig.DownloadURL + "/" + AssetsConfig.VersionConfigName;
+            string versionConfigURL = AssetsConfig.QueryDownloadFileURL(AssetsConfig.VersionConfigName);
             VersionConfig remoteVersionConfig = null;//网络请求是否回包
             BestHttpHelper.GET(versionConfigURL,(b,s) =>
             {
                 Progress = 10;
                 if (b)//请求成功,应该进行
                 {
-                    Debug.Log("下载版本配置文件成功:" + s);
                     //资源服务器上面的版本配置文件
                     remoteVersionConfig = JsonMapper.ToObject<VersionConfig>(s);
                     AssetsNotification.Broadcast(IAssetsNotificationType.RequestVersionConfigSucceed,
@@ -100,8 +101,7 @@ namespace GameAssets
             //查找配置表中的所有不存在与 MD5 值不匹配的 ab/zip 文件,然后记录下来
             foreach (var remoteItem in remoteVersionConfig.FileInfos)
             {
-                var localItem = AssetsConfig.VersionConfig.FileInfos;
-                if (!localItem.TryGetValue(remoteItem.Key,out File_V_MD5 localABVMd5))
+                if (!AssetsConfig.VersionConfig.FileInfos.TryGetValue(remoteItem.Key,out File_V_MD5 localABVMd5))
                 {
                     downloadQueue.Enqueue(new DownloadFileInfo()
                     {
@@ -133,7 +133,7 @@ namespace GameAssets
         {
             if (downloadQueue.Count <= 0)yield break;//没有下载列表
             
-            AssetsNotification.Broadcast(IAssetsNotificationType.BeginDownloadAB,
+            AssetsNotification.Broadcast(IAssetsNotificationType.BeginDownloadFile,
                 "开始下载所有 AB 包");
             
             while (downloadQueue.Count <= 0)//循环下载队列,下载一个移除一个
@@ -141,10 +141,11 @@ namespace GameAssets
                 yield return AssetsConfig.OneFrame;
                 Progress = Progress + (int)(downloadQueue.Count/80);
                 DownloadFileInfo info = downloadQueue.Peek();
-                string url = AssetsConfig.QueryRemoteABURL(info.fileName);
-                string path = AssetsConfig.QueryDownloadABPath(info.fileName);
-                if (File.Exists(path)) File.Delete(path);//在这一步先进行删除,然后再下载
-                downloadFileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
+                string url = AssetsConfig.QueryDownloadFileURL(info.fileName);
+                string path = AssetsConfig.QueryDownloadFilePath(info.fileName);
+                AssetsConfig.FileDelete(path);//在这一步先进行删除,然后再下载
+                downloadFileStream = new FileStream(AssetsConfig.CSharpFilePath(path),
+                    FileMode.OpenOrCreate, FileAccess.Write);
                 BestHttpHelper.Download(url,DownloadFiles);
                 while (!info.downloadFinished)
                 {
@@ -152,7 +153,7 @@ namespace GameAssets
                 }
             }
             
-            AssetsNotification.Broadcast(IAssetsNotificationType.DownloadABSucceed,
+            AssetsNotification.Broadcast(IAssetsNotificationType.DownloadFileSucceed,
                 "下载所有 AB 包成功");
             yield return AssetsConfig.OneFrame;
         }
@@ -166,10 +167,12 @@ namespace GameAssets
                 downloadFileStream.Close();
                 //下载正常之后,需要对这个包进行 MD5 校验
                 DownloadFileInfo info = downloadQueue.Dequeue();
-                string path = AssetsConfig.QueryDownloadABPath(info.fileName);
+                string path = AssetsConfig.QueryDownloadFilePath(info.fileName);
                 string localMD5 = SecurityTools.GetMD5Hash(path);
-                if (SecurityTools.VerifyMd5Hash(localMD5,info.remoteFileVMd5.Md5Hash))
+                if (SecurityTools.VerifyMd5Hash(localMD5,info.remoteFileVMd5.Md5Hash))//下载的 MD5 值与网络上的 MD5 值正常
                 {
+                    //将文件从下载路径移动到 AssetBundles 路径下
+                    AssetsConfig.FileMove(path,AssetsConfig.QueryLocalFilePath());
                     AssetsConfig.VersionConfig.FileInfos[info.fileName] = info.remoteFileVMd5;
                 }
                 else
@@ -178,7 +181,7 @@ namespace GameAssets
                                    info.fileName +"\n" + 
                                    info.remoteFileVMd5 + "\n" + 
                                    localMD5);
-                    AssetsNotification.Broadcast(IAssetsNotificationType.DownloadABSucceed,
+                    AssetsNotification.Broadcast(IAssetsNotificationType.DownloadFileFailed,
                         info.fileName + "的MD5 值,下载之后,本地与资源服务器上面的不匹配");
                 }
                 info.downloadFinished = true;
@@ -191,9 +194,9 @@ namespace GameAssets
                 downloadQueue.Enqueue(info);
                 downloadFileStream.Flush();
                 downloadFileStream.Close();
-                File.Delete(AssetsConfig.QueryDownloadABPath(info.fileName));
+                AssetsConfig.FileDelete(AssetsConfig.QueryDownloadFilePath(info.fileName));
                 
-                AssetsNotification.Broadcast(IAssetsNotificationType.DownloadABFailed,
+                AssetsNotification.Broadcast(IAssetsNotificationType.DownloadFileFailed,
                     "下载 AB 包失败一次" + info.fileName);
                 
                 info.downloadFinished = true;
@@ -207,25 +210,5 @@ namespace GameAssets
                 }
             }
         }
-
-        /// <summary>
-        /// 将更新过后的配置所有数据写入到本地
-        /// </summary>
-        /// <returns></returns>
-        private IEnumerator WriteToLocal()
-        {
-            //将所有数据,写入文件中.
-            using (FileStream fileStream = new FileStream(AssetsConfig.VersionConfigPersistentDataPath,
-                FileMode.Open,FileAccess.Write))
-            {
-                fileStream.SetLength(0);
-                fileStream.Flush();
-                byte[] data = Encoding.UTF8.GetBytes(JsonMapper.ToJson(AssetsConfig.VersionConfig));
-                fileStream.Write(data,0,data.Length);
-                fileStream.Flush();
-            }
-            yield return AssetsConfig.OneFrame;
-        }
-
     }
 }

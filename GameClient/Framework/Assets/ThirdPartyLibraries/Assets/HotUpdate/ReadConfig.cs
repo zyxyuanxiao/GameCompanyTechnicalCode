@@ -1,6 +1,7 @@
 using System.Collections;
 using System.IO;
 using System.Text;
+using Common;
 using LitJson;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -25,10 +26,10 @@ namespace GameAssets
             //判断一下配置文件是否已经从网络上面下载到本地了,
             //如果没有从网络上面下载到本地,则需要先从 StreamingAssets 路径下进行读取
             //如果下载到本地了,则需要从persistentDataPath路径下进行读取
-            string vcPath = AssetsConfig.VersionConfigPersistentDataPath;
-            if (!File.Exists(AssetsConfig.VersionConfigPersistentDataPath))
+            string vcPath = AssetsConfig.QueryLocalFilePath(AssetsConfig.VersionConfigName);
+            if (!AssetsConfig.FileExists(vcPath))
             {
-                vcPath = AssetsConfig.VersionConfigStreamingAssetsPath;
+                vcPath = AssetsConfig.QueryStreamingFilePath(AssetsConfig.VersionConfigName);
             }
             UnityWebRequest unityWebRequest = UnityWebRequest.Get(vcPath);
             yield return unityWebRequest.SendWebRequest();
@@ -43,8 +44,33 @@ namespace GameAssets
                 AssetsNotification.Broadcast(IAssetsNotificationType.ReadConfigSucceed,
                     "读取 " + vcPath + " 成功了  ");
             }
+            Progress = 50;
+            yield return AssetsConfig.OneFrame;
+            
+            //检查文件是否改动了.如果改动了需要删除文件夹里面的所有文件,
+            string path = AssetsConfig.CSharpFilePath(AssetsConfig.QueryLocalFilePath());
+            string s = Tool.QueryAppendDirectoryLastWriteTime(path);
+            string sha1 = Tool.QuerySHA1HashOfString(s);
+            
+            string record = PlayerPrefs.GetString(AssetsConfig.ASSETROOT_LASTWRITETIME_KEY, "");
+            if (!sha1.Equals(record)) //资源非法发生修改，清理
+            {
+                Directory.Delete(path,true);
+            }
+            
+            Progress = 75;
+            
+            if (!AssetsConfig.FileExists(AssetsConfig.QueryLocalFilePath(AssetsConfig.VersionConfigName)))
+            {
+                Debug.Log("=======================================");
+                AssetsConfig.WriteVersionConfigToFile();
+            }
+            
+            
             Progress = 100;
             yield return AssetsConfig.OneFrame;
+            AssetsNotification.Broadcast(IAssetsNotificationType.Info,
+                "<color=cyan>========================>ReadConfig 结束<========================</color>");
         }
     }
 }

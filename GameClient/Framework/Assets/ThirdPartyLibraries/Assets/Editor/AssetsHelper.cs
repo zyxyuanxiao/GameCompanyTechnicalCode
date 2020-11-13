@@ -16,7 +16,7 @@ namespace GameAssets
             get
             {  
                 string path = Application.dataPath.Replace("Assets", "AssetBundles/") + 
-                              Common.Tool.GetPlatform() + "/";
+                              Common.Tool.QueryPlatform() + "/";
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
                 return path;
@@ -145,7 +145,7 @@ namespace GameAssets
         {
             VersionConfig vc = new VersionConfig()
             {
-                OS = Common.Tool.GetPlatform(),
+                OS = Common.Tool.QueryPlatform(),
                 SVNVersion = Common.SVNHelper.GetSvnVersion(),
                 AppVersion = Application.version,
             };

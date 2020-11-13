@@ -1,5 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using Common;
+using LitJson;
 using UnityEngine;
 
 namespace GameAssets
@@ -7,7 +11,7 @@ namespace GameAssets
     /// <summary>
     /// 路径,后缀,配置,辅助
     /// </summary>
-    public class AssetsConfig
+    public static class AssetsConfig
     {
         /// <summary>
         /// 一帧
@@ -24,45 +28,162 @@ namespace GameAssets
         /// </summary>
         public static string DownloadURL = string.Empty;
 
-        /// <summary>
-        /// 远程ab包的配置路径,需要拼接
-        /// </summary>
-        public static string QueryRemoteABURL(string abName)
+        public static string ASSETROOT_LASTWRITETIME_KEY = Tool.QueryPlatform() + "_ASSETROOT_LASTWRITETIME_KEY";
+
+        
+        public static void UpdatePath()
         {
-            return DownloadURL + "/AssetBundles/" + abName;
+            string path = Application.persistentDataPath + "/" + Tool.QueryPlatform();
+            //创建沙盒空间的文件夹
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
         }
 
-        public static string QueryPlatform()
+        #region File Directory Helper
+
+        /// <summary>
+        /// 文件是否存在,主要是使用了 c#的 API,要去掉 UNITY 的 API 需要的头 file://
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool FileExists(string path)
+        {
+            path = CSharpFilePath(path);
+            if (File.Exists(path)) return true;
+            return false;
+        }
+        
+        /// <summary>
+        /// 文件夹是否存在,主要是使用了 c#的 API,要去掉 UNITY 的 API 需要的头 file://
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static bool DirectoryExists(string path)
+        {
+            path = CSharpFilePath(path);
+            if (Directory.Exists(path)) return true;
+            return false;
+        }
+        
+        /// <summary>
+        /// 文件删除,主要是使用了 c#的 API,要去掉 UNITY 的 API 需要的头 file://
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static void FileDelete(string path)
+        {
+            path = CSharpFilePath(path);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+        
+        /// <summary>
+        /// 文件删除,主要是使用了 c#的 API,要去掉 UNITY 的 API 需要的头 file://
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public static void FileMove(string sourceFileName, string destFileName)
+        {
+            sourceFileName = CSharpFilePath(sourceFileName);
+            destFileName = CSharpFilePath(destFileName);
+            File.Move(sourceFileName,destFileName);
+        }
+
+        public static string CSharpFilePath(string path)
+        {
+            return path.Replace(UnityFilePath(), "");
+        }
+        
+                
+        /// <summary>
+        /// 这个方法是为了 UNITY 的 API 而设计,C#原生的 API 是不需要这个头的
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        private static string UnityFilePath(string path = "")
         {
             switch (Application.platform)
             {
-                case RuntimePlatform.Android:
-                    return "Android";
                 case RuntimePlatform.IPhonePlayer:
-                    return "iOS";
-                case RuntimePlatform.OSXPlayer:
-                    return "OSX";
+                    return "file://" + path;
+                case RuntimePlatform.OSXPlayer :
+                    return "file://" + path;
+                case RuntimePlatform.OSXEditor:
+                    return "file://" + path;
                 case RuntimePlatform.WindowsPlayer:
-                    return "Windows";
+                    return "file://" + path;
+                case RuntimePlatform.WindowsEditor:
+                    return "file://" + path;
                 default:
-                    return "Unknown";
+                    return path;
             }
+        }
+        
+        #endregion
+        
+        
+        // /// <summary>
+        // /// 查找 AB 的路径
+        // /// </summary>
+        // /// <param name="path"></param>
+        // /// <returns></returns>
+        // public static string QueryLocalABPath(string path = "")
+        // {
+        //     string lp = LOCAL_PATH_TO_URL(Application.persistentDataPath.Replace("\\", "/")) + "/" +
+        //                 QueryPlatform() + "/" +
+        //                 "AssetBundles" + "/" +
+        //                 path;
+        //     if (File.Exists(lp))return lp;//如果在沙盒空间下查找到了此文件,则直接返回
+        //     
+        //     string sp = LOCAL_PATH_TO_URL(Application.streamingAssetsPath.Replace("\\", "/")) + "/" +
+        //                 QueryPlatform() + "/" +
+        //                 "AssetBundles" + "/" +
+        //                 path;
+        //     if (File.Exists(lp))return lp;//如果在沙盒空间下没有查找到此文件,则在StreamingAssets路径下查找,查找到了就返回
+        //     
+        //     return lp;//如果这 2 个地方都没有查找到,则返回沙盒空间下的路径
+        // }
+
+        /// <summary>
+        /// 远程文件的配置路径,需要拼接,具体的拼接方式需要视具体情况而定
+        /// 一般情况下,打包的所有文件全部放入一个文件夹中,不分子文件夹,所以此网络 URL 可以正常下载
+        /// </summary>
+        public static string QueryDownloadFileURL(string fileName)
+        {
+            return DownloadURL + "/" + Tool.QueryPlatform() + "/" + fileName;
+        }
+        
+        /// <summary>
+        /// 本地文件的下载路径,下载的文件,需要从这个地方拷贝到其他地方
+        /// </summary>
+        public static string QueryDownloadFilePath(string abName)
+        {
+            string path = QueryLocalFilePath() + "Download/";
+            if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+            return path + abName;
         }
 
         /// <summary>
-        /// 远程ab包的路径,需要拼接
+        /// 每个APP的本地 沙盒空间 + 平台路径
         /// </summary>
-        public static string QueryDownloadABPath(string abName)
+        /// <returns></returns>
+        public static string QueryLocalFilePath(string path = "")
         {
-            string path = LOCAL_PATH_TO_URL(Application.persistentDataPath.Replace("\\", "/"))
-                          + "/AssetBundles/"
-                          + QueryPlatform() + "/"
-                          + abName;
-            if (File.Exists(path)) return path;
-            Debug.LogError("下载路径报错" + abName +"\n" + path);
-            return "";
+            return UnityFilePath(Application.persistentDataPath.Replace("\\", "/")) + "/" +
+                   Tool.QueryPlatform() +"/" +
+                   path;
         }
 
+        public static string QueryStreamingFilePath(string path = "")
+        {
+            return UnityFilePath(Application.streamingAssetsPath.Replace("\\", "/")) + "/" +
+                   Tool.QueryPlatform() + "/" +
+                   path;
+        }
+
+        
+        
         #region VersionConfig
                 
         /// <summary>
@@ -82,31 +203,21 @@ namespace GameAssets
         /// </summary>
         public static readonly string VersionConfigName = "VersionConfig.json";
 
-        //在 streamingAssetsPath 路径下,随包的版本文件
-        public static readonly string VersionConfigStreamingAssetsPath =
-            LOCAL_PATH_TO_URL(Application.streamingAssetsPath.Replace("\\","/") + "/VersionConfig.json");
-        //在 persistentDataPath 路径下,由网络下载后的文件
-        public static readonly string VersionConfigPersistentDataPath =
-            LOCAL_PATH_TO_URL(Application.persistentDataPath.Replace("\\","/") + "/VersionConfig.json");
-        
-        public static string LOCAL_PATH_TO_URL(string path)
+        public static void WriteVersionConfigToFile()
         {
-            //#if (UNITY_ANDROID && !UNITY_EDITOR) || (UNITY_EDITOR_WIN && !UNITY_ANDROID)//未来win上测试android ab出错检查这里
-            //        return path;
-            //#else
-            //        return "file:///" + path;
-            //#endif
-            string url =
-#if UNITY_ANDROID && !UNITY_EDITOR
-        path;
-#elif UNITY_IPHONE && !UNITY_EDITOR
-        "file://" + path;
-#elif UNITY_STANDALONE||UNITY_EDITOR
-                "file:///" + path;
-#else
-        string.Empty;
-#endif
-            return Uri.EscapeUriString(url);
+            UpdatePath();
+            string path = CSharpFilePath(QueryLocalFilePath(VersionConfigName));
+            File.WriteAllText(path,JsonMapper.ToJson(VersionConfig));
+            //写入到本地沙盒中
+            // using (FileStream fileStream = new FileStream(QueryLocalFilePath(VersionConfigName),
+            //     FileMode.OpenOrCreate,FileAccess.Write))
+            // {
+            //     fileStream.SetLength(0);
+            //     fileStream.Flush();
+            //     byte[] data = Encoding.UTF8.GetBytes(JsonMapper.ToJson(AssetsConfig.VersionConfig));
+            //     fileStream.Write(data,0,data.Length);
+            //     fileStream.Flush();
+            // }
         }
         #endregion
     }

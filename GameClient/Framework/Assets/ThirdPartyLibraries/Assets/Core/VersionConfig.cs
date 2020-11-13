@@ -37,6 +37,6 @@ namespace GameAssets
         /// 名字:{版本,MD5},名字包含 AB 包的名字,以及 ZIP 文件的名字
         /// </summary>
         public Dictionary<string, File_V_MD5> FileInfos;
-
+        
     }
 }

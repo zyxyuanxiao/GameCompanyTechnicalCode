@@ -14,13 +14,13 @@ public class HotUpdateManager : IManager
         new ReadConfig(),
         new DownloadAssets(),
         new UnZipFiles(),
+        new CheckAllFile(),
         new LoadAllFiles(),
-        new CheckAllFile()
     };
     
     public void Awake()
     {
-
+        AssetsConfig.UpdatePath();//初始化文件夹
     }
     
     public void Start()

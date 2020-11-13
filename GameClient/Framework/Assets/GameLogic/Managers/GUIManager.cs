@@ -30,7 +30,7 @@ public class GUIManager : IManager
     
     private void AssetsMessageReceived(IAssetsNotificationType notificationType, string messageInfo)
     {
-        if (notificationType == IAssetsNotificationType.Info) return;
+        if (notificationType == IAssetsNotificationType.None) return;
         //UI 展示弹窗,弹出资源加载,下载,网络,等一系列问题
     }
 }

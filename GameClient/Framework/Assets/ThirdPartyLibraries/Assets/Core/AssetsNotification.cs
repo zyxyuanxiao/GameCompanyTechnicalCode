@@ -6,19 +6,24 @@ namespace GameAssets
 {
     public enum IAssetsNotificationType
     {
-        None = 0,//信息
-        Info ,//信息
-        UIPopUpInfo,//弹窗正常信息
-        UIPopUpError,//弹窗错误信息
+        None = 0,
+        Info,//信息
+
         BeginReadConfig,//开始读取配置文件
         ReadConfigFailed,//读取配置失败了
         ReadConfigSucceed,//读取配置成功了
+        
         BeginRequestVersionConfig,//请求版本配置文件
         RequestVersionConfigFailed,//请求版本配置文件
         RequestVersionConfigSucceed,//请求版本配置文件
-        BeginDownloadAB,//开始下载所有 AB
-        DownloadABFailed,//下载一个 AB失败
-        DownloadABSucceed,//下载 所有AB成功
+        
+        BeginDownloadFile,//开始下载所有 AB
+        DownloadFileFailed,//下载一个 AB失败
+        DownloadFileSucceed,//下载 所有AB成功
+        
+        BeginUnZipFiles,//开始解压所有被压缩的文件
+        UnZipFilesFailed,//解压缩失败
+        UnZipFilesSucceed,//解压缩所有文件成功
     }
     
     /// <summary>
@@ -44,10 +49,10 @@ namespace GameAssets
         /// json = {"message":"信息"}
         /// </summary>
         /// <param name="notificationType"></param>
-        /// <param name="json"></param>
-        public static void Broadcast(IAssetsNotificationType notificationType = IAssetsNotificationType.Info, string json = "")
+        /// <param name="s"></param>
+        public static void Broadcast(IAssetsNotificationType notificationType = IAssetsNotificationType.None, string s = "")
         {
-            jsonData["message"] = json;
+            jsonData["message"] = s;
             AssetsMessageReceived?.Invoke(notificationType,jsonData.ToJson());
         }
     }
