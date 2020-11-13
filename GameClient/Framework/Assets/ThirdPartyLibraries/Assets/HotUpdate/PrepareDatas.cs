@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace GameAssets
 {
-    public class LoadAllFiles : IBusiness
+    public class PrepareDatas : IBusiness
     {
         public int Progress { get; set; }
         public IEnumerator Work()

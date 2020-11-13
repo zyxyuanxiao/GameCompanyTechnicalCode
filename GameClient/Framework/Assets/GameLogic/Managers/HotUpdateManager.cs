@@ -15,7 +15,7 @@ public class HotUpdateManager : IManager
         new DownloadAssets(),
         new UnZipFiles(),
         new CheckAllFile(),
-        new LoadAllFiles(),
+        new PrepareDatas(),
     };
     
     public void Awake()
