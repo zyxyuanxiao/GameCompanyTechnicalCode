@@ -15,7 +15,7 @@ public abstract class BaseManager : MonoBehaviour
 {
     private static Dictionary<Type, IManager> dictManager;
     private static IManager[] _managers; 
-    private static IUpdate[] _updates; 
+    private static IUpdateManager[] _updateManagers; 
 
     //一帧,协程中使用
     public static WaitForEndOfFrame OneFrame = new WaitForEndOfFrame();
@@ -39,7 +39,7 @@ public abstract class BaseManager : MonoBehaviour
     protected virtual void Update()
     {
         // yield return GameManager.OneFrame;
-        for (int i = 0; i < _updates.Length; i++) _updates[i].Update();
+        for (int i = 0; i < _updateManagers.Length; i++) _updateManagers[i].Update();
     }
 
     protected virtual void OnDestroy()
@@ -62,7 +62,7 @@ public abstract class BaseManager : MonoBehaviour
     private void AddInitManager()
     {
         dictManager= new Dictionary<Type, IManager>();
-        Dictionary<Type, IUpdate> dictUpdate= new Dictionary<Type, IUpdate>();
+        Dictionary<Type, IUpdateManager> dictUpdate= new Dictionary<Type, IUpdateManager>();
         Assembly assembly = typeof(BaseManager).Assembly;
         foreach (Type type in assembly.GetTypes())
         {
@@ -72,9 +72,9 @@ public abstract class BaseManager : MonoBehaviour
                 IManager manager = Activator.CreateInstance(type) as IManager;
                 //manager.ID = IdGenerater.GenerateId();
                 dictManager.Add(type, manager);
-                if (typeof(IUpdate).IsAssignableFrom(type))
+                if (typeof(IUpdateManager).IsAssignableFrom(type))
                 {
-                    dictUpdate.Add(type,manager as IUpdate);
+                    dictUpdate.Add(type,manager as IUpdateManager);
                 }
             }
         }
@@ -90,10 +90,10 @@ public abstract class BaseManager : MonoBehaviour
         
         count = 0;
         //使用数组,提高查询效率,统计所有_updates
-        _updates = new IUpdate[dictUpdate.Count];
-        foreach (IUpdate item in dictUpdate.Values)
+        _updateManagers = new IUpdateManager[dictUpdate.Count];
+        foreach (IUpdateManager item in dictUpdate.Values)
         {
-            _updates[count] = item;
+            _updateManagers[count] = item;
             count++;
         }
     }

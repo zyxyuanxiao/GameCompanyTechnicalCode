@@ -7,7 +7,7 @@
     void OnDestroy();
 }
 
-public interface IUpdate : IManager
+public interface IUpdateManager : IManager
 {
     void Update();
 }
