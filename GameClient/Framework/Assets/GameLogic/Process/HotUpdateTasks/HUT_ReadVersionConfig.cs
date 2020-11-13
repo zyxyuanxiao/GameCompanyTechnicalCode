@@ -23,7 +23,7 @@ public sealed class HUT_ReadVersionConfig : ITaskProcess
     {
         yield return GameManager.OneFrame;
         this.IsDone = false;
-        yield return  HotUpdate.QueryBusiness(ID).Work();
+        yield return  HotUpdateManager.QueryBusiness(ID).Work();
         this.IsDone = true;
     }
 

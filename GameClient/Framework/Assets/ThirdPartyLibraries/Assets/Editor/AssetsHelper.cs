@@ -149,14 +149,14 @@ namespace GameAssets
                 SVNVersion = Common.SVNHelper.GetSvnVersion(),
                 AppVersion = Application.version,
             };
-            vc.ABInfos = new Dictionary<string, AB_V_MD5>();
+            vc.FileInfos = new Dictionary<string, File_V_MD5>();
 
             string[] abNames = assetBundleManifest.GetAllAssetBundles();
             foreach (string name in abNames)
             {
                 string abPath = AssetsHelper.AssetBundlesDirectory + name;
                 Debug.Log(abPath);
-                vc.ABInfos[name] = new AB_V_MD5()
+                vc.FileInfos[name] = new File_V_MD5()
                     {Version = Common.SVNHelper.GetSvnVersion(), Md5Hash = Common.SecurityTools.GetMD5Hash(abPath)};
             }
 

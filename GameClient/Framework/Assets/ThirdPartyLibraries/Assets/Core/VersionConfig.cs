@@ -19,8 +19,9 @@ namespace GameAssets
     
     /// <summary>
     /// AB包的版本以及 MD5
+    /// 
     /// </summary>
-    public class AB_V_MD5
+    public class File_V_MD5
     {
         public string Version;
         public string Md5Hash;
@@ -33,9 +34,9 @@ namespace GameAssets
         public string SVNVersion = string.Empty;//SVN版本号
         public string AppVersion = string.Empty;//游戏版本号
         /// <summary>
-        /// AB包 在 APP 内的路径对应的版本号以及 MD5,不是在本地的路径
+        /// 名字:{版本,MD5},名字包含 AB 包的名字,以及 ZIP 文件的名字
         /// </summary>
-        public Dictionary<string, AB_V_MD5> ABInfos;
+        public Dictionary<string, File_V_MD5> FileInfos;
 
     }
 }

@@ -8,6 +8,10 @@ namespace GameAssets
         public IEnumerator Work()
         {
             yield return AssetsConfig.OneFrame;
+            Progress = 0;
+            AssetsNotification.Broadcast(IAssetsNotificationType.BeginReadConfig,
+                "开始读取 VersionConfig.json 并转成 VersionConfig 对象");
+            
         }
     }
 }
