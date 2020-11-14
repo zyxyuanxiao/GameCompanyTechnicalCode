@@ -7,6 +7,14 @@ using System.Threading;
 
 public class LZ4Helper
 {
+    /// <summary>
+    /// 压缩文件,文件的前置路径不会被压缩,文件的信息,压缩的名字,是否删除文件夹
+    /// </summary>
+    /// <param name="dirPath">文件夹的前置路径不会被压缩进压缩包</param>
+    /// <param name="fileInfos">文件的全部路径,会剔除文件夹的前置路径</param>
+    /// <param name="zipFileName">压缩包名字</param>
+    /// <param name="deleteDir">是否删除文件夹</param>
+    /// <returns></returns>
     public static bool CompressDirectory(string dirPath, FileInfo[] fileInfos, string zipFileName, bool deleteDir = false)
     {
         var dirInfo = new DirectoryInfo(dirPath);

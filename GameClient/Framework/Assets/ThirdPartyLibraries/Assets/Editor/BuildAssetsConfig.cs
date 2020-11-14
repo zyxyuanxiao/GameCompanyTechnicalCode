@@ -46,7 +46,10 @@ namespace GameAssets
         [Header("Asset Bundle")] 
         public List<ABBuildInfo> AssetBundleBuilds;
         
-        
+        /// <summary>
+        /// 获取当前BuildAssetsConfig的实体对象
+        /// </summary>
+        /// <returns></returns>
         public static BuildAssetsConfig QueryAssetsConfig()
         {
             string path = EitorTools.GetScriptPath(typeof(BuildAssetsConfig)) + "BuildAssetsConfig.asset";;
@@ -63,6 +66,9 @@ namespace GameAssets
             return assetsConfig;
         }
         
+        /// <summary>
+        /// 初始化打包规则
+        /// </summary>
         public void InitRules()
         {
             _tracker?.Clear();
@@ -95,18 +101,18 @@ namespace GameAssets
 
         public void BuildAll()
         {
-            this.CollectAllAssets(); //收集所有可以打成 AB 包的资源
-            this.AnalysisAssetsDependencies(); //分析 AB 包的所有资源依赖关系
-            this.OptimizeAssets(); //对依赖关系进行优化
-            this.CombineABWithAssets(); //将所有资源组合成 AB 包
-            this.ZipAllTextFile(); //压缩所有的文本文件
+            CollectAllAssets(); //收集所有可以打成 AB 包的资源
+            AnalysisAssetsDependencies(); //分析 AB 包的所有资源依赖关系
+            OptimizeAssets(); //对依赖关系进行优化
+            CombineABWithAssets(); //将所有资源组合成 AB 包
+            ZipAllTextFile(); //压缩所有的文本文件
         }
 
 
         /// <summary>
         /// 压缩所有的文本文件
         /// </summary>
-        private void ZipAllTextFile()
+        public void ZipAllTextFile()
         {
             List<FileInfo> zipInfos = new List<FileInfo>();
             string[] texts = new[] {"*.json", "*.bytes", "*.xml"};
@@ -121,7 +127,7 @@ namespace GameAssets
                 }
             }
 
-            string dirPath = Application.dataPath.Replace("Assets","");
+            string dirPath = Application.dataPath + "/" + FileFilter.BuildAsset + "/";
             string zipFileName = AssetsHelper.AssetBundlesDirectory + FileFilter.AllText;
             if (!LZ4Helper.CompressDirectory(dirPath, zipInfos.ToArray(), zipFileName))
             {
