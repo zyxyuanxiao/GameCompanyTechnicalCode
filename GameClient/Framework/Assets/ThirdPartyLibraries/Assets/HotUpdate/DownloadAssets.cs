@@ -55,9 +55,9 @@ namespace GameAssets
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginRequestVersionConfig,
                 "开始下载");
             
+            VersionConfig remoteVersionConfig = null;//是否从网络上下载了配置文件
             //目前使用的是本地的 URL,具体到项目上面部署的情况下,再重新编写此类
             string versionConfigURL = AssetsConfig.QueryDownloadFileURL(AssetsConfig.VersionConfigName);
-            VersionConfig remoteVersionConfig = null;//网络请求是否回包
             BestHttpHelper.GET(versionConfigURL,(b,s) =>
             {
                 Progress = 10;
@@ -76,14 +76,9 @@ namespace GameAssets
                 }
             });
             
-            while (remoteVersionConfig == null)
+            while (null == remoteVersionConfig)
             {
                 yield return AssetsConfig.OneFrame;
-            }
-            //网络请求回包后,进行数据对比
-            if (AssetsConfig.VersionConfig.MD5Hash.Equals(remoteVersionConfig.MD5Hash))
-            {
-                yield break;//配置文件自身的 hash 值相同,则无版本更新
             }
 
             if (!AssetsConfig.VersionConfig.OS.Equals(remoteVersionConfig.OS) || 

@@ -51,6 +51,7 @@ namespace Common
 			string result = q.ToString();
 			result = result.Replace("\r\n", "");
 			result = result.Replace("\n", "");
+			if (string.IsNullOrEmpty(result))result = "1";
 			Debug.Log("svn:" + result);
 			return result;
 		}
@@ -77,7 +78,10 @@ namespace Common
 			}
 
 			string result = q.ToString();
-			// Debug.Log(result);
+			result = result.Replace("\r\n", "");
+			result = result.Replace("\n", "");
+			if (string.IsNullOrEmpty(result))result = "1";
+			Debug.Log(result);
 			return result;
 		}
 

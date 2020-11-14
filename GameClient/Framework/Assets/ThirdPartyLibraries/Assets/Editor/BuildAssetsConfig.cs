@@ -128,7 +128,7 @@ namespace GameAssets
             }
 
             string dirPath = Application.dataPath + "/" + FileFilter.BuildAsset + "/";
-            string zipFileName = AssetsHelper.AssetBundlesDirectory + FileFilter.AllText;
+            string zipFileName = AssetsHelper.DownloadAssetsDirectory + FileFilter.AllText;
             if (!LZ4Helper.CompressDirectory(dirPath, zipInfos.ToArray(), zipFileName))
             {
                 Debug.LogError("压缩包压缩失败");

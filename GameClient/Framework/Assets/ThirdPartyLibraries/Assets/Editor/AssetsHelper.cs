@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Common;
 using LitJson;
 using UnityEditor;
 using UnityEngine;
+using Tool = Common.Tool;
 
 namespace GameAssets
 {
     public static class AssetsHelper
     {
-        public static string AssetBundlesDirectory
+        public static string DownloadAssetsDirectory
         {
             get
             {  
-                string path = Application.dataPath.Replace("Assets", "AssetBundles/") + 
+                string path = Application.dataPath.Replace("Assets", "DownloadAssets/") + 
                               Common.Tool.QueryPlatform() + "/";
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
@@ -30,8 +32,8 @@ namespace GameAssets
         public static void BuildAllStreamingAssets()
         {
             //配置路径
-            if (Directory.Exists(AssetsHelper.AssetBundlesDirectory))
-                Directory.Delete(AssetsHelper.AssetBundlesDirectory, true);
+            if (Directory.Exists(AssetsHelper.DownloadAssetsDirectory))
+                Directory.Delete(AssetsHelper.DownloadAssetsDirectory, true);
             
             //根据配置文件进行初始化 AB 包的名字以及资源
             BuildAssetsConfig assetsConfig = BuildAssetsConfig.QueryAssetsConfig();
@@ -45,7 +47,7 @@ namespace GameAssets
             var targetPlatform = EditorUserBuildSettings.activeBuildTarget;
             //开始打包
             AssetBundleManifest assetBundleManifest = BuildPipeline.BuildAssetBundles(
-                AssetsHelper.AssetBundlesDirectory, 
+                AssetsHelper.DownloadAssetsDirectory, 
                 assetsConfig.QueryAssetBundleBuilds(), 
                 options, 
                 targetPlatform);
@@ -57,7 +59,7 @@ namespace GameAssets
             
             BuildVersionConfig(assetBundleManifest);
 
-            EditorUtility.OpenWithDefaultApp(AssetsHelper.AssetBundlesDirectory);
+            EditorUtility.OpenWithDefaultApp(AssetsHelper.DownloadAssetsDirectory);
         }
 
         public static void BuildDefaultStreamingAssets()
@@ -86,13 +88,18 @@ namespace GameAssets
             string[] abNames = assetBundleManifest.GetAllAssetBundles();
             foreach (string name in abNames)
             {
-                string abPath = AssetsHelper.AssetBundlesDirectory + name;
+                string abPath = AssetsHelper.DownloadAssetsDirectory + name;
                 Debug.Log(abPath);
                 vc.FileInfos[name] = new File_V_MD5()
                     {Version = Common.SVNHelper.GetSvnVersion(), MD5Hash = Common.SecurityTools.GetMD5Hash(abPath)};
             }
 
-            string vcPath = AssetsHelper.AssetBundlesDirectory + AssetsConfig.VersionConfigName;
+            //将 assetBundleManifest 文件也装载进配置文件中
+            string abm = AssetsHelper.DownloadAssetsDirectory + Tool.QueryPlatform();
+            vc.FileInfos[Tool.QueryPlatform()] = new File_V_MD5()
+                {Version = Common.SVNHelper.GetSvnVersion(), MD5Hash = Common.SecurityTools.GetMD5Hash(abm)};
+
+            string vcPath = AssetsHelper.DownloadAssetsDirectory + AssetsConfig.VersionConfigName;
             if (!File.Exists(vcPath))
             {
                 using (File.Create(vcPath)) ;
@@ -100,7 +107,7 @@ namespace GameAssets
 
             File.WriteAllText(vcPath, JsonMapper.ToJson(vc), Encoding.UTF8);
         }
-        
+
 
 
     }

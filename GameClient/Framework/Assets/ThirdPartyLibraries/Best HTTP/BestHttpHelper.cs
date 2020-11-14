@@ -5,6 +5,25 @@ namespace BestHTTP
 {
     public static class BestHttpHelper
     {
+#if UNITY_EDITOR
+        [UnityEditor.MenuItem("Tools/BestHttp/Test Get")]
+        public static void TestBestHttp()
+        {
+            GET("http://127.0.0.1/DownloadAssets/OSX/VersionConfig.json",(b,s) =>
+            {
+                if (b)//请求成功,应该进行
+                {
+                    //资源服务器上面的版本配置文件
+                    Debug.Log(s);
+                }
+                else
+                {
+                    Debug.LogError("资源服务器版本配置文件下载失败");
+                }
+            });
+        }
+#endif
+        
         public static void GET(string url,Action<bool,string> end)
         {
             HTTPRequest getRequest = new HTTPRequest(new Uri(url), (request, response) =>
