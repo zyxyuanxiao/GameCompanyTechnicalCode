@@ -19,7 +19,7 @@ namespace Common
         
         //根据 svn 版本号获取
         [Tooltip("当前游戏的版本")] 
-        public string version = string.Empty;
+        public string version = "1";
 
         [Tooltip("是否在编辑器下开启加载AssetBundle的模式,开启后需要先打AssetBundle,否则使用编辑器模式加载")]
         public bool UseAssetBundles;

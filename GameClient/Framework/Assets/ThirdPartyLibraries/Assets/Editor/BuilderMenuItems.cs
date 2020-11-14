@@ -16,7 +16,7 @@ namespace GameAssets
             Selection.activeObject = assetsConfig;
         }
 
-        [MenuItem("Builder/3 Build Assets For App", priority = 1003)]
+        [MenuItem("Builder/3 Build Assets For Init", priority = 1003)]
         private static void BuildDefaultStreamingAssets()
         {
             AssetsHelper.BuildDefaultStreamingAssets();

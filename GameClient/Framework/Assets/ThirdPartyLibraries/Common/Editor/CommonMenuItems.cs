@@ -6,7 +6,7 @@ using Common;
 
 namespace Common
 {
-    public class CommonTools
+    public class CommonMenuItems
     {
         [MenuItem("Tools/Security/CRC", priority = 20001)]
         private static void GetCRC()

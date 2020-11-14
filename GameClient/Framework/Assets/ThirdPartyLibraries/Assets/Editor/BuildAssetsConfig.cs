@@ -291,7 +291,7 @@ namespace GameAssets
 
         public static BuildAssetsConfig QueryAssetsConfig()
         {
-            string path = "Assets/ThirdPartyLibraries/Assets/Editor/BuildAssetsConfig.asset";
+            string path = EitorTools.GetScriptPath(typeof(BuildAssetsConfig)) + "BuildAssetsConfig.asset";;
             BuildAssetsConfig assetsConfig = AssetDatabase.LoadAssetAtPath<BuildAssetsConfig>(path);
             if (null == assetsConfig)
             {

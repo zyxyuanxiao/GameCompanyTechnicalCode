@@ -168,6 +168,8 @@ namespace GameAssets
 
             File.WriteAllText(vcPath, JsonMapper.ToJson(vc), Encoding.UTF8);
         }
+        
+
 
     }
 }
