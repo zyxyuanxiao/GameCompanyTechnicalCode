@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 
 #if NETFX_CORE
     using System.Threading.Tasks;
@@ -77,16 +77,16 @@ namespace BestHTTP
             {
                 if (!IsCreated)
                 {
-                    GameObject go = GameObject.Find("HTTPUpdateDelegator");
+                    GameObject go = GameObject.Find("HTTP Update Delegator");
 
                     if (go != null)
                         Instance = go.GetComponent<HTTPUpdateDelegator>();
 
                     if (Instance == null)
                     {
-                        go = new GameObject("HTTPUpdateDelegator");
+                        go = new GameObject("HTTP Update Delegator");
                         go.hideFlags = HideFlags.HideAndDontSave;
-
+                        
                         Instance = go.AddComponent<HTTPUpdateDelegator>();
                     }
                     IsCreated = true;
@@ -140,7 +140,7 @@ namespace BestHTTP
 
         void ThreadFunc()
         {
-            HTTPManager.Logger.Information("HTTPUpdateDelegator", "Update Thread Started");
+            HTTPManager.Logger.Information ("HTTPUpdateDelegator", "Update Thread Started");
 
             try
             {
@@ -150,7 +150,7 @@ namespace BestHTTP
                     HTTPManager.OnUpdate();
 
 #if NETFX_CORE
-                    await Task.Delay(ThreadFrequencyInMS);
+	                await Task.Delay(ThreadFrequencyInMS);
 #else
                     System.Threading.Thread.Sleep(ThreadFrequencyInMS);
 #endif
@@ -230,7 +230,7 @@ namespace BestHTTP
                         return;
                     }
                 }
-                catch (System.Exception ex)
+                catch(System.Exception ex)
                 {
                     HTTPManager.Logger.Exception("HTTPUpdateDelegator", string.Empty, ex);
                 }

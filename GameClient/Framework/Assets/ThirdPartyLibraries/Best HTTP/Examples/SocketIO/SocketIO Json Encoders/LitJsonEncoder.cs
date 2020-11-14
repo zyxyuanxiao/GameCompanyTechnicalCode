@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-// using LitJson;
+using LitJson;
 
 namespace BestHTTP.SocketIO.JsonEncoders
 {
@@ -13,18 +13,16 @@ namespace BestHTTP.SocketIO.JsonEncoders
     {
         public List<object> Decode(string json)
         {
-            return null;
-            // JsonReader reader = new JsonReader(json);
-            // return JsonMapper.ToObject<List<object>>(reader);
+            JsonReader reader = new JsonReader(json);
+            return JsonMapper.ToObject<List<object>>(reader);
         }
 
         public string Encode(List<object> obj)
         {
-            return "";
-            // JsonWriter writer = new JsonWriter();
-            // JsonMapper.ToJson(obj, writer);
-            //
-            // return writer.ToString();
+            JsonWriter writer = new JsonWriter();
+            JsonMapper.ToJson(obj, writer);
+
+            return writer.ToString();
         }
     }
 }

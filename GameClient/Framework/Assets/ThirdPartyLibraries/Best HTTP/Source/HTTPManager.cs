@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
@@ -78,14 +78,14 @@ namespace BestHTTP
         public static Connections.HTTP2.HTTP2PluginSettings HTTP2Settings = new Connections.HTTP2.HTTP2PluginSettings();
 #endif
 
-        #region Global Options
+#region Global Options
 
         /// <summary>
         /// The maximum active TCP connections that the client will maintain to a server. Default value is 4. Minimum value is 1.
         /// </summary>
         public static byte MaxConnectionPerServer
         {
-            get { return maxConnectionPerServer; }
+            get{ return maxConnectionPerServer; }
             set
             {
                 if (value <= 0)
@@ -245,15 +245,15 @@ namespace BestHTTP
         /// It's true if the application is quitting and the plugin is shutting down itself.
         /// </summary>
         public static bool IsQuitting { get; private set; }
-        #endregion
+#endregion
 
-        #region Manager variables
+#region Manager variables
 
         private static bool IsSetupCalled;
 
-        #endregion
+#endregion
 
-        #region Public Interface
+#region Public Interface
 
         public static void Setup()
         {
@@ -334,9 +334,9 @@ namespace BestHTTP
             return request;
         }
 
-        #endregion
+#endregion
 
-        #region Internal Helper Functions
+#region Internal Helper Functions
 
         /// <summary>
         /// Will return where the various caches should be saved.
@@ -348,7 +348,7 @@ namespace BestHTTP
                 if (RootCacheFolderProvider != null)
                     return RootCacheFolderProvider();
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 HTTPManager.Logger.Exception("HTTPManager", "GetRootCacheFolder", ex);
             }
@@ -369,9 +369,9 @@ namespace BestHTTP
             HTTPManager.Logger.Information("HTTPManager", "Reset called!");
         }
 
-        #endregion
+#endregion
 
-        #region MonoBehaviour Events (Called from HTTPUpdateDelegator)
+#region MonoBehaviour Events (Called from HTTPUpdateDelegator)
 
         /// <summary>
         /// Update function that should be called regularly from a Unity event(Update, LateUpdate). Callbacks are dispatched from this function.
@@ -428,6 +428,6 @@ namespace BestHTTP
             ProtocolEventHelper.CancelActiveProtocols();
         }
 
-        #endregion
+#endregion
     }
 }

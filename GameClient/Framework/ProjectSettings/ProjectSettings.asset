@@ -772,7 +772,8 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: BESTHTTP_DISABLE_HTTP2
   platformArchitecture: {}
   scriptingBackend:
     Standalone: 1
