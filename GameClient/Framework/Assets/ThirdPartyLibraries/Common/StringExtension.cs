@@ -44,5 +44,15 @@
             }
             return result;
         }
+        
+        public static float ToFloat(this string s)
+        {
+            float result = default(float);
+            if (!string.IsNullOrEmpty(s))
+            {
+                float.TryParse(s, out result);
+            }
+            return result;
+        }
     }
 }

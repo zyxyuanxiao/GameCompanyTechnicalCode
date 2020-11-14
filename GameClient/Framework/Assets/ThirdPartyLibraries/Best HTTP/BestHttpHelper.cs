@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine;
 
 namespace BestHTTP
@@ -23,19 +24,21 @@ namespace BestHTTP
             });
         }
 #endif
+
+        #region GET
         
-        public static void GET(string url,Action<bool,string> end)
+        public static void GET(string url,Action<bool,string> finished = null)
         {
-            HTTPRequest getRequest = new HTTPRequest(new Uri(url), (request, response) =>
+            HTTPRequest getRequest = new HTTPRequest(new Uri(url),(request, response) =>
             {
                 if (request.State == HTTPRequestStates.Finished && response.IsSuccess)
                 {
-                    end?.Invoke(true,response.DataAsText);
+                    finished?.Invoke(true,response.DataAsText);
                 }
                 else
                 {
-                    Debug.LogError("GET 请求错误:" + url +"    " + response.DataAsText);
-                    end?.Invoke(false,"");
+                    Debug.LogError("GET 请求错误:" + request.Uri +"    " + response.DataAsText);
+                    finished?.Invoke(false,"");
                 }
             });
             getRequest.IsKeepAlive = false;
@@ -44,14 +47,19 @@ namespace BestHTTP
             getRequest.Send();
         }
 
+        #endregion
+
         #region Download
         
         private static Action<bool,byte[],int> _DownloadAction;//第一个 bool 表示是否报错,true 为下载错误
         public static void Download(string url,Action<bool,byte[],int> d)
         {
             _DownloadAction = d;
-            HTTPRequest dRequest = new HTTPRequest(new Uri(url),OnRequestFinished);
+            HTTPRequest dRequest = new HTTPRequest(new Uri(url),OnRequestFinishedDownload);
             dRequest.OnStreamingData += OnStreamingData;
+            dRequest.IsKeepAlive = true;
+            dRequest.DisableCache = false;
+            dRequest.Timeout = TimeSpan.FromSeconds(20);
             dRequest.Send();
         }
         
@@ -70,7 +78,7 @@ namespace BestHTTP
             return true;
         }
 
-        private static void OnRequestFinished(HTTPRequest request, HTTPResponse response)
+        private static void OnRequestFinishedDownload(HTTPRequest request, HTTPResponse response)
         {
             if (request.State == HTTPRequestStates.Finished && response.IsSuccess)
             {

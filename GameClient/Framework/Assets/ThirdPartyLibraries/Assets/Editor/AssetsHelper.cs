@@ -104,8 +104,8 @@ namespace GameAssets
             {
                 using (File.Create(vcPath)) ;
             }
-
-            File.WriteAllText(vcPath, JsonMapper.ToJson(vc), Encoding.UTF8);
+            // 这个后面不能加 UTF8,因为 Litjson 解析时报错
+            File.WriteAllText(vcPath, JsonMapper.ToJson(vc));
         }
 
 

@@ -30,10 +30,13 @@ namespace GameAssets
 
         private static FileStream downloadFileStream;
         
+        private static VersionConfig remoteVersionConfig = null;//是否从网络上下载了配置文件
+
         public int Progress { get; set; }
         public IEnumerator Work()
         {
             yield return AssetsConfig.OneFrame;
+            remoteVersionConfig = null;
             Progress = 1;
             yield return DownloadVersionConfig();
             Progress = 15;
@@ -50,18 +53,17 @@ namespace GameAssets
         /// 下载 资源服务器上面的版本配置文件
         /// </summary>
         /// <returns></returns>
-        public IEnumerator DownloadVersionConfig()
+        private IEnumerator DownloadVersionConfig()
         {
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginRequestVersionConfig,
                 "开始下载");
-            
-            VersionConfig remoteVersionConfig = null;//是否从网络上下载了配置文件
+            yield return AssetsConfig.OneFrame;
+   
             //目前使用的是本地的 URL,具体到项目上面部署的情况下,再重新编写此类
             string versionConfigURL = AssetsConfig.QueryDownloadFileURL(AssetsConfig.VersionConfigName);
-            BestHttpHelper.GET(versionConfigURL,(b,s) =>
+            BestHttpHelper.GET(versionConfigURL, (b, s) =>
             {
-                Progress = 10;
-                if (b)//请求成功,应该进行
+                if (b && !string.IsNullOrEmpty(s))//请求成功,应该进行
                 {
                     //资源服务器上面的版本配置文件
                     remoteVersionConfig = JsonMapper.ToObject<VersionConfig>(s);
@@ -80,11 +82,13 @@ namespace GameAssets
             {
                 yield return AssetsConfig.OneFrame;
             }
+            Progress = 10;
 
             if (!AssetsConfig.VersionConfig.OS.Equals(remoteVersionConfig.OS) || 
                 AssetsConfig.VersionConfig.SVNVersion.ToInt() < remoteVersionConfig.SVNVersion.ToInt()||
-                AssetsConfig.VersionConfig.AppVersion.ToInt() < remoteVersionConfig.AppVersion.ToInt())
+                AssetsConfig.VersionConfig.AppVersion.ToFloat() < remoteVersionConfig.AppVersion.ToFloat())
             {
+                Debug.Log("xxxxxxxxxxxxxxxxxxxxxx");
                 yield break;//下载配置文件自身的平台,版本号,游戏二进制号 与本身的平台不匹配,不大于的情况下不给下载
             }
             else//有更新时,先将本地配置文件的版本数据重置
@@ -124,7 +128,7 @@ namespace GameAssets
         /// 通过下载队列下载 AB 包
         /// </summary>
         /// <returns></returns>
-        public IEnumerator DownloadFiles()
+        private IEnumerator DownloadFiles()
         {
             if (downloadQueue.Count <= 0)yield break;//没有下载列表
             
