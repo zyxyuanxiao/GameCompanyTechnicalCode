@@ -30,7 +30,7 @@ namespace GameAssets
 
 
         public static string BuildAsset = "_BuildAsset"; //一个scene(后缀名为.unity)场景必定是一个 AB 包
-        public static string AllText = "all_text.zip"; //所有文本文件的压缩包名字
+        public static string AllText = "Binary.zip"; //所有文本文件的压缩包名字
 
         /// <summary>
         /// 如果一个资源路径是以 Assets 开头,并且,不是以 .dll .cs .meta .js .boo 结尾

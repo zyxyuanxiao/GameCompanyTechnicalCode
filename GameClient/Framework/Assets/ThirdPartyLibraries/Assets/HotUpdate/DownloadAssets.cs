@@ -81,7 +81,7 @@ namespace GameAssets
                 yield return AssetsConfig.OneFrame;
             }
             //网络请求回包后,进行数据对比
-            if (AssetsConfig.VersionConfig.Md5Hash.Equals(remoteVersionConfig.Md5Hash))
+            if (AssetsConfig.VersionConfig.MD5Hash.Equals(remoteVersionConfig.MD5Hash))
             {
                 yield break;//配置文件自身的 hash 值相同,则无版本更新
             }
@@ -112,7 +112,7 @@ namespace GameAssets
                 }
                 //本地和远程都查找到了,但是远程的版本大于本地的版本,并且 MD5 值不同,需要添加进下载队列
                 if (remoteItem.Value.Version.ToInt() > localABVMd5.Version.ToInt() && 
-                    !remoteItem.Value.Md5Hash.Equals(localABVMd5.Md5Hash))
+                    !remoteItem.Value.MD5Hash.Equals(localABVMd5.MD5Hash))
                 {
                     downloadQueue.Enqueue(new DownloadFileInfo()
                     {
@@ -169,7 +169,7 @@ namespace GameAssets
                 DownloadFileInfo info = downloadQueue.Dequeue();
                 string path = AssetsConfig.QueryDownloadFilePath(info.fileName);
                 string localMD5 = SecurityTools.GetMD5Hash(path);
-                if (SecurityTools.VerifyMd5Hash(localMD5,info.remoteFileVMd5.Md5Hash))//下载的 MD5 值与网络上的 MD5 值正常
+                if (SecurityTools.VerifyMd5Hash(localMD5,info.remoteFileVMd5.MD5Hash))//下载的 MD5 值与网络上的 MD5 值正常
                 {
                     //将文件从下载路径移动到 AssetBundles 路径下
                     AssetsConfig.FileMove(path,AssetsConfig.QueryLocalFilePath());

@@ -43,12 +43,26 @@ namespace GameAssets
         public List<LocalFile> LocalFiles;
         
         
-        
         [Header("Asset Bundle")] 
         public List<ABBuildInfo> AssetBundleBuilds;
+        
+        
+        public static BuildAssetsConfig QueryAssetsConfig()
+        {
+            string path = EitorTools.GetScriptPath(typeof(BuildAssetsConfig)) + "BuildAssetsConfig.asset";;
+            BuildAssetsConfig assetsConfig = AssetDatabase.LoadAssetAtPath<BuildAssetsConfig>(path);
+            if (null == assetsConfig)
+            {
+                assetsConfig = ScriptableObject.CreateInstance<BuildAssetsConfig>();
+                assetsConfig.InitRules();
+                AssetDatabase.CreateAsset(assetsConfig, path);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
+            }
 
-
-
+            return assetsConfig;
+        }
+        
         public void InitRules()
         {
             _tracker?.Clear();
@@ -77,7 +91,9 @@ namespace GameAssets
             AssetDatabase.Refresh();
         }
 
-        public void BuildAllAB()
+        #region Build All
+
+        public void BuildAll()
         {
             this.CollectAllAssets(); //收集所有可以打成 AB 包的资源
             this.AnalysisAssetsDependencies(); //分析 AB 包的所有资源依赖关系
@@ -287,23 +303,8 @@ namespace GameAssets
 
             return builds.ToArray();
         }
-
-
-        public static BuildAssetsConfig QueryAssetsConfig()
-        {
-            string path = EitorTools.GetScriptPath(typeof(BuildAssetsConfig)) + "BuildAssetsConfig.asset";;
-            BuildAssetsConfig assetsConfig = AssetDatabase.LoadAssetAtPath<BuildAssetsConfig>(path);
-            if (null == assetsConfig)
-            {
-                assetsConfig = ScriptableObject.CreateInstance<BuildAssetsConfig>();
-                assetsConfig.InitRules();
-                AssetDatabase.CreateAsset(assetsConfig, path);
-                AssetDatabase.SaveAssets();
-                AssetDatabase.Refresh();
-            }
-
-            return assetsConfig;
-        }
-
+        
+        #endregion
+        
     }
 }

@@ -24,12 +24,12 @@ namespace GameAssets
     public class File_V_MD5
     {
         public string Version;
-        public string Md5Hash;
+        public string MD5Hash;
     }
     
     public class VersionConfig
     {
-        public string Md5Hash = string.Empty;//本身文件的 MD5
+        public string MD5Hash = string.Empty;//本身文件的 MD5
         public string OS = string.Empty;//操作平台
         public string SVNVersion = string.Empty;//SVN版本号
         public string AppVersion = string.Empty;//游戏版本号
