@@ -13,6 +13,14 @@ namespace GameAssets
         ReadConfigFailed,//读取配置失败了
         ReadConfigSucceed,//读取配置成功了
         
+        BeginCopyToLocal,
+        CopyToLocalFailed,
+        CopyToLocalSucceed,
+
+        UnZipFilesFailed,//解压缩失败
+        UnZipFilesSucceed,//解压缩所有文件成功
+        
+        
         BeginRequestVersionConfig,//请求版本配置文件
         RequestVersionConfigFailed,//请求版本配置文件
         RequestVersionConfigSucceed,//请求版本配置文件
@@ -21,9 +29,7 @@ namespace GameAssets
         DownloadFileFailed,//下载一个 AB失败
         DownloadFileSucceed,//下载 所有AB成功
         
-        BeginUnZipFiles,//开始解压所有被压缩的文件
-        UnZipFilesFailed,//解压缩失败
-        UnZipFilesSucceed,//解压缩所有文件成功
+
     }
     
     /// <summary>

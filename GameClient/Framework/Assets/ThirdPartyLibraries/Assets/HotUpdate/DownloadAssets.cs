@@ -26,12 +26,16 @@ namespace GameAssets
             public File_V_MD5 remoteFileVMd5;//记录远程的 File_V_MD5,当下载一个完毕之后,赋值给本地的版本配置文件对象
         }
         
-        private static Queue<DownloadFileInfo> downloadQueue = new Queue<DownloadFileInfo>(300);
 
         private static FileStream downloadFileStream;
+
+        private static DownloadFileInfo downloadFileInfo;
         
+        private static Queue<DownloadFileInfo> downloadQueue = new Queue<DownloadFileInfo>(300);
+
         private static VersionConfig remoteVersionConfig = null;//是否从网络上下载了配置文件
 
+        
         public int Progress { get; set; }
         public IEnumerator Work()
         {
@@ -109,16 +113,19 @@ namespace GameAssets
                         remoteFileVMd5 = remoteItem.Value,
                     });//本地没查到这个 AB,需要添加进下载队列
                 }
-                //本地和远程都查找到了,但是远程的版本大于本地的版本,并且 MD5 值不同,需要添加进下载队列
-                if (remoteItem.Value.Version.ToInt() > localABVMd5.Version.ToInt() && 
-                    !remoteItem.Value.MD5Hash.Equals(localABVMd5.MD5Hash))
+                else
                 {
-                    downloadQueue.Enqueue(new DownloadFileInfo()
+                    //本地和远程都查找到了,但是远程的版本大于本地的版本,并且 MD5 值不同,需要添加进下载队列
+                    if (remoteItem.Value.Version.ToInt() > localABVMd5.Version.ToInt() || 
+                        !remoteItem.Value.MD5Hash.Equals(localABVMd5.MD5Hash))
                     {
-                        fileName = remoteItem.Key,
-                        downloadFinished = false,
-                        remoteFileVMd5 = remoteItem.Value,
-                    });
+                        downloadQueue.Enqueue(new DownloadFileInfo()
+                        {
+                            fileName = remoteItem.Key,
+                            downloadFinished = false,
+                            remoteFileVMd5 = remoteItem.Value,
+                        });
+                    }   
                 }
             }
             yield return AssetsConfig.OneFrame;
@@ -135,18 +142,19 @@ namespace GameAssets
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginDownloadFile,
                 "开始下载所有 AB 包");
             
-            while (downloadQueue.Count <= 0)//循环下载队列,下载一个移除一个
+            while (downloadQueue.Count > 0)//循环下载队列,下载一个移除一个
             {
                 yield return AssetsConfig.OneFrame;
                 Progress = Progress + (int)(downloadQueue.Count/80);
-                DownloadFileInfo info = downloadQueue.Peek();
-                string url = AssetsConfig.QueryDownloadFileURL(info.fileName);
-                string path = AssetsConfig.QueryDownloadFilePath(info.fileName);
+                downloadFileInfo = downloadQueue.Peek();//这个值是复制了一份内存,使用Dequeue与其得到的不是同一个对象
+                string url = AssetsConfig.QueryDownloadFileURL(downloadFileInfo.fileName);
+                string path = AssetsConfig.QueryDownloadFilePath(downloadFileInfo.fileName);
                 AssetsConfig.FileDelete(path);//在这一步先进行删除,然后再下载
                 downloadFileStream = new FileStream(AssetsConfig.CSharpFilePath(path),
                     FileMode.OpenOrCreate, FileAccess.Write);
                 BestHttpHelper.Download(url,DownloadFiles);
-                while (!info.downloadFinished)
+                
+                while (!downloadFileInfo.downloadFinished)
                 {
                     yield return AssetsConfig.OneFrame;
                 }
@@ -164,41 +172,45 @@ namespace GameAssets
                 //下载完毕,并且正常
                 downloadFileStream.Flush();
                 downloadFileStream.Close();
+                
                 //下载正常之后,需要对这个包进行 MD5 校验
-                DownloadFileInfo info = downloadQueue.Dequeue();
-                string path = AssetsConfig.QueryDownloadFilePath(info.fileName);
-                string localMD5 = SecurityTools.GetMD5Hash(path);
-                if (SecurityTools.VerifyMd5Hash(localMD5,info.remoteFileVMd5.MD5Hash))//下载的 MD5 值与网络上的 MD5 值正常
+                downloadFileInfo = downloadQueue.Dequeue();
+                string path = AssetsConfig.QueryDownloadFilePath(downloadFileInfo.fileName);
+                string destPath = AssetsConfig.QueryLocalFilePath(downloadFileInfo.fileName);
+                AssetsConfig.FileMove(path,destPath);
+                if (Path.GetExtension(destPath).ToLower().Contains("zip"))//如果是 zip 则需要解压
                 {
-                    //将文件从下载路径移动到 AssetBundles 路径下
-                    AssetsConfig.FileMove(path,AssetsConfig.QueryLocalFilePath());
-                    AssetsConfig.VersionConfig.FileInfos[info.fileName] = info.remoteFileVMd5;
+                    AssetsConfig.DecompressBinary(destPath);//解压
                 }
-                else
+                
+                //重新填充配置文件
+                AssetsConfig.VersionConfig.FileInfos[downloadFileInfo.fileName] = downloadFileInfo.remoteFileVMd5;
+                FileInfo fileInfo = new FileInfo(AssetsConfig.CSharpFilePath(destPath));
+                AssetsConfig.FileInfoConfigs[downloadFileInfo.fileName] = new FileInfoConfig()
                 {
-                    Debug.LogError("下载到本地的 MD5 与网络上面的 MD5 不匹配:" + 
-                                   info.fileName +"\n" + 
-                                   info.remoteFileVMd5 + "\n" + 
-                                   localMD5);
-                    AssetsNotification.Broadcast(IAssetsNotificationType.DownloadFileFailed,
-                        info.fileName + "的MD5 值,下载之后,本地与资源服务器上面的不匹配");
-                }
-                info.downloadFinished = true;
+                    MD5Hash = downloadFileInfo.remoteFileVMd5.MD5Hash,
+                    Length = fileInfo.Length,
+                    LastWriteTime = fileInfo.LastWriteTime.ToString(),
+                    Name = downloadFileInfo.fileName
+                };
+                AssetsConfig.WriteVersionConfigToFile();
+                AssetsConfig.WriteFileInfoConfigsToFile();
+                downloadFileInfo.downloadFinished = true;
             }
             else if (isError && -200 == dataLength && null == data)
             {
-                DownloadFileInfo info = downloadQueue.Peek();
+                downloadFileInfo = downloadQueue.Peek();
                 //下载过程中报错,需要删除之后,再重新添加进下载队列里面,再次重新下载
                 downloadQueue.Dequeue();
-                downloadQueue.Enqueue(info);
+                downloadQueue.Enqueue(downloadFileInfo);
                 downloadFileStream.Flush();
                 downloadFileStream.Close();
-                AssetsConfig.FileDelete(AssetsConfig.QueryDownloadFilePath(info.fileName));
+                AssetsConfig.FileDelete(AssetsConfig.QueryDownloadFilePath(downloadFileInfo.fileName));
                 
                 AssetsNotification.Broadcast(IAssetsNotificationType.DownloadFileFailed,
-                    "下载 AB 包失败一次" + info.fileName);
+                    "下载 AB 包失败一次:  " + downloadFileInfo.fileName);
                 
-                info.downloadFinished = true;
+                downloadFileInfo.downloadFinished = true;
             }
             else if (dataLength > 0 && null != data)
             {

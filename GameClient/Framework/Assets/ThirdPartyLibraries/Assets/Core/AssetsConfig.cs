@@ -87,6 +87,7 @@ namespace GameAssets
         {
             sourceFileName = CSharpFilePath(sourceFileName);
             destFileName = CSharpFilePath(destFileName);
+            if (File.Exists(destFileName))File.Delete(destFileName);
             File.Move(sourceFileName,destFileName);
         }
 
@@ -159,7 +160,7 @@ namespace GameAssets
         /// </summary>
         public static string QueryDownloadFilePath(string abName)
         {
-            string path = QueryLocalFilePath() + "Download/";
+            string path = CSharpFilePath(QueryLocalFilePath()) + "Download/";
             if (!Directory.Exists(path)) Directory.CreateDirectory(path);
             return path + abName;
         }
@@ -174,7 +175,12 @@ namespace GameAssets
                    Tool.QueryPlatform() +"/" +
                    path;
         }
-
+        
+        /// <summary>
+        /// streamingAssetsPath 的路径
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
         public static string QueryStreamingFilePath(string path = "")
         {
             return UnityFilePath(Application.streamingAssetsPath.Replace("\\", "/")) + "/" +
@@ -182,15 +188,29 @@ namespace GameAssets
                    path;
         }
 
+        #region Zip
         
+        public static void DecompressBinary(string zipPath)
+        {
+            //每次都将压缩文件解压一遍,防止
+            zipPath = AssetsConfig.CSharpFilePath(zipPath);
+            if (Path.GetExtension(zipPath).ToLower().Contains("zip"))//如果是 zip 则需要解压
+            {
+                ZipResult zipResult = new ZipResult();
+                string targetPath = AssetsConfig.CSharpFilePath(AssetsConfig.QueryLocalFilePath());
+                LZ4Helper.Decompress(zipPath,targetPath,ref  zipResult,true); 
+            }
+        }
         
-        #region VersionConfig
+
+        #endregion
+        
+        #region Config
                 
         /// <summary>
         /// 从本地加载的VersionConfig数据,全局使用这一份即可
         /// </summary>
         public static VersionConfig VersionConfig;
-        
         
         /// <summary>
         /// 本次打包的配置版本文件,
@@ -202,22 +222,26 @@ namespace GameAssets
         /// 
         /// </summary>
         public static readonly string VersionConfigName = "VersionConfig.json";
+        
+        /// <summary>
+        /// 此文件信息必要进行加密与解密操作
+        /// </summary>
+        public static Dictionary<string,FileInfoConfig> FileInfoConfigs;
+        
+        public static readonly string FileInfoConfigName = "FileInfoConfig.json";
 
         public static void WriteVersionConfigToFile()
         {
             UpdatePath();
             string path = CSharpFilePath(QueryLocalFilePath(VersionConfigName));
             File.WriteAllText(path,JsonMapper.ToJson(VersionConfig));
-            //写入到本地沙盒中
-            // using (FileStream fileStream = new FileStream(QueryLocalFilePath(VersionConfigName),
-            //     FileMode.OpenOrCreate,FileAccess.Write))
-            // {
-            //     fileStream.SetLength(0);
-            //     fileStream.Flush();
-            //     byte[] data = Encoding.UTF8.GetBytes(JsonMapper.ToJson(AssetsConfig.VersionConfig));
-            //     fileStream.Write(data,0,data.Length);
-            //     fileStream.Flush();
-            // }
+        }
+        public static void WriteFileInfoConfigsToFile()
+        {
+            if (FileInfoConfigs == null || FileInfoConfigs.Count<=0) return;
+            UpdatePath();
+            string path = CSharpFilePath(QueryLocalFilePath(FileInfoConfigName));
+            File.WriteAllText(path,JsonMapper.ToJson(FileInfoConfigs));
         }
         #endregion
     }

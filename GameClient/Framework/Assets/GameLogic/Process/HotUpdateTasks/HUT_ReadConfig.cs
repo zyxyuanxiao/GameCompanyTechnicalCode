@@ -12,11 +12,12 @@ using GameAssets;
  * HUT : Hot Update Task 热更流程任务
  * 所有类以 HUT 开头
  */
-//加载本地 AB 包
-public sealed class HUT_PrepareDatas : ITaskProcess
+
+//读取配置表
+public sealed class HUT_ReadConfig : ITaskProcess
 {
     public TaskProcessLayer Layer => TaskProcessLayer.HotUpdate;
-    public byte ID => 4;
+    public byte ID => 0;
     public byte DelayFrame => 1;
     public IEnumerator Work()
     {

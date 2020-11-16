@@ -18,7 +18,7 @@ using UnityEngine;
 public sealed class HUT_DownloadAssets : ITaskProcess
 {
     public TaskProcessLayer Layer => TaskProcessLayer.HotUpdate;
-    public byte ID => 1;
+    public byte ID => 2;
     public byte DelayFrame => 1;
     public IEnumerator Work()
     {

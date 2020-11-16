@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Common;
@@ -17,12 +18,27 @@ namespace GameAssets
         public IEnumerator Work()
         {
             Progress = 0;
-
+            yield return AssetsConfig.OneFrame;
+            yield return ReadVersionConfig();
+            Progress = 50;
+            yield return AssetsConfig.OneFrame;
+            yield return ReadFileInfoConfig();
+            Progress = 100;
+            yield return AssetsConfig.OneFrame;
+            AssetsNotification.Broadcast(IAssetsNotificationType.Info,
+                "<color=cyan>========================>ReadConfig 结束<========================</color>");
+        }
+        
+        
+        /// <summary>
+        /// 读取配置文件
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator ReadVersionConfig()
+        {
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginReadConfig,
                 "开始读取 VersionConfig.json 并转成 VersionConfig 对象");
             
-            yield return AssetsConfig.OneFrame;
-            Progress = 1;
             //判断一下配置文件是否已经从网络上面下载到本地了,
             //如果没有从网络上面下载到本地,则需要先从 StreamingAssets 路径下进行读取
             //如果下载到本地了,则需要从persistentDataPath路径下进行读取
@@ -44,34 +60,38 @@ namespace GameAssets
                 AssetsNotification.Broadcast(IAssetsNotificationType.ReadConfigSucceed,
                     "读取 " + vcPath + " 成功了  ");
             }
-            Progress = 50;
+            
             yield return AssetsConfig.OneFrame;
-            
-            //检查文件是否改动了.如果改动了需要删除文件夹里面的所有文件,
-            string path = AssetsConfig.CSharpFilePath(AssetsConfig.QueryLocalFilePath());
-            string s = Tool.QueryAppendDirectoryLastWriteTime(path);
-            string sha1 = Tool.QuerySHA1HashOfString(s);
-            
-            string record = PlayerPrefs.GetString(AssetsConfig.ASSETROOT_LASTWRITETIME_KEY, "");
-            if (!sha1.Equals(record)) //资源非法发生修改，清理
+        }
+
+
+        /// <summary>
+        /// 读取文件信息配置文件,每一个文件都有配套的文件信息所对应
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerator ReadFileInfoConfig()
+        {
+            AssetsNotification.Broadcast(IAssetsNotificationType.BeginReadConfig,
+                "开始读取 FileInfoConfig.json 并转成 Dictionary<string, FileInfoConfig> 对象");
+            string ficPath = AssetsConfig.QueryLocalFilePath(AssetsConfig.FileInfoConfigName);
+            if (!AssetsConfig.FileExists(ficPath)) yield break; //不存在则跳出,说明是第一次
+            UnityWebRequest unityWebRequest = UnityWebRequest.Get(ficPath);
+            yield return unityWebRequest.SendWebRequest();
+
+            if (unityWebRequest.isHttpError || unityWebRequest.isNetworkError)
             {
-                Directory.Delete(path,true);
+                AssetsNotification.Broadcast(IAssetsNotificationType.ReadConfigFailed,
+                    "读取 " + ficPath + " 失败了  ");
+            }
+            else
+            {
+                AssetsConfig.FileInfoConfigs =
+                    JsonMapper.ToObject<Dictionary<string, FileInfoConfig>>(unityWebRequest.downloadHandler.text);
+                AssetsNotification.Broadcast(IAssetsNotificationType.ReadConfigSucceed,
+                    "读取 " + ficPath + " 成功了  ");
             }
             
-            Progress = 75;
-            
-            //沙盒空间不存在这个文件,则生成一个文件,下次从沙盒空间里面去拿
-            //下载之后的版本配置文件,也是和这个配置文件进行对比
-            if (!AssetsConfig.FileExists(AssetsConfig.QueryLocalFilePath(AssetsConfig.VersionConfigName)))
-            {
-                AssetsConfig.WriteVersionConfigToFile();
-            }
             yield return AssetsConfig.OneFrame;
-            
-            Progress = 100;
-            yield return AssetsConfig.OneFrame;
-            AssetsNotification.Broadcast(IAssetsNotificationType.Info,
-                "<color=cyan>========================>ReadConfig 结束<========================</color>");
         }
     }
 }

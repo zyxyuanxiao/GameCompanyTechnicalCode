@@ -101,7 +101,12 @@ namespace GameAssets
             string abm = AssetsHelper.DownloadAssetsDirectory + Tool.QueryPlatform();
             vc.FileInfos[Tool.QueryPlatform()] = new File_V_MD5()
                 {Version = Common.SVNHelper.GetSvnVersion(), MD5Hash = Common.SecurityTools.GetMD5Hash(abm)};
-
+            
+            //将 zip 文件也装载进配置文件中
+            string zip = AssetsHelper.DownloadAssetsDirectory + Tool.QueryPlatform();
+            vc.FileInfos[FileFilter.AllText] = new File_V_MD5()
+                {Version = Common.SVNHelper.GetSvnVersion(), MD5Hash = Common.SecurityTools.GetMD5Hash(zip)};
+            
             string vcPath = AssetsHelper.DownloadAssetsDirectory + AssetsConfig.VersionConfigName;
             if (!File.Exists(vcPath))
             {
@@ -125,8 +130,6 @@ namespace GameAssets
                 {
                     continue;
                 }
-                Debug.Log(file);
-                Debug.Log(destFileName);
                 File.Copy(file, destFileName + Path.GetFileName(file),true);
             }
         }

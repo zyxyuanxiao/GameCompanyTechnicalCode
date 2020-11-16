@@ -12,11 +12,12 @@ using GameAssets;
  * HUT : Hot Update Task 热更流程任务
  * 所有类以 HUT 开头
  */
-//解压文件
-public sealed class HUT_UnZipFiles : ITaskProcess
+
+//检查文件
+public sealed class HUT_CheckAllFiles : ITaskProcess
 {
     public TaskProcessLayer Layer => TaskProcessLayer.HotUpdate;
-    public byte ID => 2;
+    public byte ID => 1;
     public byte DelayFrame => 1;
     public IEnumerator Work()
     {
