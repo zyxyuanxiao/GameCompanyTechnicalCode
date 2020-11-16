@@ -57,8 +57,11 @@ namespace GameAssets
                 return;
             }
             
+            //输出版本配置文件
             BuildVersionConfig(assetBundleManifest);
-
+            //将 AB 数据以及二进制数据,版本配置文件拷贝到StreamingAssets文件夹里面.
+            CopyFileToStreamingAssets();
+            
             EditorUtility.OpenWithDefaultApp(AssetsHelper.DownloadAssetsDirectory);
         }
 
@@ -108,7 +111,25 @@ namespace GameAssets
             File.WriteAllText(vcPath, JsonMapper.ToJson(vc));
         }
 
-
+        
+        /// <summary>
+        /// 拷贝打包出的文件到游戏目录里面
+        /// </summary>
+        private static void CopyFileToStreamingAssets()
+        {
+            string[] files = Directory.GetFiles(DownloadAssetsDirectory, "*");
+            string destFileName = AssetsConfig.CSharpFilePath(AssetsConfig.QueryStreamingFilePath());
+            foreach (string file in files)
+            {
+                if (Path.GetExtension(file).ToLower().Contains("manifest"))
+                {
+                    continue;
+                }
+                Debug.Log(file);
+                Debug.Log(destFileName);
+                File.Copy(file, destFileName + Path.GetFileName(file),true);
+            }
+        }
 
     }
 }

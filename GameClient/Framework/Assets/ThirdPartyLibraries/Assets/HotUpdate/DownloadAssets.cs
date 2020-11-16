@@ -88,7 +88,7 @@ namespace GameAssets
                 AssetsConfig.VersionConfig.SVNVersion.ToInt() < remoteVersionConfig.SVNVersion.ToInt()||
                 AssetsConfig.VersionConfig.AppVersion.ToFloat() < remoteVersionConfig.AppVersion.ToFloat())
             {
-                Debug.Log("xxxxxxxxxxxxxxxxxxxxxx");
+                Debug.Log("会出现这个情况的原因,是因为本地没有正常的VersionConfig文件");
                 yield break;//下载配置文件自身的平台,版本号,游戏二进制号 与本身的平台不匹配,不大于的情况下不给下载
             }
             else//有更新时,先将本地配置文件的版本数据重置
