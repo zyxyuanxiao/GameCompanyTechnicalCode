@@ -15,33 +15,39 @@ namespace GameAssets
             assetsConfig.UpdateRules();
             Selection.activeObject = assetsConfig;
         }
-
-        [MenuItem("Builder/3 Build Assets For Init", priority = 1003)]
+        
+        [MenuItem("Builder/3 Build All Asset", priority = 1002)]
+        private static void BuildAllAssets()
+        {
+            BuildAssetsHelper.BuildAllAssets();
+        }
+        
+        [MenuItem("Builder/4 Build Assets For Default", priority = 1003)]
         private static void BuildDefaultStreamingAssets()
         {
             BuildAssetsHelper.BuildDefaultStreamingAssets();
         }
 
-        [MenuItem("Builder/4 Build Assets For HotUpdate", priority = 1004)]
+        [MenuItem("Builder/5 Build Assets For HotUpdate", priority = 1004)]
         private static void BuildHotUpdateAsset()
         {
             BuildAssetsHelper.BuildHotUpdateAsset();
         }
-
-        [MenuItem("Builder/5 Build All Asset", priority = 1005)]
-        private static void BuildAllStreamingAssets()
+        
+        [MenuItem("Builder/6 Copy Files To StreamingAssets", false, 1005)]
+        private static void CopyAssetBundlesToStreamingAssets()
         {
-            BuildAssetsHelper.BuildAllStreamingAssets();
+            string destDir = Application.streamingAssetsPath + "/";
+            string sourceDir = Application.dataPath.Replace("Assets", "DownloadAssets/");
+            if (!Directory.Exists(destDir)) Directory.CreateDirectory(destDir);
+            Common.EitorTools.CopyDirAndFile(sourceDir, destDir);
+            if (!string.IsNullOrEmpty(destDir)) 
+                EditorUtility.OpenWithDefaultApp(destDir + Common.Tool.QueryPlatform());
+            AssetDatabase.Refresh();
         }
-
-        [MenuItem("Builder/Open App Download Files Path", false, 3001)]
-        private static void OpenAppAssetBundlesPath()
-        {
-            EditorUtility.OpenWithDefaultApp(Application.persistentDataPath);
-        }
-
-        [MenuItem("Builder/Copy Download Files To Web Server", false, 3002)]
-        private static void CopyAssetBundlesToWebServer()
+        
+        [MenuItem("Builder/7 Copy Download Files To Web Server", false, 1006)]
+        public static void CopyAssetBundlesToWebServer()
         {
             //拷贝下载的文件到 web 服务器上面,web 服务器需要自己搭建,mac 上面自带 Apache 服务器.
             string destDir = "";
@@ -49,10 +55,19 @@ namespace GameAssets
             {
                 destDir = "/Library/WebServer/Documents/DownloadAssets/";
             }
-
+            if (!Directory.Exists(destDir)) Directory.CreateDirectory(destDir);
             string sourceDir = Application.dataPath.Replace("Assets", "DownloadAssets/");
             Common.EitorTools.CopyDirAndFile(sourceDir, destDir);
-            if (!string.IsNullOrEmpty(destDir)) EditorUtility.OpenWithDefaultApp(destDir);
+            if (!string.IsNullOrEmpty(destDir))                 
+                EditorUtility.OpenWithDefaultApp(destDir + Common.Tool.QueryPlatform());
         }
+
+        [MenuItem("Builder/8 Open App Download Files Path", false, 1007)]
+        private static void OpenAppAssetBundlesPath()
+        {
+            EditorUtility.OpenWithDefaultApp(Application.persistentDataPath);
+        }
+
+
     }
 }

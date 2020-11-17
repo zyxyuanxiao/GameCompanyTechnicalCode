@@ -17,6 +17,14 @@ MonoBehaviour:
     SearchPattern: '*.png'
     LocalFilePaths:
     - Assets/BuildAssets/Shader/UIEffect/Default-Transition.png
+    - Assets/BuildAssets/Texture/Png/Brown Stony Light.png
+    - Assets/BuildAssets/Texture/Png/Brown Stony.png
+    - Assets/BuildAssets/Texture/Png/Grass.png
+    - Assets/BuildAssets/Texture/Png/Grey Stones.png
+    - Assets/BuildAssets/Texture/Png/Sandy Orange.png
+    - Assets/BuildAssets/Texture/Png/Sandy.png
+    - Assets/BuildAssets/Texture/Png/Water Deep Blue.png
+    - Assets/BuildAssets/Texture/Png/Water Light Blue.png
   - FileType: TTF
     SearchPattern: '*.ttf'
     LocalFilePaths:
@@ -77,12 +85,20 @@ MonoBehaviour:
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Brown Stony Light.mat
       depsPath:
-      - Assets/Editor Default Resources/Texture/Png/Brown Stony Light.png
+      - Assets/BuildAssets/Texture/Png/Brown Stony Light.png
+  - assetBundleName: brown stony light.png.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Png/Brown Stony Light.png
+      depsPath: []
   - assetBundleName: brown stony.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Brown Stony.mat
       depsPath:
-      - Assets/Editor Default Resources/Texture/Png/Brown Stony.png
+      - Assets/BuildAssets/Texture/Png/Brown Stony.png
+  - assetBundleName: brown stony.png.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Png/Brown Stony.png
+      depsPath: []
   - assetBundleName: daytime.hdr.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Cubemap/Skybox/daytime.hdr
@@ -116,12 +132,20 @@ MonoBehaviour:
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Grass.mat
       depsPath:
-      - Assets/Editor Default Resources/Texture/Png/Grass.png
+      - Assets/BuildAssets/Texture/Png/Grass.png
+  - assetBundleName: grass.png.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Png/Grass.png
+      depsPath: []
   - assetBundleName: grey stones.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Grey Stones.mat
       depsPath:
-      - Assets/Editor Default Resources/Texture/Png/Grey Stones.png
+      - Assets/BuildAssets/Texture/Png/Grey Stones.png
+  - assetBundleName: grey stones.png.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Png/Grey Stones.png
+      depsPath: []
   - assetBundleName: loginscene.unity.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Scene/LoginScene.unity
@@ -130,12 +154,20 @@ MonoBehaviour:
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Sandy Orange.mat
       depsPath:
-      - Assets/Editor Default Resources/Texture/Png/Sandy Orange.png
+      - Assets/BuildAssets/Texture/Png/Sandy Orange.png
+  - assetBundleName: sandy orange.png.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Png/Sandy Orange.png
+      depsPath: []
   - assetBundleName: sandy.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Sandy.mat
       depsPath:
-      - Assets/Editor Default Resources/Texture/Png/Sandy.png
+      - Assets/BuildAssets/Texture/Png/Sandy.png
+  - assetBundleName: sandy.png.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Png/Sandy.png
+      depsPath: []
   - assetBundleName: scenecamera.prefab.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Prefab/Scene/SceneCamera.prefab
@@ -233,9 +265,17 @@ MonoBehaviour:
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Water Deep Blue.mat
       depsPath:
-      - Assets/Editor Default Resources/Texture/Png/Water Deep Blue.png
+      - Assets/BuildAssets/Texture/Png/Water Deep Blue.png
+  - assetBundleName: water deep blue.png.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Png/Water Deep Blue.png
+      depsPath: []
   - assetBundleName: water light blue.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Water Light Blue.mat
       depsPath:
-      - Assets/Editor Default Resources/Texture/Png/Water Light Blue.png
+      - Assets/BuildAssets/Texture/Png/Water Light Blue.png
+  - assetBundleName: water light blue.png.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Png/Water Light Blue.png
+      depsPath: []

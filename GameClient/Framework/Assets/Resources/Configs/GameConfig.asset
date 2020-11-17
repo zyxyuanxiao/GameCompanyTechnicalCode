@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32813ad1f504442e7970c81eac926f67, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
-  version: 
+  BuildConfig: 0
+  version: 2
   UseAssetBundles: 0
-  UseLocalServer: 0
-  LocalWebServerAddress: http://127.0.0.1:80/AssetBundles/
-  _remoteWebServerAddress: []
+  RemoteWebServerAddress:
+  - http://127.0.0.1/DownloadAssets

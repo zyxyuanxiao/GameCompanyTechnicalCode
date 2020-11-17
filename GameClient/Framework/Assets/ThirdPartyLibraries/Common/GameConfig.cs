@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Common
 {
-    public enum GameBuildConfig
+    public enum GameBuildType
     {
         Local = 0,//本地编辑器上面运行,会输出 Log,编辑器下也会运行此模式
         Debug,   //打包测试,打包成 apk,ipa,app.exe 等,都会输出 Log
@@ -15,7 +15,7 @@ namespace Common
     public class GameConfig : ScriptableObject
     {
         [Tooltip("当前游戏运行的方式")]
-        public GameBuildConfig BuildConfig;
+        public GameBuildType BuildConfig;
         
         //根据 svn 版本号获取
         [Tooltip("当前游戏的版本")] 
@@ -31,7 +31,7 @@ namespace Common
 
         public string[] QueryAddress()
         {
-            if (BuildConfig == GameBuildConfig.Local || RemoteWebServerAddress == null || RemoteWebServerAddress.Length <= 0)
+            if (BuildConfig == GameBuildType.Local || RemoteWebServerAddress == null || RemoteWebServerAddress.Length <= 0)
             {//使用的是 HTTP ,本地搭建的 web 服务器,测试使用,默认:http://127.0.0.1:80/DownloadAssets/" 请本地搭建.
                 RemoteWebServerAddress = new string[] {"http://127.0.0.1/DownloadAssets"};
             }
@@ -42,11 +42,12 @@ namespace Common
         {
             UseAssetBundles = false;
             RemoteWebServerAddress = null;
+            version = "1";
         }
 
 #if UNITY_EDITOR
-        [MenuItem("Builder/1 Init GameConfig", priority = 1000)]
-        private static void CreateGameConfig()
+        [MenuItem("Builder/1 Update GameConfig", priority = 1000)]
+        public static GameConfig UpdateGameConfig()
         {
             GameConfig buildConfig = Resources.Load<GameConfig>("Configs/GameConfig");
             if (null == buildConfig)
@@ -60,6 +61,7 @@ namespace Common
 
             buildConfig.Reset();
             Selection.activeObject = buildConfig;
+            return buildConfig;
             // Resources.UnloadAsset(assetsConfig);//编辑器下无需卸载
         }
 #endif

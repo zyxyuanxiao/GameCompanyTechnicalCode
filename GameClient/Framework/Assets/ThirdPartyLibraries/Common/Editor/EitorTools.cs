@@ -57,7 +57,8 @@ namespace Common
                         Directory.CreateDirectory(destfolderdir);
                     }
 
-                    // if (Path.GetExtension(file).ToLower().Contains(".ds_store")) continue;
+                    if (Path.GetExtension(file).ToLower().Contains(".ds_store")) continue;
+                    if (Path.GetExtension(file).ToLower().Contains(".manifest")) continue;
                     File.Copy(file, srcfileName,true);
                 }
             }

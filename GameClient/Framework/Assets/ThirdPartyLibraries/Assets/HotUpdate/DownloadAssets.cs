@@ -60,7 +60,7 @@ namespace GameAssets
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginRequestVersionConfig,
                 "开始下载");
             yield return AssetsConfig.OneFrame;
-   
+            
             //目前使用的是本地的 URL,具体到项目上面部署的情况下,再重新编写此类
             string versionConfigURL = AssetsConfig.QueryDownloadFileURL(AssetsConfig.VersionConfigName);
             BestHttpHelper.GET(versionConfigURL, (b, s) =>
@@ -74,6 +74,7 @@ namespace GameAssets
                 }
                 else
                 {
+                    
                     Debug.LogError("资源服务器版本配置文件下载失败");
                     AssetsNotification.Broadcast(IAssetsNotificationType.RequestVersionConfigFailed,
                         "下载 VersionConfig.json 失败");
@@ -87,8 +88,8 @@ namespace GameAssets
             Progress = 10;
 
             if (!AssetsConfig.VersionConfig.OS.Equals(remoteVersionConfig.OS) || 
-                AssetsConfig.VersionConfig.SVNVersion.ToInt() < remoteVersionConfig.SVNVersion.ToInt()||
-                AssetsConfig.VersionConfig.AppVersion.ToFloat() < remoteVersionConfig.AppVersion.ToFloat())
+                AssetsConfig.VersionConfig.SVNVersion.ToInt() > remoteVersionConfig.SVNVersion.ToInt()||
+                AssetsConfig.VersionConfig.AppVersion.ToFloat() > remoteVersionConfig.AppVersion.ToFloat())
             {
                 Debug.Log("会出现这个情况的原因,是因为本地没有正常的VersionConfig文件");
                 yield break;//下载配置文件自身的平台,版本号,游戏二进制号 与本身的平台不匹配,不大于的情况下不给下载
@@ -196,6 +197,7 @@ namespace GameAssets
                     LastWriteTime = fileInfo.LastWriteTime.ToString(),
                     Name = downloadFileInfo.fileName
                 };
+                Debug.Log("下载成功了:" + downloadFileInfo.fileName);
                 AssetsConfig.WriteVersionConfigToFile();
                 AssetsConfig.WriteFileInfoConfigsToFile();
                 downloadFileInfo.downloadFinished = true;
