@@ -17,14 +17,6 @@ MonoBehaviour:
     SearchPattern: '*.png'
     LocalFilePaths:
     - Assets/BuildAssets/Shader/UIEffect/Default-Transition.png
-    - Assets/BuildAssets/Texture/Png/Brown Stony Light.png
-    - Assets/BuildAssets/Texture/Png/Brown Stony.png
-    - Assets/BuildAssets/Texture/Png/Grass.png
-    - Assets/BuildAssets/Texture/Png/Grey Stones.png
-    - Assets/BuildAssets/Texture/Png/Sandy Orange.png
-    - Assets/BuildAssets/Texture/Png/Sandy.png
-    - Assets/BuildAssets/Texture/Png/Water Deep Blue.png
-    - Assets/BuildAssets/Texture/Png/Water Light Blue.png
   - FileType: TTF
     SearchPattern: '*.ttf'
     LocalFilePaths:
@@ -79,104 +71,171 @@ MonoBehaviour:
     SearchPattern: '*.spriteatlas'
     LocalFilePaths:
     - Assets/BuildAssets/Texture/Spriteatlas/Test.spriteatlas
-  AssetBundleBuilds:
+  AssetBundleManifest: OSX
+  AssetBundleBuildInfos:
   - assetBundleName: brown stony light.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Surface/Brown Stony Light.mat
-  - assetBundleName: brown stony light.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Png/Brown Stony Light.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Surface/Brown Stony Light.mat
+      depsPath:
+      - Assets/Editor Default Resources/Texture/Png/Brown Stony Light.png
   - assetBundleName: brown stony.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Surface/Brown Stony.mat
-  - assetBundleName: brown stony.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Png/Brown Stony.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Surface/Brown Stony.mat
+      depsPath:
+      - Assets/Editor Default Resources/Texture/Png/Brown Stony.png
   - assetBundleName: daytime.hdr.unity3d
-    assetNames:
-    - Assets/BuildAssets/Cubemap/Skybox/daytime.hdr
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Cubemap/Skybox/daytime.hdr
+      depsPath: []
   - assetBundleName: default-transition.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Shader/UIEffect/Default-Transition.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Shader/UIEffect/Default-Transition.png
+      depsPath: []
   - assetBundleName: ekard.prefab.unity3d
-    assetNames:
-    - Assets/BuildAssets/Prefab/Model/Ekard.prefab
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Prefab/Model/Ekard.prefab
+      depsPath:
+      - Assets/Editor Default Resources/RPG/Models/Sword_M_BattleIdle_01.FBX
+      - Assets/Editor Default Resources/RPG/Models/Sword_M_Stun_01.FBX
+      - Assets/Editor Default Resources/RPG/Models/materials/Ekard.mat
+      - Assets/Editor Default Resources/RPG/Models/animator/Ekard.controller
+      - Assets/Editor Default Resources/RPG/Models/Sword_M_Attack_01.FBX
+      - Assets/Editor Default Resources/RPG/Models/Sword_M_Debuff_01.FBX
+      - Assets/Editor Default Resources/RPG/Models/Sword_12.FBX
+      - Assets/Editor Default Resources/RPG/Models/textures/RuneKnight_M_Ekard.tga
+      - Assets/Editor Default Resources/RPG/Models/Ekard_Skill_01.FBX
+      - Assets/Editor Default Resources/RPG/Models/Sword_M_Run_01.FBX
+      - Assets/Editor Default Resources/RPG/Models/Sword_M_Attack_02.FBX
+      - Assets/Editor Default Resources/RPG/Models/Ekard.FBX
+      - Assets/Editor Default Resources/RPG/Models/textures/Sword_12.tga
   - assetBundleName: fzbz.ttf.unity3d
-    assetNames:
-    - Assets/BuildAssets/Font/FZBZ.ttf
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Font/FZBZ.ttf
+      depsPath: []
   - assetBundleName: grass.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Surface/Grass.mat
-  - assetBundleName: grass.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Png/Grass.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Surface/Grass.mat
+      depsPath:
+      - Assets/Editor Default Resources/Texture/Png/Grass.png
   - assetBundleName: grey stones.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Surface/Grey Stones.mat
-  - assetBundleName: grey stones.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Png/Grey Stones.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Surface/Grey Stones.mat
+      depsPath:
+      - Assets/Editor Default Resources/Texture/Png/Grey Stones.png
   - assetBundleName: loginscene.unity.unity3d
-    assetNames:
-    - Assets/BuildAssets/Scene/LoginScene.unity
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Scene/LoginScene.unity
+      depsPath: []
   - assetBundleName: sandy orange.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Surface/Sandy Orange.mat
-  - assetBundleName: sandy orange.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Png/Sandy Orange.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Surface/Sandy Orange.mat
+      depsPath:
+      - Assets/Editor Default Resources/Texture/Png/Sandy Orange.png
   - assetBundleName: sandy.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Surface/Sandy.mat
-  - assetBundleName: sandy.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Png/Sandy.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Surface/Sandy.mat
+      depsPath:
+      - Assets/Editor Default Resources/Texture/Png/Sandy.png
   - assetBundleName: scenecamera.prefab.unity3d
-    assetNames:
-    - Assets/BuildAssets/Prefab/Scene/SceneCamera.prefab
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Prefab/Scene/SceneCamera.prefab
+      depsPath: []
   - assetBundleName: scenelevel1.unity.unity3d
-    assetNames:
-    - Assets/BuildAssets/Scene/SceneLevel1.unity
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Scene/SceneLevel1.unity
+      depsPath:
+      - Assets/BuildAssets/Cubemap/Skybox/daytime.hdr
+      - Assets/BuildAssets/Material/Skybox/Skybox_Daytime.mat
   - assetBundleName: shaderlibs.unity3d
-    assetNames:
-    - Assets/BuildAssets/Shader/UIEffect/UIDissolve.shader
-    - Assets/BuildAssets/Shader/UIEffect/UIEffect.shader
-    - Assets/BuildAssets/Shader/UIEffect/UIHsvModifier.shader
-    - Assets/BuildAssets/Shader/UIEffect/UIShiny.shader
-    - Assets/BuildAssets/Shader/UIEffect/UITtransition.shader
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Shader/UIEffect/UIDissolve.shader
+      depsPath: []
+    - filePath: Assets/BuildAssets/Shader/UIEffect/UIEffect.shader
+      depsPath: []
+    - filePath: Assets/BuildAssets/Shader/UIEffect/UIHsvModifier.shader
+      depsPath: []
+    - filePath: Assets/BuildAssets/Shader/UIEffect/UIShiny.shader
+      depsPath: []
+    - filePath: Assets/BuildAssets/Shader/UIEffect/UITtransition.shader
+      depsPath:
+      - Assets/BuildAssets/Shader/UIEffect/Default-Transition.png
   - assetBundleName: skybox_daytime.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Skybox/Skybox_Daytime.mat
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Skybox/Skybox_Daytime.mat
+      depsPath:
+      - Assets/BuildAssets/Cubemap/Skybox/daytime.hdr
   - assetBundleName: skybox_sunset.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Skybox/Skybox_Sunset.mat
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Skybox/Skybox_Sunset.mat
+      depsPath:
+      - Assets/BuildAssets/Cubemap/Skybox/sunset.hdr
   - assetBundleName: sourcehansanscn_medium_0.ttf.unity3d
-    assetNames:
-    - Assets/BuildAssets/Font/SOURCEHANSANSCN_MEDIUM_0.ttf
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Font/SOURCEHANSANSCN_MEDIUM_0.ttf
+      depsPath: []
   - assetBundleName: sunset.hdr.unity3d
-    assetNames:
-    - Assets/BuildAssets/Cubemap/Skybox/sunset.hdr
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Cubemap/Skybox/sunset.hdr
+      depsPath: []
   - assetBundleName: sy1.ttf.unity3d
-    assetNames:
-    - Assets/BuildAssets/Font/SY1.ttf
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Font/SY1.ttf
+      depsPath: []
   - assetBundleName: sz.ttf.unity3d
-    assetNames:
-    - Assets/BuildAssets/Font/SZ.ttf
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Font/SZ.ttf
+      depsPath: []
   - assetBundleName: test.spriteatlas.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Spriteatlas/Test.spriteatlas
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Texture/Spriteatlas/Test.spriteatlas
+      depsPath:
+      - Assets/Editor Default Resources/Spriteatlas/Character_icon
+      - Assets/Editor Default Resources/Spriteatlas/Character_icon/Ekard_Skill_01.png
+      - Assets/Editor Default Resources/Spriteatlas/Character_icon/Ekard.png
   - assetBundleName: uirootlogin.prefab.unity3d
-    assetNames:
-    - Assets/BuildAssets/Prefab/UI/UIRootLogin.prefab
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Prefab/UI/UIRootLogin.prefab
+      depsPath:
+      - Packages/com.unity.ugui/Runtime/UI/Core/Layout/CanvasScaler.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/input_input.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/InputField/InputFieldAdapter.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Autocomplete/AutocompleteString.cs
+      - Packages/com.unity.ugui/Runtime/UI/Core/Text.cs
+      - Packages/com.unity.ugui/Runtime/UI/Core/Scrollbar.cs
+      - Packages/com.unity.ugui/Runtime/UI/Core/Image.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/button_mask.png
+      - Packages/com.unity.ugui/Runtime/UI/Core/Layout/ContentSizeFitter.cs
+      - Packages/com.unity.ugui/Runtime/UI/Core/Layout/LayoutElement.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/listview_mask.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/EasyLayout/EasyLayout.cs
+      - Packages/com.unity.ugui/Runtime/UI/Core/Mask.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/button_texture.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/ListView/ListViewString.cs
+      - Packages/com.unity.ugui/Runtime/EventSystem/EventSystem.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Drag-and-Drop/ListViewDropIndicator.cs
+      - Packages/com.unity.ugui/Runtime/UI/Core/ScrollRect.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Examples/TestData/countries.txt
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/listview_background.png
+      - Packages/com.unity.ugui/Runtime/UI/Core/Button.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/scrollbar_handle.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Style/Input/StyleSupportButtonBig.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Text/TextAdapter.cs
+      - Packages/com.unity.ugui/Runtime/UI/Core/InputField.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/scrollbar_background.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Drag-and-Drop/ListViewStringDragSupport.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Autocomplete/AutocompleteDataSource.cs
+      - Packages/com.unity.ugui/Runtime/UI/Core/GraphicRaycaster.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/ListView/ListViewStringItemComponent.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Drag-and-Drop/ListViewStringDropSupport.cs
+      - Packages/com.unity.ugui/Runtime/EventSystem/InputModules/StandaloneInputModule.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/button_border.png
   - assetBundleName: water deep blue.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Surface/Water Deep Blue.mat
-  - assetBundleName: water deep blue.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Png/Water Deep Blue.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Surface/Water Deep Blue.mat
+      depsPath:
+      - Assets/Editor Default Resources/Texture/Png/Water Deep Blue.png
   - assetBundleName: water light blue.mat.unity3d
-    assetNames:
-    - Assets/BuildAssets/Material/Surface/Water Light Blue.mat
-  - assetBundleName: water light blue.png.unity3d
-    assetNames:
-    - Assets/BuildAssets/Texture/Png/Water Light Blue.png
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Material/Surface/Water Light Blue.mat
+      depsPath:
+      - Assets/Editor Default Resources/Texture/Png/Water Light Blue.png

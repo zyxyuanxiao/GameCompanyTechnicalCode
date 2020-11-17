@@ -11,7 +11,7 @@ using Tool = Common.Tool;
 
 namespace GameAssets
 {
-    public static class AssetsHelper
+    public static class BuildAssetsHelper
     {
         public static string DownloadAssetsDirectory
         {
@@ -32,8 +32,8 @@ namespace GameAssets
         public static void BuildAllStreamingAssets()
         {
             //配置路径
-            if (Directory.Exists(AssetsHelper.DownloadAssetsDirectory))
-                Directory.Delete(AssetsHelper.DownloadAssetsDirectory, true);
+            if (Directory.Exists(DownloadAssetsDirectory))
+                Directory.Delete(DownloadAssetsDirectory, true);
             
             //根据配置文件进行初始化 AB 包的名字以及资源
             BuildAssetsConfig assetsConfig = BuildAssetsConfig.QueryAssetsConfig();
@@ -47,7 +47,7 @@ namespace GameAssets
             var targetPlatform = EditorUserBuildSettings.activeBuildTarget;
             //开始打包
             AssetBundleManifest assetBundleManifest = BuildPipeline.BuildAssetBundles(
-                AssetsHelper.DownloadAssetsDirectory, 
+                DownloadAssetsDirectory, 
                 assetsConfig.QueryAssetBundleBuilds(), 
                 options, 
                 targetPlatform);
@@ -62,7 +62,7 @@ namespace GameAssets
             //将 AB 数据以及二进制数据,版本配置文件拷贝到StreamingAssets文件夹里面.
             CopyFileToStreamingAssets();
             
-            EditorUtility.OpenWithDefaultApp(AssetsHelper.DownloadAssetsDirectory);
+            EditorUtility.OpenWithDefaultApp(DownloadAssetsDirectory);
         }
 
         public static void BuildDefaultStreamingAssets()
@@ -91,23 +91,24 @@ namespace GameAssets
             string[] abNames = assetBundleManifest.GetAllAssetBundles();
             foreach (string name in abNames)
             {
-                string abPath = AssetsHelper.DownloadAssetsDirectory + name;
+                string abPath = DownloadAssetsDirectory + name;
                 Debug.Log(abPath);
                 vc.FileInfos[name] = new File_V_MD5()
                     {Version = Common.SVNHelper.GetSvnVersion(), MD5Hash = Common.SecurityTools.GetMD5Hash(abPath)};
+                
             }
 
             //将 assetBundleManifest 文件也装载进配置文件中
-            string abm = AssetsHelper.DownloadAssetsDirectory + Tool.QueryPlatform();
+            string abm = DownloadAssetsDirectory + Tool.QueryPlatform();
             vc.FileInfos[Tool.QueryPlatform()] = new File_V_MD5()
                 {Version = Common.SVNHelper.GetSvnVersion(), MD5Hash = Common.SecurityTools.GetMD5Hash(abm)};
             
             //将 zip 文件也装载进配置文件中
-            string zip = AssetsHelper.DownloadAssetsDirectory + Tool.QueryPlatform();
+            string zip = DownloadAssetsDirectory + Tool.QueryPlatform();
             vc.FileInfos[FileFilter.AllText] = new File_V_MD5()
                 {Version = Common.SVNHelper.GetSvnVersion(), MD5Hash = Common.SecurityTools.GetMD5Hash(zip)};
             
-            string vcPath = AssetsHelper.DownloadAssetsDirectory + AssetsConfig.VersionConfigName;
+            string vcPath = DownloadAssetsDirectory + AssetsConfig.VersionConfigName;
             if (!File.Exists(vcPath))
             {
                 using (File.Create(vcPath)) ;

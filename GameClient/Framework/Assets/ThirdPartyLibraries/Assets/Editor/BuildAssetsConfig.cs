@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using GameAssets;
 using Common;
+using Tool = Common.Tool;
 
 
 namespace GameAssets
@@ -39,13 +40,17 @@ namespace GameAssets
         /// </summary>
         private readonly Dictionary<string, HashSet<string>> _tracker = new Dictionary<string, HashSet<string>>();
 
-        [Header("LocalFiles Path: Assets/_BuildAsset/")] 
+        [Header("LocalFiles Path: Assets/BuildAssets/")] 
+        [Tooltip("不可手动修改时,都要进行代码的修改")]
         public List<LocalFile> LocalFiles;
         
+        [Tooltip("仅仅展示名字,不要修改,每次打包后会更新")]
+        public string AssetBundleManifest;
         
-        [Header("Asset Bundle")] 
-        public List<ABBuildInfo> AssetBundleBuilds;
+        [Tooltip("展示 AB 包的名字,不要修改,每次打包后会更新")]
+        public List<ABBuildInfo> AssetBundleBuildInfos;
         
+
         /// <summary>
         /// 获取当前BuildAssetsConfig的实体对象
         /// </summary>
@@ -57,7 +62,7 @@ namespace GameAssets
             if (null == assetsConfig)
             {
                 assetsConfig = ScriptableObject.CreateInstance<BuildAssetsConfig>();
-                assetsConfig.InitRules();
+                assetsConfig.UpdateRules();
                 AssetDatabase.CreateAsset(assetsConfig, path);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
@@ -69,14 +74,14 @@ namespace GameAssets
         /// <summary>
         /// 初始化打包规则
         /// </summary>
-        public void InitRules()
+        public void UpdateRules()
         {
             _tracker?.Clear();
             _duplicated?.Clear();
             _conflicted?.Clear();
             _assetToAB?.Clear();
             LocalFiles?.Clear();
-            AssetBundleBuilds?.Clear();
+            AssetBundleBuildInfos?.Clear();
             if (LocalFiles == null) LocalFiles = new List<LocalFile>();
             if (LocalFiles.Count <= 0)
             {
@@ -101,6 +106,8 @@ namespace GameAssets
 
         public void BuildAll()
         {
+            UpdateRules();
+            AssetBundleManifest = Common.Tool.QueryPlatform();
             CollectAllAssets(); //收集所有可以打成 AB 包的资源
             AnalysisAssetsDependencies(); //分析 AB 包的所有资源依赖关系
             OptimizeAssets(); //对依赖关系进行优化
@@ -128,7 +135,7 @@ namespace GameAssets
             }
 
             string dirPath = Application.dataPath + "/" + FileFilter.BuildAssets + "/";
-            string zipFileName = AssetsHelper.DownloadAssetsDirectory + FileFilter.AllText;
+            string zipFileName = BuildAssetsHelper.DownloadAssetsDirectory + FileFilter.AllText;
             if (!LZ4Helper.CompressDirectory(dirPath, zipInfos.ToArray(), zipFileName))
             {
                 Debug.LogError("压缩包压缩失败");
@@ -250,18 +257,30 @@ namespace GameAssets
         /// </summary>
         private void CombineABWithAssets()
         {
-            AssetBundleBuilds?.Clear();
-            if (AssetBundleBuilds == null) AssetBundleBuilds = new List<ABBuildInfo>();
+            AssetBundleBuildInfos?.Clear();
+            if (AssetBundleBuildInfos == null) AssetBundleBuildInfos = new List<ABBuildInfo>();
             Dictionary<string, List<string>> abMap = QueryABMap();
             foreach (var item in abMap)
             {
-                AssetBundleBuilds.Add(new ABBuildInfo()
+                var abbi = new ABBuildInfo();
+                abbi.assetBundleName = item.Key;
+                foreach (string file in item.Value)
                 {
-                    assetBundleName = item.Key,
-                    assetNames = item.Value //必须是以 Asset 开头
-                });
+                    var anad = new ABBuildInfo.PathAndDepPath();
+                    anad.filePath = file;
+                    var deps = new List<string>();
+                    foreach (string depName in AssetDatabase.GetDependencies(file))
+                    {
+                        if (depName.Equals(anad.filePath))continue;
+                        deps.Add(depName);
+                    }
+                    anad.depsPath = deps.ToArray();
+                    abbi.assetPathAndDepPaths.Add(anad);
+                }
+                AssetBundleBuildInfos.Add(abbi);
             }
-            AssetBundleBuilds.Sort((a,b)=>a.assetBundleName.CompareTo(b.assetBundleName));
+            AssetBundleBuildInfos.Sort((a,b)=>a.assetBundleName.CompareTo(b.assetBundleName));
+            
             EditorUtility.SetDirty(this);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -298,19 +317,33 @@ namespace GameAssets
         public AssetBundleBuild[] QueryAssetBundleBuilds()
         {
             var builds = new List<AssetBundleBuild>();
-            foreach (ABBuildInfo ab in AssetBundleBuilds)
+            foreach (ABBuildInfo ab in AssetBundleBuildInfos)
             {
-                builds.Add(new AssetBundleBuild
-                {
-                    assetBundleName = ab.assetBundleName,
-                    assetNames = ab.assetNames.ToArray()
-                });
+                builds.Add(ab.ToABB());
             }
-
             return builds.ToArray();
         }
         
         #endregion
-        
     }
+
+    #region BuildAssetsConfigEditor
+    
+    [CanEditMultipleObjects]
+    [CustomEditor(typeof(BuildAssetsConfig))]
+    public class BuildAssetsConfigEditor : Editor
+    {
+        
+        public override void OnInspectorGUI()
+        {
+            if (GUILayout.Button("更新打包配置文件"))
+            {
+                BuilderMenuItems.UpdateAssetsConfig();
+            }
+            GUI.enabled = false;
+            base.DrawDefaultInspector();
+            GUI.enabled = true;
+        }
+    }
+    #endregion
 }
