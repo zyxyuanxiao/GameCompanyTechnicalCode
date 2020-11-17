@@ -26,7 +26,6 @@ namespace GameAssets
             public File_V_MD5 remoteFileVMd5;//记录远程的 File_V_MD5,当下载一个完毕之后,赋值给本地的版本配置文件对象
         }
         
-
         private static FileStream downloadFileStream;
 
         private static DownloadFileInfo downloadFileInfo;
@@ -34,7 +33,6 @@ namespace GameAssets
         private static Queue<DownloadFileInfo> downloadQueue = new Queue<DownloadFileInfo>(300);
 
         private static VersionConfig remoteVersionConfig = null;//是否从网络上下载了配置文件
-
         
         public int Progress { get; set; }
         public IEnumerator Work()
@@ -137,7 +135,12 @@ namespace GameAssets
         /// <returns></returns>
         private IEnumerator DownloadFiles()
         {
-            if (downloadQueue.Count <= 0)yield break;//没有下载列表
+            if (downloadQueue.Count <= 0)
+            {
+                AssetsNotification.Broadcast(IAssetsNotificationType.Info,
+                    "没有 AB 包可下载");
+                yield break;//没有下载列表
+            }
             
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginDownloadFile,
                 "开始下载所有 AB 包");

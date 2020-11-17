@@ -1,11 +1,12 @@
-﻿using UnityEngine.SceneManagement;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 /// <summary>
 /// 场景的设计模式
 /// 1:GameManager场景为Root场景,其他场景都是附加在上上面的场景
 /// </summary>
-public partial class GameSceneManager : IManager
+public partial class GameSceneManager : IUpdateManager
 {
 
     public void Awake()
@@ -16,7 +17,10 @@ public partial class GameSceneManager : IManager
 
     public void Start()
     {
-        Load(Scene_GameManager);
+        Load(Scene_GameManager, (SceneLoadingType type) =>
+        {
+            Debug.Log(type);
+        });
     }
 
     public void OnDestroy()

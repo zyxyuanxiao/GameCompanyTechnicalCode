@@ -118,7 +118,7 @@ namespace GameAssets
             string[] texts = new[] {"*.json", "*.bytes", "*.xml"};
             foreach (string searchPattern in texts)
             {
-                string[] filePaths = Directory.GetFiles(Application.dataPath + "/" + FileFilter.BuildAsset + "/",
+                string[] filePaths = Directory.GetFiles(Application.dataPath + "/" + FileFilter.BuildAssets + "/",
                     searchPattern,
                     SearchOption.AllDirectories);
                 foreach (string filePath in filePaths) //把所有的文件抽出来进行压缩
@@ -127,7 +127,7 @@ namespace GameAssets
                 }
             }
 
-            string dirPath = Application.dataPath + "/" + FileFilter.BuildAsset + "/";
+            string dirPath = Application.dataPath + "/" + FileFilter.BuildAssets + "/";
             string zipFileName = AssetsHelper.DownloadAssetsDirectory + FileFilter.AllText;
             if (!LZ4Helper.CompressDirectory(dirPath, zipInfos.ToArray(), zipFileName))
             {

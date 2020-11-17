@@ -46,7 +46,7 @@ namespace GameAssets
         //获取文件夹内的所有文件资源        
         public static List<string> QueryFilePath(string searchPattern)
         {
-            string path = Application.dataPath.Replace("\\", "/") + "/" + FileFilter.BuildAsset + "/";
+            string path = Application.dataPath.Replace("\\", "/") + "/" + FileFilter.BuildAssets + "/";
             string[] localFilePaths = Directory.GetFiles(path, searchPattern.ToLower(), SearchOption.AllDirectories);
             CheckNames(localFilePaths);
             List<string> filePaths = new List<string>();

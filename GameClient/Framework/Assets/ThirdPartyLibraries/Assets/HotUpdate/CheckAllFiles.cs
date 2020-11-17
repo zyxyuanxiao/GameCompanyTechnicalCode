@@ -42,6 +42,8 @@ namespace GameAssets
         /// <returns></returns>
         private IEnumerator WriteToLocal()
         {
+            AssetsNotification.Broadcast(IAssetsNotificationType.BeginCopyToLocal,
+                "如果是第一次安装 APP,就把数据拷贝到沙盒空间下 ");
             foreach (var item in AssetsConfig.VersionConfig.FileInfos)
             {
                 string path = AssetsConfig.QueryLocalFilePath(item.Key);
@@ -51,9 +53,6 @@ namespace GameAssets
                 }
 
                 if (AssetsConfig.FileExists(path)) continue;
-                
-                AssetsNotification.Broadcast(IAssetsNotificationType.BeginCopyToLocal,
-                    "开始拷贝 " + path);
 
                 //移动 AB 包文件
                 UnityWebRequest unityWebRequest = UnityWebRequest.Get(AssetsConfig.QueryStreamingFilePath(item.Key));
@@ -77,11 +76,10 @@ namespace GameAssets
                         LastWriteTime = fileInfo.LastWriteTime.ToString(),
                         Name = item.Key
                     };
-                    AssetsNotification.Broadcast(IAssetsNotificationType.CopyToLocalSucceed,
-                        "拷贝 " + path + " 成功了");
                 }
             }
-
+            AssetsNotification.Broadcast(IAssetsNotificationType.BeginCopyToLocal,
+                "如果是第一次安装 APP,拷贝成功 ");
             yield return AssetsConfig.OneFrame;
         }
         

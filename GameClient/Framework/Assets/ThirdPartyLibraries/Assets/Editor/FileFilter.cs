@@ -29,7 +29,7 @@ namespace GameAssets
         public static string Unity = "*.unity"; //一个scene(后缀名为.unity)场景必定是一个 AB 包
 
 
-        public static string BuildAsset = "_BuildAsset"; //一个scene(后缀名为.unity)场景必定是一个 AB 包
+        public static string BuildAssets = "BuildAssets"; //一个scene(后缀名为.unity)场景必定是一个 AB 包
         public static string AllText = "Binary.zip"; //所有文本文件的压缩包名字
 
         /// <summary>
