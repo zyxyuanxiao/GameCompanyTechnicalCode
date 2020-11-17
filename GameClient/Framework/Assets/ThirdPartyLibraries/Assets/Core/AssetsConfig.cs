@@ -11,7 +11,7 @@ namespace GameAssets
     /// <summary>
     /// 路径,后缀,配置,辅助
     /// </summary>
-    public static class AssetsConfig
+    public static class AssetsHelper
     {
         /// <summary>
         /// 一帧
@@ -193,11 +193,11 @@ namespace GameAssets
         public static void DecompressBinary(string zipPath)
         {
             //每次都将压缩文件解压一遍,防止
-            zipPath = AssetsConfig.CSharpFilePath(zipPath);
+            zipPath = CSharpFilePath(zipPath);
             if (Path.GetExtension(zipPath).ToLower().Contains("zip"))//如果是 zip 则需要解压
             {
                 ZipResult zipResult = new ZipResult();
-                string targetPath = AssetsConfig.CSharpFilePath(AssetsConfig.QueryLocalFilePath());
+                string targetPath = CSharpFilePath(QueryLocalFilePath());
                 LZ4Helper.Decompress(zipPath,targetPath,ref  zipResult,true); 
             }
         }

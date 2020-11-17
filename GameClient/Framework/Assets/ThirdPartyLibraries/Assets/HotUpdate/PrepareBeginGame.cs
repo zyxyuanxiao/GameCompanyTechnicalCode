@@ -16,9 +16,9 @@ namespace GameAssets
 
             AssetsNotification.Broadcast(IAssetsNotificationType.Info,
                 "热更最后阶段,准备开始游戏");
-            AssetsConfig.WriteVersionConfigToFile();
-            AssetsConfig.WriteFileInfoConfigsToFile();
-            yield return AssetsConfig.OneFrame;
+            AssetsHelper.WriteVersionConfigToFile();
+            AssetsHelper.WriteFileInfoConfigsToFile();
+            yield return AssetsHelper.OneFrame;
             Progress = 100;
 
             AssetsNotification.Broadcast(IAssetsNotificationType.Info,

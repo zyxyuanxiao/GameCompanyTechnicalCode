@@ -37,15 +37,16 @@ namespace GameAssets
         public int Progress { get; set; }
         public IEnumerator Work()
         {
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
             remoteVersionConfig = null;
             Progress = 1;
             yield return DownloadVersionConfig();
             Progress = 15;
+            yield return AssetsHelper.OneFrame;
             yield return DownloadFiles();
             Progress = 95;
-            yield return AssetsConfig.OneFrame;
-            AssetsConfig.WriteVersionConfigToFile();
+            yield return AssetsHelper.OneFrame;
+            AssetsHelper.WriteVersionConfigToFile();
             Progress = 100;
             AssetsNotification.Broadcast(IAssetsNotificationType.Info,
                 "<color=cyan>========================>DownloadAssets 结束<========================</color>");
@@ -59,10 +60,10 @@ namespace GameAssets
         {
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginRequestVersionConfig,
                 "开始下载");
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
             
             //目前使用的是本地的 URL,具体到项目上面部署的情况下,再重新编写此类
-            string versionConfigURL = AssetsConfig.QueryDownloadFileURL(AssetsConfig.VersionConfigName);
+            string versionConfigURL = AssetsHelper.QueryDownloadFileURL(AssetsHelper.VersionConfigName);
             BestHttpHelper.GET(versionConfigURL, (b, s) =>
             {
                 if (b && !string.IsNullOrEmpty(s))//请求成功,应该进行
@@ -83,27 +84,27 @@ namespace GameAssets
             
             while (null == remoteVersionConfig)
             {
-                yield return AssetsConfig.OneFrame;
+                yield return AssetsHelper.OneFrame;
             }
             Progress = 10;
 
-            if (!AssetsConfig.VersionConfig.OS.Equals(remoteVersionConfig.OS) || 
-                AssetsConfig.VersionConfig.SVNVersion.ToInt() > remoteVersionConfig.SVNVersion.ToInt()||
-                AssetsConfig.VersionConfig.AppVersion.ToFloat() > remoteVersionConfig.AppVersion.ToFloat())
+            if (!AssetsHelper.VersionConfig.OS.Equals(remoteVersionConfig.OS) || 
+                AssetsHelper.VersionConfig.SVNVersion.ToInt() > remoteVersionConfig.SVNVersion.ToInt()||
+                AssetsHelper.VersionConfig.AppVersion.ToFloat() > remoteVersionConfig.AppVersion.ToFloat())
             {
                 Debug.Log("会出现这个情况的原因,是因为本地没有正常的VersionConfig文件");
                 yield break;//下载配置文件自身的平台,版本号,游戏二进制号 与本身的平台不匹配,不大于的情况下不给下载
             }
             else//有更新时,先将本地配置文件的版本数据重置
             {
-                AssetsConfig.VersionConfig.SVNVersion = remoteVersionConfig.SVNVersion;
-                AssetsConfig.VersionConfig.AppVersion = remoteVersionConfig.AppVersion;
+                AssetsHelper.VersionConfig.SVNVersion = remoteVersionConfig.SVNVersion;
+                AssetsHelper.VersionConfig.AppVersion = remoteVersionConfig.AppVersion;
             }
             
             //查找配置表中的所有不存在与 MD5 值不匹配的 ab/zip 文件,然后记录下来
             foreach (var remoteItem in remoteVersionConfig.FileInfos)
             {
-                if (!AssetsConfig.VersionConfig.FileInfos.TryGetValue(remoteItem.Key,out File_V_MD5 localABVMd5))
+                if (!AssetsHelper.VersionConfig.FileInfos.TryGetValue(remoteItem.Key,out File_V_MD5 localABVMd5))
                 {
                     downloadQueue.Enqueue(new DownloadFileInfo()
                     {
@@ -127,7 +128,7 @@ namespace GameAssets
                     }   
                 }
             }
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
         }
 
         /// <summary>
@@ -148,25 +149,25 @@ namespace GameAssets
             
             while (downloadQueue.Count > 0)//循环下载队列,下载一个移除一个
             {
-                yield return AssetsConfig.OneFrame;
+                yield return AssetsHelper.OneFrame;
                 Progress = Progress + (int)(downloadQueue.Count/80);
                 downloadFileInfo = downloadQueue.Peek();//这个值是复制了一份内存,使用Dequeue与其得到的不是同一个对象
-                string url = AssetsConfig.QueryDownloadFileURL(downloadFileInfo.fileName);
-                string path = AssetsConfig.QueryDownloadFilePath(downloadFileInfo.fileName);
-                AssetsConfig.FileDelete(path);//在这一步先进行删除,然后再下载
-                downloadFileStream = new FileStream(AssetsConfig.CSharpFilePath(path),
+                string url = AssetsHelper.QueryDownloadFileURL(downloadFileInfo.fileName);
+                string path = AssetsHelper.QueryDownloadFilePath(downloadFileInfo.fileName);
+                AssetsHelper.FileDelete(path);//在这一步先进行删除,然后再下载
+                downloadFileStream = new FileStream(AssetsHelper.CSharpFilePath(path),
                     FileMode.OpenOrCreate, FileAccess.Write);
                 BestHttpHelper.Download(url,DownloadFiles);
                 
                 while (!downloadFileInfo.downloadFinished)
                 {
-                    yield return AssetsConfig.OneFrame;
+                    yield return AssetsHelper.OneFrame;
                 }
             }
             
             AssetsNotification.Broadcast(IAssetsNotificationType.DownloadFileSucceed,
                 "下载所有 AB 包成功");
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
         }
         
         private void DownloadFiles(bool isError, byte[] data, int dataLength)
@@ -179,18 +180,18 @@ namespace GameAssets
                 
                 //下载正常之后,需要对这个包进行 MD5 校验
                 downloadFileInfo = downloadQueue.Dequeue();
-                string path = AssetsConfig.QueryDownloadFilePath(downloadFileInfo.fileName);
-                string destPath = AssetsConfig.QueryLocalFilePath(downloadFileInfo.fileName);
-                AssetsConfig.FileMove(path,destPath);
+                string path = AssetsHelper.QueryDownloadFilePath(downloadFileInfo.fileName);
+                string destPath = AssetsHelper.QueryLocalFilePath(downloadFileInfo.fileName);
+                AssetsHelper.FileMove(path,destPath);
                 if (Path.GetExtension(destPath).ToLower().Contains("zip"))//如果是 zip 则需要解压
                 {
-                    AssetsConfig.DecompressBinary(destPath);//解压
+                    AssetsHelper.DecompressBinary(destPath);//解压
                 }
                 
                 //重新填充配置文件
-                AssetsConfig.VersionConfig.FileInfos[downloadFileInfo.fileName] = downloadFileInfo.remoteFileVMd5;
-                FileInfo fileInfo = new FileInfo(AssetsConfig.CSharpFilePath(destPath));
-                AssetsConfig.FileInfoConfigs[downloadFileInfo.fileName] = new FileInfoConfig()
+                AssetsHelper.VersionConfig.FileInfos[downloadFileInfo.fileName] = downloadFileInfo.remoteFileVMd5;
+                FileInfo fileInfo = new FileInfo(AssetsHelper.CSharpFilePath(destPath));
+                AssetsHelper.FileInfoConfigs[downloadFileInfo.fileName] = new FileInfoConfig()
                 {
                     MD5Hash = downloadFileInfo.remoteFileVMd5.MD5Hash,
                     Length = fileInfo.Length,
@@ -198,8 +199,8 @@ namespace GameAssets
                     Name = downloadFileInfo.fileName
                 };
                 Debug.Log("下载成功了:" + downloadFileInfo.fileName);
-                AssetsConfig.WriteVersionConfigToFile();
-                AssetsConfig.WriteFileInfoConfigsToFile();
+                AssetsHelper.WriteVersionConfigToFile();
+                AssetsHelper.WriteFileInfoConfigsToFile();
                 downloadFileInfo.downloadFinished = true;
             }
             else if (isError && -200 == dataLength && null == data)
@@ -210,7 +211,7 @@ namespace GameAssets
                 downloadQueue.Enqueue(downloadFileInfo);
                 downloadFileStream.Flush();
                 downloadFileStream.Close();
-                AssetsConfig.FileDelete(AssetsConfig.QueryDownloadFilePath(downloadFileInfo.fileName));
+                AssetsHelper.FileDelete(AssetsHelper.QueryDownloadFilePath(downloadFileInfo.fileName));
                 
                 AssetsNotification.Broadcast(IAssetsNotificationType.DownloadFileFailed,
                     "下载 AB 包失败一次:  " + downloadFileInfo.fileName);

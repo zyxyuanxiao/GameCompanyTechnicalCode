@@ -44,8 +44,8 @@ namespace GameAssets
         {
             BuildAllAssets();
             //目前使用的是本地的 URL,具体到项目上面部署的情况下,再重新编写此类
-            AssetsConfig.DownloadURL = Resources.Load<GameConfig>("Configs/GameConfig").QueryAddress()[0];
-            string versionConfigURL = AssetsConfig.QueryDownloadFileURL(AssetsConfig.VersionConfigName);
+            AssetsHelper.DownloadURL = Resources.Load<GameConfig>("Configs/GameConfig").QueryAddress()[0];
+            string versionConfigURL = AssetsHelper.QueryDownloadFileURL(AssetsHelper.VersionConfigName);
             BestHttpHelper.GET(versionConfigURL, CheckVersionConfig);
         }
         
@@ -66,7 +66,7 @@ namespace GameAssets
             Debug.Log("从资源服务器下载 VersionConfig.json 成功");
             VersionConfig remoteVersionConfig = JsonMapper.ToObject<VersionConfig>(s);
             
-            string vcPath = DownloadAssetsDirectory + AssetsConfig.VersionConfigName;
+            string vcPath = DownloadAssetsDirectory + AssetsHelper.VersionConfigName;
             string localVC = File.ReadAllText(vcPath, Encoding.UTF8);
             VersionConfig localVersionConfig = JsonMapper.ToObject<VersionConfig>(localVC);
             
@@ -98,7 +98,7 @@ namespace GameAssets
             }
 
             File.WriteAllText(vcPath, JsonMapper.ToJson(localVersionConfig));
-            copyFileNames.Add(AssetsConfig.VersionConfigName);
+            copyFileNames.Add(AssetsHelper.VersionConfigName);
             //覆盖上传到服务器上面
             Debug.Log("覆盖上传");
             foreach (string name in copyFileNames)
@@ -196,7 +196,7 @@ namespace GameAssets
             vc.FileInfos[FileFilter.AllText] = new File_V_MD5()
                 {Version = version, MD5Hash = Common.SecurityTools.GetMD5Hash(zip)};
             
-            string vcPath = DownloadAssetsDirectory + AssetsConfig.VersionConfigName;
+            string vcPath = DownloadAssetsDirectory + AssetsHelper.VersionConfigName;
             if (!File.Exists(vcPath))
             {
                 using (File.Create(vcPath)) ;
@@ -212,7 +212,7 @@ namespace GameAssets
         private static void CopyFileToStreamingAssets()
         {
             string[] files = Directory.GetFiles(DownloadAssetsDirectory, "*");
-            string destFileName = AssetsConfig.CSharpFilePath(AssetsConfig.QueryStreamingFilePath());
+            string destFileName = AssetsHelper.CSharpFilePath(AssetsHelper.QueryStreamingFilePath());
             foreach (string file in files)
             {
                 if (Path.GetExtension(file).ToLower().Contains("manifest"))

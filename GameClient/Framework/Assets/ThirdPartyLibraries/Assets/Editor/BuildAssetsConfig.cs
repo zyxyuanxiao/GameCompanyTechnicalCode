@@ -295,10 +295,10 @@ namespace GameAssets
         private string QueryABName(string fullPath)
         {
             //Path.GetExtension(fullPath).ToLower() + "_" + 
-            string abName = Path.GetFileName(fullPath).ToLower() + AssetsConfig.Extension; 
+            string abName = Path.GetFileName(fullPath).ToLower() + AssetsHelper.Extension; 
             if (fullPath.EndsWith(".shader"))
             {
-                return "shaderlibs" + AssetsConfig.Extension;
+                return "shaderlibs" + AssetsHelper.Extension;
             }
             return abName;
 

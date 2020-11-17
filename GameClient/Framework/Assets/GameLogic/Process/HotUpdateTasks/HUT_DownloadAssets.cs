@@ -24,7 +24,7 @@ public sealed class HUT_DownloadAssets : ITaskProcess
     {
         yield return GameManager.OneFrame;
         this.IsDone = false;
-        AssetsConfig.DownloadURL = ConfigManager.GameConfig.QueryAddress()[0];
+        AssetsHelper.DownloadURL = ConfigManager.GameConfig.QueryAddress()[0];
         yield return  HotUpdateManager.QueryBusiness(ID).Work();
         this.IsDone = true;
     }

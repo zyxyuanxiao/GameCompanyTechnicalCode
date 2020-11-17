@@ -25,7 +25,7 @@ public class HotUpdateManager : IManager
     
     public void Awake()
     {
-        AssetsConfig.UpdatePath();//初始化文件夹
+        AssetsHelper.UpdatePath();//初始化文件夹
     }
     
     public void Start()

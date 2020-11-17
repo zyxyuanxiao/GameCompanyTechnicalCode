@@ -18,13 +18,13 @@ namespace GameAssets
         public IEnumerator Work()
         {
             Progress = 0;
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
             yield return ReadVersionConfig();
             Progress = 50;
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
             yield return ReadFileInfoConfig();
             Progress = 100;
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
             AssetsNotification.Broadcast(IAssetsNotificationType.Info,
                 "<color=cyan>========================>ReadConfig 结束<========================</color>");
         }
@@ -42,10 +42,10 @@ namespace GameAssets
             //判断一下配置文件是否已经从网络上面下载到本地了,
             //如果没有从网络上面下载到本地,则需要先从 StreamingAssets 路径下进行读取
             //如果下载到本地了,则需要从persistentDataPath路径下进行读取
-            string vcPath = AssetsConfig.QueryLocalFilePath(AssetsConfig.VersionConfigName);
-            if (!AssetsConfig.FileExists(vcPath))
+            string vcPath = AssetsHelper.QueryLocalFilePath(AssetsHelper.VersionConfigName);
+            if (!AssetsHelper.FileExists(vcPath))
             {
-                vcPath = AssetsConfig.QueryStreamingFilePath(AssetsConfig.VersionConfigName);
+                vcPath = AssetsHelper.QueryStreamingFilePath(AssetsHelper.VersionConfigName);
             }
             UnityWebRequest unityWebRequest = UnityWebRequest.Get(vcPath);
             yield return unityWebRequest.SendWebRequest();
@@ -56,12 +56,12 @@ namespace GameAssets
             }
             else
             {
-                AssetsConfig.VersionConfig = JsonMapper.ToObject<VersionConfig>(unityWebRequest.downloadHandler.text);
+                AssetsHelper.VersionConfig = JsonMapper.ToObject<VersionConfig>(unityWebRequest.downloadHandler.text);
                 AssetsNotification.Broadcast(IAssetsNotificationType.ReadConfigSucceed,
                     "读取 " + vcPath + " 成功了  ");
             }
             
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
         }
 
 
@@ -73,8 +73,8 @@ namespace GameAssets
         {
             AssetsNotification.Broadcast(IAssetsNotificationType.BeginReadConfig,
                 "开始读取 FileInfoConfig.json 并转成 Dictionary<string, FileInfoConfig> 对象");
-            string ficPath = AssetsConfig.QueryLocalFilePath(AssetsConfig.FileInfoConfigName);
-            if (!AssetsConfig.FileExists(ficPath)) yield break; //不存在则跳出,说明是第一次
+            string ficPath = AssetsHelper.QueryLocalFilePath(AssetsHelper.FileInfoConfigName);
+            if (!AssetsHelper.FileExists(ficPath)) yield break; //不存在则跳出,说明是第一次
             UnityWebRequest unityWebRequest = UnityWebRequest.Get(ficPath);
             yield return unityWebRequest.SendWebRequest();
 
@@ -85,13 +85,13 @@ namespace GameAssets
             }
             else
             {
-                AssetsConfig.FileInfoConfigs =
+                AssetsHelper.FileInfoConfigs =
                     JsonMapper.ToObject<Dictionary<string, FileInfoConfig>>(unityWebRequest.downloadHandler.text);
                 AssetsNotification.Broadcast(IAssetsNotificationType.ReadConfigSucceed,
                     "读取 " + ficPath + " 成功了  ");
             }
             
-            yield return AssetsConfig.OneFrame;
+            yield return AssetsHelper.OneFrame;
         }
     }
 }
