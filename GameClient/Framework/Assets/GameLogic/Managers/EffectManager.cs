@@ -1,4 +1,4 @@
-﻿public class EffectManager : IManager
+﻿public sealed class EffectManager : IManager
 {
     public void Awake()
     {

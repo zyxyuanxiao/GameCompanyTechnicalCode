@@ -1,4 +1,4 @@
-﻿public class FontManager : IManager
+﻿public sealed class FontManager : IManager
 {
     public void Awake()
     {

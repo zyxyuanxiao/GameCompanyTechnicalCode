@@ -10,7 +10,7 @@ namespace GameAssets
     /// 在本地Assets/的路径之后,游戏文件夹内的一些文件资源,被统一抽象化为  LocalFile
     /// </summary>
     [Serializable]
-    public class LocalFile
+    public sealed class LocalFile
     {
         [Tooltip("资源类型名名")]
         public string FileType = string.Empty;

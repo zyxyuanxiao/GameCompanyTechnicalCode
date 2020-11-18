@@ -13,7 +13,7 @@ using GameAssets;
 ///    下载一个包,将版本配置文件,信息检查文件更新一次,防止网络直接被杀死,所有数据要从头开始下载的情况.不支持下载大文件的断点下载
 /// 4. 解压压缩包到本地,再次将所有的文件信息输出到一个文件内,等待下次使用.如果期间出现了
 /// </summary>
-public class HotUpdateManager : IManager
+public sealed class HotUpdateManager : IManager
 {
     private static List<IBusiness> huBusiness = new List<IBusiness>()
     {

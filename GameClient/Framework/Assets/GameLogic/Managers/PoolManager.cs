@@ -1,4 +1,4 @@
-﻿public class PoolManager : IManager
+﻿public sealed class PoolManager : IManager
 {
     public void Awake()
     {

@@ -1,5 +1,5 @@
 ﻿//关卡管理
-public class LevelManager : IManager
+public sealed class LevelManager : IManager
 {
     public void Awake()
     {

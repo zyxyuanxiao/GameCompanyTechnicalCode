@@ -20,7 +20,7 @@ namespace GameAssets
     /// 4:_BuildAsset文件夹中的资源依赖于_EditorAsset文件夹中的资源,即 _BuildAsset的大型资源 组合 _EditorAsset中的小型资源
     /// 5:_BuildAsset文件夹中的资源尽量不要小于 100KB,小于 100KB 的资源尽量放在其他文件夹中,最后被引用打包,而不是单独打包
     /// </summary>
-    public class BuildAssetsConfig : ScriptableObject
+    public sealed class BuildAssetsConfig : ScriptableObject
     {
         /// <summary>
         /// 将资源转成 AB 包的集合,多个资源路径对应一个 AB 包,也就是 Key 不同,但是 AB 包的名字相同

@@ -21,13 +21,13 @@ namespace GameAssets
     /// AB包的版本以及 MD5
     /// 
     /// </summary>
-    public class File_V_MD5
+    public sealed class File_V_MD5
     {
         public string Version;
         public string MD5Hash;
     }
     
-    public class VersionConfig
+    public sealed class VersionConfig
     {
         public string OS = string.Empty;//操作平台
         public string SVNVersion = string.Empty;//SVN版本号

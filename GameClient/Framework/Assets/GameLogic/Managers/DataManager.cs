@@ -1,4 +1,4 @@
-﻿public class DataManager : IManager
+﻿public sealed class DataManager : IManager
 {
     public void Awake()
     {

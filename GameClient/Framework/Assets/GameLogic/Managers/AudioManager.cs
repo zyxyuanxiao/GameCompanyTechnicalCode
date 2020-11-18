@@ -1,4 +1,4 @@
-﻿public class AudioManager : IManager
+﻿public sealed class AudioManager : IManager
 {
     public void Awake()
     {

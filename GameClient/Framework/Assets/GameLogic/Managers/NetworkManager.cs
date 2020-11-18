@@ -1,6 +1,6 @@
 ﻿using Network;
 
-public class NetworkManager : IManager
+public sealed class NetworkManager : IManager
 {
     private Network.Network network;
 

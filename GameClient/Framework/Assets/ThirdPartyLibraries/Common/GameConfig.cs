@@ -12,7 +12,7 @@ namespace Common
     }
     
     [ExecuteAlways]
-    public class GameConfig : ScriptableObject
+    public sealed class GameConfig : ScriptableObject
     {
         [Tooltip("当前游戏运行的方式")]
         public GameBuildType BuildConfig;

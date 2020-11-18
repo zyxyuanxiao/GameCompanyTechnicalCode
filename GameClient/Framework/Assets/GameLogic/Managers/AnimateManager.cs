@@ -1,4 +1,4 @@
-﻿public class AnimateManager : IManager
+﻿public sealed class AnimateManager : IManager
 {
     public void Awake()
     {

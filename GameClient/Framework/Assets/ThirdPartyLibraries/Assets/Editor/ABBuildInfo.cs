@@ -9,13 +9,13 @@ namespace GameAssets
     /// 一个此类,一个 AB 包
     /// </summary>
     [Serializable]
-    public class ABBuildInfo
+    public sealed class ABBuildInfo
     {
         //整个 AB 包的名字
         public string assetBundleName;
         
         [Serializable]
-        public class PathAndDepPath
+        public sealed class PathAndDepPath
         {
             public string   filePath;//本身资源路径
             public string[] depsPath;//资源所依赖的资源路径

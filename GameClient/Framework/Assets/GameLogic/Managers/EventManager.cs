@@ -1,4 +1,4 @@
-﻿public class EventManager : IManager
+﻿public sealed class EventManager : IManager
 {
     public void Awake()
     {

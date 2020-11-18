@@ -1,4 +1,4 @@
-﻿public class ShaderManager : IManager
+﻿public sealed class ShaderManager : IManager
 {
     public void Awake()
     {

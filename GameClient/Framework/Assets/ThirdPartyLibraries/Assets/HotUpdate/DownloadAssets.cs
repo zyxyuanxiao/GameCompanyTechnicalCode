@@ -17,7 +17,7 @@ namespace GameAssets
     /// 每次下载正确时,将数据添加进本地的 VersionConfig 对象里面
     /// 第三步 全部下载结束时,将VersionConfig对象的数据,全部重新写入文件
     /// </summary>
-    public class DownloadAssets : IBusiness
+    public sealed class DownloadAssets : IBusiness
     {
         protected class DownloadFileInfo
         {

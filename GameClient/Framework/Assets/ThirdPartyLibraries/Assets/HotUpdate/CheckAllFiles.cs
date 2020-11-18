@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace GameAssets
 {
-    public class CheckAllFiles : IBusiness
+    public sealed class CheckAllFiles : IBusiness
     {
         private string zipPath = string.Empty;
         public int Progress { get; set; }

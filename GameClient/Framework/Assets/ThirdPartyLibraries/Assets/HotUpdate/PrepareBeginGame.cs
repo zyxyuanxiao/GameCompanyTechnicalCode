@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace GameAssets
 {
-    public class PrepareBeginGame  : IBusiness
+    public sealed class PrepareBeginGame  : IBusiness
     {
         public int Progress { get; set; }
 

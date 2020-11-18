@@ -1,4 +1,4 @@
-public class SDKManager : IManager
+public sealed class SDKManager : IManager
 {
     public void Awake()
     {

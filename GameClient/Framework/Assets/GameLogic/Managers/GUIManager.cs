@@ -2,7 +2,7 @@
 using GameAssets;
 using UnityEngine;
 
-public class GUIManager : IManager
+public sealed class GUIManager : IManager
 {
     public GameObject UIRoot { get; private set; }
     public void Awake()

@@ -1,4 +1,4 @@
-﻿public class LuaManager : IUpdateManager
+﻿public sealed class LuaManager : IUpdateManager
 {
     public void Awake()
     {

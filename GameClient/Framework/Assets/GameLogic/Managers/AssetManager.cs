@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// 资源管理,管理所有的资源,包括 AssetBundle 的加载卸载
 /// </summary>
-public class AssetManager : IManager
+public sealed class AssetManager : IManager
 {
     public void Awake()
     {

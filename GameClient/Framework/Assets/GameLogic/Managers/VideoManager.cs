@@ -1,4 +1,4 @@
-﻿public class VideoManager : IManager
+﻿public sealed class VideoManager : IManager
 {
     public void Awake()
     {

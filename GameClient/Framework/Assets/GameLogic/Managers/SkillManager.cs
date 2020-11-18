@@ -1,4 +1,4 @@
-﻿public class SkillManager : IManager
+﻿public sealed class SkillManager : IManager
 {
     public void Awake()
     {

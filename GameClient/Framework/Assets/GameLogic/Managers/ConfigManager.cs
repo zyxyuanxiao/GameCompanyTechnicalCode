@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Common;
 
-public class ConfigManager  : IManager
+public sealed class ConfigManager  : IManager
 {
     public static GameConfig GameConfig;
     

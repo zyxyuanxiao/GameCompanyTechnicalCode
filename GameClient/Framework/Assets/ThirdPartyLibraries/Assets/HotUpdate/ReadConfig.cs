@@ -9,7 +9,7 @@ using UnityEngine.Networking;
 
 namespace GameAssets
 {
-    public class ReadConfig : IBusiness
+    public sealed class ReadConfig : IBusiness
     {
         public int Progress { get; set; }
         /// <summary>
