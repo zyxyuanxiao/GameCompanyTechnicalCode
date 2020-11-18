@@ -19,7 +19,7 @@ namespace GameAssets
     /// </summary>
     public sealed class DownloadAssets : IBusiness
     {
-        protected class DownloadFileInfo
+        internal class DownloadFileInfo
         {
             public string fileName;//存入的有 AB 包的名字,也有压缩包的名字
             public bool downloadFinished;
