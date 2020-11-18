@@ -15,7 +15,7 @@ namespace GameAssets
         public string assetBundleName;
         
         [Serializable]
-        public struct PathAndDepPath
+        public class PathAndDepPath
         {
             public string   filePath;//本身资源路径
             public string[] depsPath;//资源所依赖的资源路径

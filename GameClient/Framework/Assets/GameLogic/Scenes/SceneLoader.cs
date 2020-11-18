@@ -59,7 +59,8 @@ public partial class GameSceneManager
         //检查场景是否已加载
         if (SceneManager.GetSceneByName(name).isLoaded)
         {
-            Debug.LogError(name + " 场景已加载,无需再次加载");
+            Debug.Log(name + " 场景已加载,无需再次加载");
+            action?.Invoke(SceneLoadingType);
             return;
         }
         LoadSceneName = name;

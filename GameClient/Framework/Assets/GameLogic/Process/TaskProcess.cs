@@ -29,12 +29,12 @@ public partial class ProcessManager
     /// 当用户不停的向 任务流队列 里面添加 任务流, 需要使用队列做好规划,先进先出,必须在主线程中
     /// 任务流不应该很多,目前的定义是任务流是同步执行的
     /// </summary>
-    private static Queue<TaskAction> taskQueue = new Queue<TaskAction>(5);
+    private Queue<TaskAction> taskQueue = new Queue<TaskAction>(5);
 
     /// <summary>
     /// 任务流使用协程,默认最多 10 个流程类,太多的流程类不适合短任务流
     /// </summary>
-    private static List<ITaskProcess> tasks = new List<ITaskProcess>(10);
+    private List<ITaskProcess> tasks = new List<ITaskProcess>(10);
 
     /// <summary>
     /// 传入这次执行的动态任务流的层次以及任务流执行完毕的方法,根据层次进行初始化,然后执行,任务流执行完毕之后,调用回调

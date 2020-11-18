@@ -19,20 +19,20 @@ namespace GameAssets
     /// </summary>
     public class DownloadAssets : IBusiness
     {
-        protected struct DownloadFileInfo
+        protected class DownloadFileInfo
         {
             public string fileName;//存入的有 AB 包的名字,也有压缩包的名字
             public bool downloadFinished;
             public File_V_MD5 remoteFileVMd5;//记录远程的 File_V_MD5,当下载一个完毕之后,赋值给本地的版本配置文件对象
         }
         
-        private static FileStream downloadFileStream;
+        private FileStream downloadFileStream;
 
-        private static DownloadFileInfo downloadFileInfo;
+        private DownloadFileInfo downloadFileInfo;
         
-        private static Queue<DownloadFileInfo> downloadQueue = new Queue<DownloadFileInfo>(300);
+        private Queue<DownloadFileInfo> downloadQueue = new Queue<DownloadFileInfo>(300);
 
-        private static VersionConfig remoteVersionConfig = null;//是否从网络上下载了配置文件
+        private VersionConfig remoteVersionConfig = null;//是否从网络上下载了配置文件
         
         public int Progress { get; set; }
         public IEnumerator Work()
