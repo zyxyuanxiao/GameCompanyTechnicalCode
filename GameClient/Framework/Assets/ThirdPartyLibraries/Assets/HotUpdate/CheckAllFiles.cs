@@ -100,7 +100,7 @@ namespace GameAssets
             catch (Exception e)
             {
                 AssetsNotification.Broadcast(IAssetsNotificationType.UnZipFilesSucceed,
-                    "解压缩文件失败");
+                    "解压缩文件失败. " + e.ToString());
             }
 
             yield return AssetsHelper.OneFrame;

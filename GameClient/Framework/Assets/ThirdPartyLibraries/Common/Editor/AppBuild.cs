@@ -69,6 +69,11 @@ namespace Common
             {
                 return "游戏";
             }
+            
+            if (key.Equals("hotUpdate"))
+            {
+                return "true";
+            }
 
             if (key.Equals("releaseType"))
             {
@@ -96,7 +101,19 @@ namespace Common
         }
 
 
-        [MenuItem("Builder/Build Android.apk", priority = 2000)]
+        static void InitBuildConfig()
+        {
+            bool startHotUpdate = Boolean.Parse(GetParmByKey("hotUpdate"));
+            GameConfig gameConfig = GameConfig.BuildRuntime(startHotUpdate);//默认开启热更,游戏设置
+            
+            
+            
+            EditorUtility.SetDirty(gameConfig);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+        
+        [MenuItem("Builder/Build Android.apk", priority = 60000)]
         static void BuildForAndroid()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
@@ -121,13 +138,13 @@ namespace Common
         /// <summary>
         /// 打包android
         /// </summary>
-        [MenuItem("Builder/Build Android_DEV.apk", priority = 2001)]
+        [MenuItem("Builder/Build Android_DEV.apk", priority = 60001)]
         static void BuildForAndroid_DEV()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
 
-            PlayerSettings.Android.keystorePass = "xlcw123";
-            PlayerSettings.Android.keyaliasPass = "xlcw123";
+            PlayerSettings.Android.keystorePass = "zzz123";
+            PlayerSettings.Android.keyaliasPass = "zzz123";
 
             string path = Application.dataPath;
             path = path.Replace("Assets", "") + projectName + ".apk";
@@ -139,12 +156,12 @@ namespace Common
         /// <summary>
         /// 打包android
         /// </summary>
-        [MenuItem("Builder/Build Android.project", priority = 2002)]
+        [MenuItem("Builder/Build Android.project", priority = 60002)]
         static void BuildForAndroidProject()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Android, BuildTarget.Android);
-            PlayerSettings.Android.keystorePass = "xlcw123";
-            PlayerSettings.Android.keyaliasPass = "xlcw123";
+            PlayerSettings.Android.keystorePass = "zzz123";
+            PlayerSettings.Android.keyaliasPass = "zzz123";
             // string path = Application.dataPath;
             // path = path.Replace("Assets", "") + projectName + ".apk";
             // DeleteExit(path);
@@ -159,7 +176,7 @@ namespace Common
         /// <summary>
         /// 打包ipa
         /// </summary>
-        [MenuItem("Builder/Build Phone.xcode", priority = 2002)]
+        [MenuItem("Builder/Build Phone.xcode", priority = 60002)]
         static void BuildForIPhone()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.iOS, BuildTarget.iOS);
@@ -170,7 +187,7 @@ namespace Common
         /// <summary>
         /// 打包ipa_dev
         /// </summary>
-        [MenuItem("Builder/Build Phone_DEV.xcode", priority = 2003)]
+        [MenuItem("Builder/Build Phone_DEV.xcode", priority = 60003)]
         static void BuildForIPhone_DEV()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.iOS, BuildTarget.iOS);
@@ -181,7 +198,7 @@ namespace Common
         /// <summary>
         /// 打包win
         /// </summary>
-        [MenuItem("Builder/Build Windows_DEV.exe", priority = 2004)]
+        [MenuItem("Builder/Build Windows_DEV.exe", priority = 60004)]
         public static void BuildForWindows_DEV()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone,
@@ -197,7 +214,7 @@ namespace Common
         /// <summary>
         /// 打包MacOS
         /// </summary>
-        [MenuItem("Builder/Build MacOS_DEV.app", priority = 2005)]
+        [MenuItem("Builder/Build MacOS_DEV.app", priority = 60005)]
         public static void BuildForMacOS_DEV()
         {
             EditorUserBuildSettings.SwitchActiveBuildTarget(BuildTargetGroup.Standalone, BuildTarget.StandaloneOSX);

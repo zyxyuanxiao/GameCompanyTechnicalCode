@@ -10,20 +10,22 @@ namespace Common
 		{
 #if UNITY_EDITOR && UNITY_EDITOR_OSX
 			return SvnInfoUpdateOSX();
-#elif UNITY_EDITOR && !UNITY_EDITOR_OSX
+#elif UNITY_EDITOR && UNITY_EDITOR_WIN
 		return SvnInfoUpdateWIN();
+#else
+		return "0";	
 #endif
-			return "0";
 		}
 
 		public static string GetSvnBlame(string filepath)
 		{
 #if UNITY_EDITOR && UNITY_EDITOR_OSX
 			return SvnBlameOSX(filepath);
-#elif UNITY_EDITOR && !UNITY_EDITOR_OSX
+#elif UNITY_EDITOR && UNITY_EDITOR_WIN
 		return SvnBlameWIN(filepath);
+#else
+		return "0";	
 #endif
-			return "0";
 		}
 
 #if UNITY_EDITOR_OSX

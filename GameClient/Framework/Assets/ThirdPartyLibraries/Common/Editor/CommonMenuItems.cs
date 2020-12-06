@@ -51,5 +51,11 @@ namespace Common
 
             ScreenCapture.CaptureScreenshot(path);
         }
+
+        [MenuItem("Tools/清除本地缓存数据", priority = 40004)]
+        private static void DeleteAllCache()
+        {
+            PlayerPrefs.DeleteAll();
+        }
     }
 }

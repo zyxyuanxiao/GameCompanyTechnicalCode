@@ -30,7 +30,14 @@ public sealed class HotUpdateManager : IManager
     
     public void Start()
     {
-        GameManager.QueryManager<ProcessManager>().AddExecute(TaskProcessLayer.HotUpdate, hotUpdateEnd);
+        if (ConfigManager.GameConfig.StartHotUpdate)
+        {
+            GameManager.QueryManager<ProcessManager>().AddExecute(TaskProcessLayer.HotUpdate, hotUpdateEnd);
+        }
+        else
+        {
+            hotUpdateEnd();
+        }
     }
 
     public void OnDestroy()

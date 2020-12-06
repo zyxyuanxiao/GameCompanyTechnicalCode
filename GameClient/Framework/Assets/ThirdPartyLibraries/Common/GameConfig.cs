@@ -20,10 +20,10 @@ namespace Common
         //根据 svn 版本号获取
         [Tooltip("当前游戏的版本")] 
         public string version = "1";
-
-        [Tooltip("是否在编辑器下开启加载AssetBundle的模式,开启后需要先打AssetBundle,否则使用编辑器模式加载")]
-        public bool UseAssetBundles;
         
+        [Tooltip("勾选之后执行热更流程")]
+        public bool StartHotUpdate;
+
         [SerializeField][Tooltip("web 服务器的 URL 列表")]
         private string[] RemoteWebServerAddress;
 
@@ -40,7 +40,7 @@ namespace Common
 
         public void Reset()
         {
-            UseAssetBundles = false;
+            StartHotUpdate = false;
             RemoteWebServerAddress = null;
             version = "1";
         }
@@ -63,6 +63,35 @@ namespace Common
             Selection.activeObject = buildConfig;
             return buildConfig;
             // Resources.UnloadAsset(assetsConfig);//编辑器下无需卸载
+        }
+        
+
+        [MenuItem("Builder/Use AssetBundles In Editor", priority = 30001)]
+        private static void UpdateUseAssetBundles()
+        {
+            int i = PlayerPrefs.GetInt("__UseAssetBundles__", 0);
+            if (i == 0)
+            {
+                PlayerPrefs.SetInt("__UseAssetBundles__",1);
+                Debug.Log("<color=red>在编辑器下使用 AssetBundles 加载资源</color>");
+            }
+            else
+            {
+                PlayerPrefs.SetInt("__UseAssetBundles__",0);
+                Debug.Log("编辑器下使用 AssetDatabase.LoadAssetAtPath 加载资源");
+            }
+        }
+        
+        public static bool QueryUseAssetBundles()
+        {
+            return PlayerPrefs.GetInt("__UseAssetBundles__", 0) > 0 ? true : false;
+        }
+        
+        public static GameConfig BuildRuntime(bool startHotUpdate)
+        {
+            GameConfig gameConfig = UpdateGameConfig();
+            gameConfig.StartHotUpdate = startHotUpdate;
+            return gameConfig;
         }
 #endif
     }
