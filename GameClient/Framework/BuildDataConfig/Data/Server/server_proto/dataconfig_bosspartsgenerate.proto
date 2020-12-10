@@ -1,0 +1,25 @@
+/**
+* @file:   dataconfig_bosspartsgenerate.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message BossPartsGenerate{
+    /**
+        难度
+    */
+    required int32 Difficulty = 1;
+    /**
+        高级部件数量下限
+    */
+    optional int32 PartsMin = 2 [ default = 0];
+    /**
+        高级部件数量上限
+    */
+    optional int32 PartsMax = 3 [ default = 0];
+}
+
+message BossPartsGenerateArray {
+    repeated BossPartsGenerate items = 1;
+}

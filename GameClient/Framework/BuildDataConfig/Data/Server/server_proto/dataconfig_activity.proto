@@ -1,0 +1,72 @@
+/**
+* @file:   dataconfig_activity.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message Activity{
+    /**
+        活动全局ID
+        活动全局ID=活动类型×1000+活动编号（同个类型活动下不同编号的活动）
+        1000-20000=运营抽奖
+        21000-30000=运营福利
+        31000-40000=新手任务
+        41000-50000=日常任务
+        51000-60000=资源副本
+        61000-70000=PVP活动
+    */
+    required int32 ActiveId = 1;
+    /**
+        活动状态(0关闭1开启)
+    */
+    required int32 ActiveStatus = 2;
+    /**
+        时间类型（1星期2日期3新区）
+    */
+    optional int32 DateType = 3 [ default = 0];
+    /**
+        开始天数
+    */
+    optional int32 StartDay = 4 [ default = 0];
+    /**
+        开始具体时间
+    */
+    optional string StartTime = 5 [ default = ""];
+    /**
+        结束天数
+    */
+    optional int32 EndDay = 6 [ default = 0];
+    /**
+        结束具体时间
+    */
+    optional string EndTime = 7 [ default = ""];
+    /**
+        开始日期
+    */
+    optional string StartDate = 8 [ default = ""];
+    /**
+        结束日期
+    */
+    optional string EndDate = 9 [ default = ""];
+    /**
+        是否第一天开启（0否1是）
+    */
+    required int32 IsFirstDayOpen = 10;
+    /**
+        活动开放等级
+    */
+    required int32 OpenLevel = 11;
+    /**
+        特殊控制标识（非0有，0没有）
+    */
+    required int32 SpecialControl = 12;
+    /**
+        特殊控制参数
+    */
+    optional string SpecialControlParam = 13 [ default = ""];
+}
+
+message ActivityArray {
+    repeated Activity items = 1;
+}

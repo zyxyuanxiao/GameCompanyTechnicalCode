@@ -1,0 +1,37 @@
+/**
+* @file:   dataconfig_bosspartsprobability.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message BossPartsProbability{
+    /**
+        部件ID
+    */
+    required int32 ID = 1;
+    /**
+        简单难度概率
+    */
+    optional int32 Easy = 2 [ default = 0];
+    /**
+        中等难度概率
+    */
+    optional int32 Medium = 3 [ default = 0];
+    /**
+        困难难度概率
+    */
+    optional int32 Hard = 4 [ default = 0];
+    /**
+        噩梦难度概率
+    */
+    optional int32 Nightmare = 5 [ default = 0];
+    /**
+        地狱难度概率
+    */
+    optional int32 Hell = 6 [ default = 0];
+}
+
+message BossPartsProbabilityArray {
+    repeated BossPartsProbability items = 1;
+}

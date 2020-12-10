@@ -1,0 +1,33 @@
+/**
+* @file:   dataconfig_rechargedouble.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message RechargeDouble{
+    /**
+        计费点ID(见 RechargePoint)
+    */
+    required uint32 RechargeId = 1;
+    /**
+        服务器开放天数（只有1生效）
+    */
+    optional uint32 OpenDay = 2 [ default = 0];
+    /**
+        首冲倍数
+    */
+    optional uint32 FirstPayTimes = 3 [ default = 0];
+    /**
+        非首冲奖励
+    */
+    optional uint32 GoldBonus = 4 [ default = 0];
+    /**
+        首充翻倍重置时间（凌晨4点）格式 2015-10-10 09:10:00，字符全文英文状态，年月日预时间之间有一个空格（只有1生效）
+    */
+    optional string ResetTime = 5 [ default = ""];
+}
+
+message RechargeDoubleArray {
+    repeated RechargeDouble items = 1;
+}

@@ -1,0 +1,37 @@
+/**
+* @file:   dataconfig_prizepool.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message prizePool{
+    /**
+        奖池ID
+    */
+    required int32 prizePool = 1;
+    /**
+        道具ID
+    */
+    required int32 ItemId = 2;
+    /**
+        数量
+    */
+    required int32 num = 3;
+    /**
+        期望值
+    */
+    optional int32 expectedValue = 4 [ default = 0];
+    /**
+        是否必得
+    */
+    optional int32 isMustHave = 5 [ default = 0];
+    /**
+        结算显示限制
+    */
+    optional int32 displayLimit = 6 [ default = 0];
+}
+
+message prizePoolArray {
+    repeated prizePool items = 1;
+}

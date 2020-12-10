@@ -1,0 +1,21 @@
+/**
+* @file:   dataconfig_initconfig.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message InitConfig{
+    /**
+        id
+    */
+    required string id = 1;
+    /**
+        初始值
+    */
+    required string init_value = 2;
+}
+
+message InitConfigArray {
+    repeated InitConfig items = 1;
+}

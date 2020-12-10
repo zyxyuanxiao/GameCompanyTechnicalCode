@@ -1,0 +1,29 @@
+/**
+* @file:   dataconfig_randomname2.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message randomName2{
+    /**
+        ID
+    */
+    required int32 id = 1;
+    /**
+        第一段
+    */
+    optional string lastname = 2 [ default = ""];
+    /**
+        第二段
+    */
+    optional string middlename = 3 [ default = ""];
+    /**
+        第三段
+    */
+    optional string firstname = 4 [ default = ""];
+}
+
+message randomName2Array {
+    repeated randomName2 items = 1;
+}

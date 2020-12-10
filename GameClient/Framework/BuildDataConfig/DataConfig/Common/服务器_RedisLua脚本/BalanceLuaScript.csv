@@ -1,0 +1,6 @@
+﻿S,S,S,
+optional,optional,optional,
+int32,string,int32,
+LuaID,LuaScriptName,RedisID,
+lua脚本对应ID,lua脚本文件名,redis id,描述
+1,GetMinLoad.lua,1,获取所有负载

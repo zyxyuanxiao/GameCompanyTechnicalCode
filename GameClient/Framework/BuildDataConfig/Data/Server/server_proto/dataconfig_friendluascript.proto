@@ -1,0 +1,25 @@
+/**
+* @file:   dataconfig_friendluascript.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message FriendLuaScript{
+    /**
+        lua脚本对应ID
+    */
+    optional int32 LuaID = 1 [ default = 0];
+    /**
+        lua脚本文件名
+    */
+    optional string LuaScriptName = 2 [ default = ""];
+    /**
+        redis id
+    */
+    optional int32 RedisID = 3 [ default = 0];
+}
+
+message FriendLuaScriptArray {
+    repeated FriendLuaScript items = 1;
+}

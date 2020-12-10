@@ -1,0 +1,16 @@
+﻿S,S,S,
+optional,optional,optional,
+int32,string,int32,
+LuaID,LuaScriptName,RedisID,
+lua脚本对应ID,lua脚本文件名,redis id,描述
+1,GetPlayerBase.lua,1,获取玩家数据
+2,GenPlayerID.lua,1,生成玩家ID
+3,GetPlayerReport.lua,1,举报数据
+4,OfflineData.lua,2,离线数据
+5,FreezeAccount.lua,2,封号
+6,CheckPlayerID.lua,1,验证 playerID
+7,GetFriendRelation.lua,3,获取好友关系
+8,GetAuth.lua,4,账号验证
+9,AddListItemWithLimit.lua,2,向List中添加项
+10,GetMultipleList.lua,2,拉取多个List数据
+24,CheckChatForbidden.lua,2,得到禁言时间

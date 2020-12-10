@@ -1,0 +1,29 @@
+/**
+* @file:   dataconfig_bootgameconfig.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message bootGameConfig{
+    /**
+        配置Key
+    */
+    required string moduleKey = 1;
+    /**
+        配置类型[2:是否弹出提示框;4:商城图片地址;5:弹出的提示框]
+    */
+    required int32 bootType = 2;
+    /**
+        配置值
+    */
+    required string moduleVal = 3;
+    /**
+        模块版本
+    */
+    required string moduleVersion = 4;
+}
+
+message bootGameConfigArray {
+    repeated bootGameConfig items = 1;
+}

@@ -1,0 +1,29 @@
+/**
+* @file:   dataconfig_player_level.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message player_level{
+    /**
+        玩家等级
+    */
+    required int32 levelId = 1;
+    /**
+        升级需要经验
+    */
+    required int32 needExp = 2;
+    /**
+        每日获取经验上限
+    */
+    required int32 expGetLimit = 3;
+    /**
+        体力上限
+    */
+    required int32 spiritUplimit = 4;
+}
+
+message player_levelArray {
+    repeated player_level items = 1;
+}

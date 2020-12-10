@@ -1,0 +1,25 @@
+/**
+* @file:   dataconfig_serverconfbuilding.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message Serverconfbuilding{
+    /**
+        配置KEY
+    */
+    required string key = 1;
+    /**
+        配置单值字段
+    */
+    required string singleValue = 2;
+    /**
+        多个值的配置
+    */
+    repeated string repeatedValue = 3;
+}
+
+message ServerconfbuildingArray {
+    repeated Serverconfbuilding items = 1;
+}

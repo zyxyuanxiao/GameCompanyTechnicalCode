@@ -1,0 +1,37 @@
+/**
+* @file:   dataconfig_fairy_update.proto
+* @brief:  这个文件是通过工具自动生成的，建议不要手动修改
+*/
+
+package dataconfig;
+
+message Fairy_Update{
+    /** 灵宠阶id* 
+CLIENT_KEY 
+NON_UNIQUE */
+    required uint32 FairyClass = 1;
+    /** 灵宠星顺序* */
+    required uint32 Star = 2;
+    /** 当前星祝福值上限 */
+    required uint32 BlessingLimit = 3;
+    /** 首次祝福值步长 */
+    required uint32 FirstBlessingStep = 4;
+    /** 非首次祝福值步长下限 */
+    required uint32 BlessingStepLowerLimit = 5;
+    /** 非首次祝福值步长上限 */
+    required uint32 BlessingStepUpperLimit = 6;
+    /** 每次消耗道具id */
+    required uint32 CostItemID = 7;
+    /** 每次消耗道具数量 */
+    required uint32 CostItemNum = 8;
+    /** 祝福值倒计时（秒） */
+    required uint32 BlessingTime = 9;
+    /** 当前星最终战力 */
+    required uint32 FightNum = 10;
+    /** 是否倒计时0不倒计时 */
+    required uint32 IsCountdown = 11;
+}
+
+message Fairy_UpdateArray {
+    repeated Fairy_Update items = 1;
+}

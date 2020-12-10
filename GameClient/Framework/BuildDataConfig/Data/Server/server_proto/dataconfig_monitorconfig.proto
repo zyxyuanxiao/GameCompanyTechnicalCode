@@ -1,0 +1,50 @@
+/**
+* @file:   dataconfig_monitorconfig.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message MonitorConfig{
+    /**
+        临控类型
+    */
+    optional int32 Type = 1 [ default = 0];
+    /**
+        临控条件
+    */
+    optional string Condition = 2 [ default = ""];
+    /**
+        邮件标题
+    */
+    optional string MailTitle = 3 [ default = ""];
+    /**
+        邮件内容(#0对应SPMonitor中Nums中的第0个索引,$0对应
+        Strs第0个索引,&t地应php日期格式,&i对应SPMonitor中的Type)
+    */
+    optional string MailContent = 4 [ default = ""];
+    /**
+        收邮件人
+    */
+    optional string MailRecv = 5 [ default = ""];
+    /**
+        数据库表
+    */
+    optional string DBTable = 6 [ default = ""];
+    /**
+        数据库地址
+    */
+    optional string DBHost = 7 [ default = ""];
+    /**
+        对应 mysql 中 insert 语句value括号内的内容
+    */
+    optional string InsertSql = 8 [ default = ""];
+    /**
+        是否发警报:0为不发送，非0发送，不填则为0
+    */
+    optional int32 IsSend = 9 [ default = 0];
+}
+
+message MonitorConfigArray {
+    repeated MonitorConfig items = 1;
+}

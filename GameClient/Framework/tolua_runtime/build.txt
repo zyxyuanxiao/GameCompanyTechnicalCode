@@ -1,0 +1,4 @@
+build tolua 的时候需要  cd xxx/src 中进行
+tolua 的 iOS 编译,需要 macos14 一下,Xcode10 一下,支持 32 位的系统,再安装 commond line tools 才可以进行正常打包
+无需 32 位系统的话也可以正常打包
+src 中 执行 build_xxx 即可,在 windows 平台编译 Android 与 windows,在 mac 平台编译 iOS 与 mac

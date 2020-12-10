@@ -1,0 +1,53 @@
+/**
+* @file:   dataconfig_gvgmatchconf.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message GVGMatchConf{
+    /**
+        序号
+    */
+    required uint32 id = 1;
+    /**
+        段位下限
+    */
+    required uint32 beg_point = 2;
+    /**
+        段位上限（积分超过上限时按最大值处理）
+    */
+    required uint32 end_point = 3;
+    /**
+        elo扩大,时间(秒)
+    */
+    required uint32 tm = 4;
+    /**
+        elo超时随机时间,时间(秒)
+    */
+    required uint32 tm_end = 5;
+    /**
+        队友elo范围起点
+    */
+    required uint32 teammate_prev_factor = 6;
+    /**
+        队友elo范围终点
+    */
+    required uint32 teammate_next_factor = 7;
+    /**
+        对手elo范围起点
+    */
+    required uint32 tomate_prev_factor = 8;
+    /**
+        对手elo范围终点
+    */
+    required uint32 tomate_next_factor = 9;
+    /**
+        是否超时(0不超时，1超时)
+    */
+    required uint32 time_out = 10;
+}
+
+message GVGMatchConfArray {
+    repeated GVGMatchConf items = 1;
+}

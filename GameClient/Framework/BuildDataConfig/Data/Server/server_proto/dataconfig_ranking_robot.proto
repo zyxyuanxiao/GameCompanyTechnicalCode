@@ -1,0 +1,47 @@
+/**
+* @file:   dataconfig_ranking_robot.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message ranking_robot{
+    /**
+        机器人组ID
+    */
+    required int32 robotID = 1;
+    /**
+        机器人对应榜单ID
+        101 晶能榜
+        102 BOSS单人榜
+        103 BOSS组队榜
+    */
+    required int32 robotList = 2;
+    /**
+        组内机器人数量
+    */
+    required int32 robotNumber = 3;
+    /**
+        等级区间
+    */
+    repeated int32 robotLevel = 4;
+    /**
+        效果参数
+        （一共有几个效果指向生效，策划不填）
+    */
+    message InternalType_robotParamCount{
+        /**
+            参数区间1，与榜单对应
+            101 晶能榜晶能数
+            102 BOSS单人榜分数
+            102 BOSS组队榜分数
+        */
+        repeated int32 robotParam = 1;
+    }
+
+    repeated InternalType_robotParamCount robotParamCount = 5;
+}
+
+message ranking_robotArray {
+    repeated ranking_robot items = 1;
+}

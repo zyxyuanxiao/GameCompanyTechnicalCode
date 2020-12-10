@@ -1,0 +1,10 @@
+﻿S,S,S
+optional,optional,optional
+int32,string,int32
+LuaID,LuaScriptName,RedisID
+lua脚本对应ID,lua脚本文件名,redis id
+1,FriendOnline.lua,1
+2,FriendDeleteList.lua,1
+3,FriendAddList.lua,1
+4,FriendIsInList.lua,1
+5,FriendOfflineChat.lua,1

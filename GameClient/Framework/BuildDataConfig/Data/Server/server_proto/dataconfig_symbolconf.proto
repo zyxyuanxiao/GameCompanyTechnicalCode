@@ -1,0 +1,21 @@
+/**
+* @file:   dataconfig_symbolconf.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message SymbolConf{
+    /**
+        字符编号
+    */
+    required uint32 SymbolID = 1;
+    /**
+        特殊符号
+    */
+    required string SpeSymbol = 2;
+}
+
+message SymbolConfArray {
+    repeated SymbolConf items = 1;
+}

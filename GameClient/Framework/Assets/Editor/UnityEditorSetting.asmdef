@@ -1,3 +1,17 @@
-﻿{
-	"name": "UnityEditorSetting"
+{
+    "name": "UnityEditorSetting",
+    "references": [
+        "GUID:381ba828049d84248848532ed9a25597"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

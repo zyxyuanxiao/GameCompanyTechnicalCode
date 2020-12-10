@@ -1,0 +1,15 @@
+﻿S,S,S,C
+required,required,repeated,optional
+string,string,string,string
+key,singleValue,repeatedValue,C
+配置KEY,配置单值字段,多个值的配置,注释
+initPlayerLevel,1,,初始玩家等级
+initUnlockTerri,-1,1,初始解锁地块ID
+headquarterIds,1,1,大本营IDs
+researchInstituteIds,-1,2;3,研究所IDs
+productSoldierBuildings,-1,4;5;6;7;8,生产兵Ids
+productMoneyBuildings,-1,9;10;11;13;14,生产金币Ids
+storehouses,-1,15;16;17,仓库Id
+storehousesMapMinefield,-1,15:9-10;16:11-12;17:13-14,结算时候仓库与矿场的对应关系
+dbBuildingFields,-1,bdid;lev;status;up_starttime;boost_time;ticktime;store;peru;pert;botype,建筑初始化字段
+PreForbidChat,ForbidChat,,redis禁言前缀

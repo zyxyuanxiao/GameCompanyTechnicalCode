@@ -1,0 +1,25 @@
+/**
+* @file:   dataconfig_task_special.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message task_special{
+    /**
+        ID
+    */
+    required int32 ID = 1;
+    /**
+        掉落ID
+    */
+    required int32 dropID = 2;
+    /**
+        权重
+    */
+    required int32 dropWeight = 3;
+}
+
+message task_specialArray {
+    repeated task_special items = 1;
+}

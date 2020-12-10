@@ -1,0 +1,41 @@
+/**
+* @file:   dataconfig_pvpmatchconf.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message PVPMatchConf{
+    /**
+        序号
+    */
+    required uint32 id = 1;
+    /**
+        段位下限
+    */
+    required uint32 beg_point = 2;
+    /**
+        段位上限（积分超过上限时按最大值处理)
+    */
+    required uint32 end_point = 3;
+    /**
+        对手elo范围起点（固定值）
+    */
+    required uint32 prev_factor = 4;
+    /**
+        对手elo范围终点（固定值）
+    */
+    required uint32 next_factor = 5;
+    /**
+        机器人匹配时间下限（秒）
+    */
+    required uint32 beg_timeout = 6;
+    /**
+        机器人匹配时间上限（秒）
+    */
+    required uint32 end_timeout = 7;
+}
+
+message PVPMatchConfArray {
+    repeated PVPMatchConf items = 1;
+}

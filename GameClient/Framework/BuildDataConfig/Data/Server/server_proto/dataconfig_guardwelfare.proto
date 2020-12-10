@@ -1,0 +1,41 @@
+/**
+* @file:   dataconfig_guardwelfare.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message guardWelfare{
+    /**
+        活动全局ID
+    */
+    required int32 ActiveId = 1;
+    /**
+        保底类型
+    */
+    required int32 type = 2;
+    /**
+        保底参数
+    */
+    repeated int32 parameter = 3;
+    /**
+        保底奖池
+    */
+    required int32 prizePool = 4;
+    /**
+        是否一次性保底
+    */
+    optional int32 isOneTime = 5 [ default = 0];
+    /**
+        触发权重
+    */
+    required int32 weight = 6;
+    /**
+        是否展示保底
+    */
+    optional int32 Exhibition = 7 [ default = 0];
+}
+
+message guardWelfareArray {
+    repeated guardWelfare items = 1;
+}

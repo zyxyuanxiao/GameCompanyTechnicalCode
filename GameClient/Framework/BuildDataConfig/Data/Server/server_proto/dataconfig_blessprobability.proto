@@ -1,0 +1,45 @@
+/**
+* @file:   dataconfig_blessprobability.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message blessProbability{
+    /**
+        活动全局ID
+    */
+    required int32 ActiveId = 1;
+    /**
+        奖池ID
+    */
+    required int32 prizePool = 2;
+    /**
+        概率
+    */
+    required int32 probability = 3;
+    /**
+        奖励类型
+    */
+    required int32 prizeType = 4;
+    /**
+        祝福值生效条件
+    */
+    repeated int32 blessCondition = 5;
+    /**
+        祝福值类型
+    */
+    required int32 blessType = 6;
+    /**
+        方式
+    */
+    repeated int32 method = 7;
+    /**
+        参数
+    */
+    repeated int32 parameter = 8;
+}
+
+message blessProbabilityArray {
+    repeated blessProbability items = 1;
+}

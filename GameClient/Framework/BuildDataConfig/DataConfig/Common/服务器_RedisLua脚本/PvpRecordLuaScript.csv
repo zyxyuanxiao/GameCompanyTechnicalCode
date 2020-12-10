@@ -1,0 +1,10 @@
+﻿S,S,S
+optional,optional,optional
+int32,string,int32
+LuaID,LuaScriptName,RedisID
+lua脚本对应ID,lua脚本文件名,redis id
+1,SynPvpEnd.lua,1
+2,PvpRecordList.lua,1
+3,RoomDetailData.lua,1
+4,PvpRecordUrl.lua,1
+5,PvpRecordExpire.lua,1

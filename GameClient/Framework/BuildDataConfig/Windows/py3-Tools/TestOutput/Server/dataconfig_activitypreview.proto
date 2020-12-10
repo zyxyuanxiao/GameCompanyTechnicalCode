@@ -1,0 +1,61 @@
+/**
+* @file:   dataconfig_activitypreview.proto
+* @brief:  这个文件是通过工具自动生成的，建议不要手动修改
+*/
+
+package dataconfig;
+
+message ActivityPreview{
+    /** id */
+    required uint32 ID = 1;
+    /** 页签名字 */
+    required string TabName = 2;
+    /** 标题 */
+    required string Title = 3;
+    /** 内容 */
+    required string Content = 4;
+    /** 模板类型（1全图，2文本） */
+    required uint32 UIType = 5;
+    /** 活动按钮的开启（1有按钮，0无按钮） */
+    required uint32 Link = 6;
+    /** 是否拥有超链接（1有超链接，0无超链接） */
+    required uint32 Url = 7;
+    /** 活动id（客户端跳转） */
+    repeated uint32 Func = 8;
+    /** 超链接ID */
+    repeated uint32 UrlNum = 9;
+    /** 按钮文案 */
+    optional string LinkName = 10 [ default = " "];
+    /** 自定义的活动id（具体定义看配表必读） */
+    optional uint32 ActivityID = 11 [ default = 0];
+    /** 开放等级
+空-无等级要求 */
+    optional uint32 ActivityLevel = 12 [ default = 0];
+    /** 开放等级上限
+空-无等级要求 */
+    optional uint32 LevelLimit = 13 [ default = 0];
+    /** 天数（距服务器开放天数） */
+    required uint32 openDay = 14;
+    /** 天数（距服务器开放天数关闭）空-永久 */
+    optional uint32 openDayLimit = 15 [ default = 0];
+    /** 开放时间需满足的类型（配表必读） */
+    required uint32 type = 16;
+    /** 开始时间 */
+    optional string startTime = 17 [ default = " "];
+    /** 结束时间 */
+    optional string endTime = 18 [ default = " "];
+    /** 周几的活动（0周日） */
+    repeated uint32 week = 19;
+    /**  */
+    message InternalType_Clock{
+        /** 每天开始时间 */
+        optional string dayStartTime = 1 [ default = " "];
+        /** 每天结束时间 */
+        optional string dayEndTime = 2 [ default = " "];
+    }
+
+    repeated InternalType_Clock Clock = 20;
+}
+message ActivityPreviewArray{
+    repeated ActivityPreview items = 1;
+}

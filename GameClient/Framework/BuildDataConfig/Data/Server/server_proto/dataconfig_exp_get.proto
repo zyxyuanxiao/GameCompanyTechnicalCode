@@ -1,0 +1,21 @@
+/**
+* @file:   dataconfig_exp_get.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message exp_get{
+    /**
+        功能类型（唯一ID）
+    */
+    required int32 functionId = 1;
+    /**
+        单次获得经验
+    */
+    required int32 expReward = 2;
+}
+
+message exp_getArray {
+    repeated exp_get items = 1;
+}

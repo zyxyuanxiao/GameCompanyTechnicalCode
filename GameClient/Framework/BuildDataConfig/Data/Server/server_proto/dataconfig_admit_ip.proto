@@ -1,0 +1,21 @@
+/**
+* @file:   dataconfig_admit_ip.proto
+* @brief: ----auto generate----
+*/
+
+package dataconfig;
+
+message admit_ip{
+    /**
+        ip序号
+    */
+    required int32 ipId = 1;
+    /**
+        具体ip
+    */
+    required string ipName = 2;
+}
+
+message admit_ipArray {
+    repeated admit_ip items = 1;
+}
