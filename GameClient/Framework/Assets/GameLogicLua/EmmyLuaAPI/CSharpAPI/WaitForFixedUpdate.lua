@@ -1,0 +1,2 @@
+﻿---@class WaitForFixedUpdate : YieldInstruction
+WaitForFixedUpdate={ }

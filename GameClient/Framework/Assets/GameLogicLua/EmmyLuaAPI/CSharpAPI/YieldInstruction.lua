@@ -1,0 +1,2 @@
+﻿---@class YieldInstruction : Object
+YieldInstruction={ }

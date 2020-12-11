@@ -1,0 +1,2 @@
+﻿---@class WaitForSeconds : YieldInstruction
+WaitForSeconds={ }

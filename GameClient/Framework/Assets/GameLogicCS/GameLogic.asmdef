@@ -1,0 +1,20 @@
+{
+    "name": "GameLogic",
+    "references": [
+        "GUID:9069ac25d95ca17448a247f3bb1c769f",
+        "GUID:8c08cd3b08dd4894980e53c63c714136",
+        "GUID:7cc9a68684b717a44855e56e961e519f",
+        "GUID:2e7ee367bd693494daefdd95fe5c5c0f",
+        "GUID:981022a2f47254f27b80f8d35c3ebaef",
+        "GUID:77b640ebe03a1194598db26ced37dd6e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -2561,22 +2561,22 @@ static const struct luaL_Reg tolua_mathf[] =
 
 LUALIB_API void tolua_openlibs(lua_State *L)
 {   
-    initmodulebuffer();
-    luaL_openlibs(L);   
+    initmodulebuffer();//初始化了一个 stringbuffer,用于缓存命名空间.
+    luaL_openlibs(L);  //初始化 Lua 基本库,math,debug,io,os 等
     int top = lua_gettop(L);    
 
-    tolua_setluabaseridx(L);    
-    tolua_opentraceback(L);
-    tolua_openpreload(L);
-    tolua_openubox(L);
-    tolua_openfixedmap(L);    
-    tolua_openint64(L);
-    tolua_openuint64(L);
-    tolua_openvptr(L);    
+    tolua_setluabaseridx(L);    //在 Lua 注册表中预留了 1-64,注册的东西用于 C#层获取
+    tolua_opentraceback(L);//debug.traceback
+    tolua_openpreload(L);// package.preload,package.loaded
+    tolua_openubox(L);//创建了一个弱表,setmetatable({}, {__mode = “v”})
+    tolua_openfixedmap(L);//创建了一个fixedmap table
+    tolua_openint64(L);//声明并注册了int64元表
+    tolua_openuint64(L);//声明并注册了uint64元表
+    tolua_openvptr(L);//声明注册了vptr元表    
     //tolua_openrequire(L);
 
-    luaL_register(L, "Mathf", tolua_mathf);     
-    luaL_register(L, "tolua", tolua_funcs);    
+    luaL_register(L, "Mathf", tolua_mathf);//添加了一些Mathf相关函数     
+    luaL_register(L, "tolua", tolua_funcs);//添加了一些tolua拓展函数    
 
     lua_getglobal(L, "tolua");
 
