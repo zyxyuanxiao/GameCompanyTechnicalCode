@@ -1453,7 +1453,7 @@ public static class ToLuaMenu
     [MenuItem("Lua/EmmyLua API提示,联想", false, 103)]
     static void GenEmmyLuaApi()
     {
-        string path = Application.dataPath + "/GameLogicLua/EmmyLuaAPI/CSharpAPI/";
+        string path = Application.dataPath + "/GameLogic/Lua/EmmyLuaAPI/CSharpAPI/";
         if (Directory.Exists(path))
         {
             Directory.Delete(path, true);
