@@ -29,5 +29,7 @@ GameClient/Framework/.vscode/settings.json
 GameClient/Framework/AssetBundles/
 GameClient/Framework/DownloadAssets/
 GameClient/Framework/Assets/StreamingAssets/
+GameClient/Framework/Assets/Resources/Lua
+GameClient/Framework/Assets/Resources/Lua.meta
 
 
