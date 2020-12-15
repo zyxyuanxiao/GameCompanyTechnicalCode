@@ -7,6 +7,54 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		75D4091D2588C68C0052FFFE /* strbuf.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC5A2588C3FD00F50F6A /* strbuf.h */; };
+		75D4091E2588C68C0052FFFE /* fpconv.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC5C2588C3FD00F50F6A /* fpconv.h */; };
+		75D4091F2588C68C0052FFFE /* WHAT in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC5E2588C3FD00F50F6A /* WHAT */; };
+		75D409202588C68C0052FFFE /* MemoryUsage.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC482588C29F00F50F6A /* MemoryUsage.h */; };
+		75D409212588C68C0052FFFE /* GData.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC4E2588C29F00F50F6A /* GData.h */; };
+		75D409222588C68C0052FFFE /* tcp.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC0F2588C28900F50F6A /* tcp.h */; };
+		75D409232588C68C0052FFFE /* mime.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC122588C28900F50F6A /* mime.h */; };
+		75D409242588C68C0052FFFE /* auxiliar.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC142588C28900F50F6A /* auxiliar.h */; };
+		75D409252588C68C0052FFFE /* usocket.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC162588C28900F50F6A /* usocket.h */; };
+		75D409262588C68C0052FFFE /* luasocket.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC172588C28900F50F6A /* luasocket.h */; };
+		75D409272588C68C0052FFFE /* inet.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC192588C28900F50F6A /* inet.h */; };
+		75D409282588C68C0052FFFE /* wsocket.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC1A2588C28900F50F6A /* wsocket.h */; };
+		75D409292588C68C0052FFFE /* options.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC1E2588C28900F50F6A /* options.h */; };
+		75D4092A2588C68C0052FFFE /* luasocket_scripts.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC1F2588C28900F50F6A /* luasocket_scripts.h */; };
+		75D4092B2588C68C0052FFFE /* except.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC202588C28900F50F6A /* except.h */; };
+		75D4092C2588C68C0052FFFE /* pierror.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC222588C28900F50F6A /* pierror.h */; };
+		75D4092D2588C68C0052FFFE /* buffer.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC232588C28900F50F6A /* buffer.h */; };
+		75D4092E2588C68C0052FFFE /* io.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC262588C28900F50F6A /* io.h */; };
+		75D4092F2588C68C0052FFFE /* compat.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC272588C28900F50F6A /* compat.h */; };
+		75D409302588C68C0052FFFE /* timeout.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC2B2588C28900F50F6A /* timeout.h */; };
+		75D409312588C68C0052FFFE /* socket.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC2F2588C28900F50F6A /* socket.h */; };
+		75D409322588C68C0052FFFE /* udp.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC312588C28900F50F6A /* udp.h */; };
+		75D409332588C68C0052FFFE /* unix.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC322588C28900F50F6A /* unix.h */; };
+		75D409342588C68C0052FFFE /* select.h in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC332588C28900F50F6A /* select.h */; };
+		75D409352588C68C0052FFFE /* lapi.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23561C4CCD3F0093A49A /* lapi.h */; };
+		75D409362588C68C0052FFFE /* lauxlib.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23581C4CCD3F0093A49A /* lauxlib.h */; };
+		75D409372588C68C0052FFFE /* lcode.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF235B1C4CCD3F0093A49A /* lcode.h */; };
+		75D409382588C68C0052FFFE /* ldebug.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF235E1C4CCD3F0093A49A /* ldebug.h */; };
+		75D409392588C68C0052FFFE /* ldo.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23601C4CCD3F0093A49A /* ldo.h */; };
+		75D4093A2588C68C0052FFFE /* lfunc.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23631C4CCD3F0093A49A /* lfunc.h */; };
+		75D4093B2588C68C0052FFFE /* lgc.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23651C4CCD3F0093A49A /* lgc.h */; };
+		75D4093C2588C68C0052FFFE /* llex.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23691C4CCD3F0093A49A /* llex.h */; };
+		75D4093D2588C68C0052FFFE /* llimits.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF236A1C4CCD3F0093A49A /* llimits.h */; };
+		75D4093E2588C68C0052FFFE /* lmem.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF236D1C4CCD3F0093A49A /* lmem.h */; };
+		75D4093F2588C68C0052FFFE /* lobject.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23701C4CCD3F0093A49A /* lobject.h */; };
+		75D409402588C68C0052FFFE /* lopcodes.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23721C4CCD3F0093A49A /* lopcodes.h */; };
+		75D409412588C68C0052FFFE /* lparser.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23751C4CCD3F0093A49A /* lparser.h */; };
+		75D409422588C68C0052FFFE /* lstate.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23771C4CCD3F0093A49A /* lstate.h */; };
+		75D409432588C68C0052FFFE /* lstring.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23791C4CCD3F0093A49A /* lstring.h */; };
+		75D409442588C68C0052FFFE /* ltable.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF237C1C4CCD3F0093A49A /* ltable.h */; };
+		75D409452588C68C0052FFFE /* ltm.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF237F1C4CCD3F0093A49A /* ltm.h */; };
+		75D409462588C68C0052FFFE /* lua.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23811C4CCD3F0093A49A /* lua.h */; };
+		75D409472588C68C0052FFFE /* luaconf.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23831C4CCD3F0093A49A /* luaconf.h */; };
+		75D409482588C68C0052FFFE /* lualib.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23841C4CCD3F0093A49A /* lualib.h */; };
+		75D409492588C68C0052FFFE /* lundump.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23861C4CCD3F0093A49A /* lundump.h */; };
+		75D4094A2588C68C0052FFFE /* lvm.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF23881C4CCD3F0093A49A /* lvm.h */; };
+		75D4094B2588C68C0052FFFE /* lzio.h in Sources */ = {isa = PBXBuildFile; fileRef = 84EF238A1C4CCD3F0093A49A /* lzio.h */; };
+		75D4094C2588C68C0052FFFE /* tolua-Prefix.pch in Sources */ = {isa = PBXBuildFile; fileRef = 0F4B04DB1800959F002EA938 /* tolua-Prefix.pch */; };
 		75FDFC342588C28900F50F6A /* buffer.c in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC102588C28900F50F6A /* buffer.c */; };
 		75FDFC352588C28900F50F6A /* serial.c in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC112588C28900F50F6A /* serial.c */; };
 		75FDFC362588C28900F50F6A /* compat.c in Sources */ = {isa = PBXBuildFile; fileRef = 75FDFC132588C28900F50F6A /* compat.c */; };
@@ -432,6 +480,54 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75D4091D2588C68C0052FFFE /* strbuf.h in Sources */,
+				75D4091E2588C68C0052FFFE /* fpconv.h in Sources */,
+				75D4091F2588C68C0052FFFE /* WHAT in Sources */,
+				75D409202588C68C0052FFFE /* MemoryUsage.h in Sources */,
+				75D409212588C68C0052FFFE /* GData.h in Sources */,
+				75D409222588C68C0052FFFE /* tcp.h in Sources */,
+				75D409232588C68C0052FFFE /* mime.h in Sources */,
+				75D409242588C68C0052FFFE /* auxiliar.h in Sources */,
+				75D409252588C68C0052FFFE /* usocket.h in Sources */,
+				75D409262588C68C0052FFFE /* luasocket.h in Sources */,
+				75D409272588C68C0052FFFE /* inet.h in Sources */,
+				75D409282588C68C0052FFFE /* wsocket.h in Sources */,
+				75D409292588C68C0052FFFE /* options.h in Sources */,
+				75D4092A2588C68C0052FFFE /* luasocket_scripts.h in Sources */,
+				75D4092B2588C68C0052FFFE /* except.h in Sources */,
+				75D4092C2588C68C0052FFFE /* pierror.h in Sources */,
+				75D4092D2588C68C0052FFFE /* buffer.h in Sources */,
+				75D4092E2588C68C0052FFFE /* io.h in Sources */,
+				75D4092F2588C68C0052FFFE /* compat.h in Sources */,
+				75D409302588C68C0052FFFE /* timeout.h in Sources */,
+				75D409312588C68C0052FFFE /* socket.h in Sources */,
+				75D409322588C68C0052FFFE /* udp.h in Sources */,
+				75D409332588C68C0052FFFE /* unix.h in Sources */,
+				75D409342588C68C0052FFFE /* select.h in Sources */,
+				75D409352588C68C0052FFFE /* lapi.h in Sources */,
+				75D409362588C68C0052FFFE /* lauxlib.h in Sources */,
+				75D409372588C68C0052FFFE /* lcode.h in Sources */,
+				75D409382588C68C0052FFFE /* ldebug.h in Sources */,
+				75D409392588C68C0052FFFE /* ldo.h in Sources */,
+				75D4093A2588C68C0052FFFE /* lfunc.h in Sources */,
+				75D4093B2588C68C0052FFFE /* lgc.h in Sources */,
+				75D4093C2588C68C0052FFFE /* llex.h in Sources */,
+				75D4093D2588C68C0052FFFE /* llimits.h in Sources */,
+				75D4093E2588C68C0052FFFE /* lmem.h in Sources */,
+				75D4093F2588C68C0052FFFE /* lobject.h in Sources */,
+				75D409402588C68C0052FFFE /* lopcodes.h in Sources */,
+				75D409412588C68C0052FFFE /* lparser.h in Sources */,
+				75D409422588C68C0052FFFE /* lstate.h in Sources */,
+				75D409432588C68C0052FFFE /* lstring.h in Sources */,
+				75D409442588C68C0052FFFE /* ltable.h in Sources */,
+				75D409452588C68C0052FFFE /* ltm.h in Sources */,
+				75D409462588C68C0052FFFE /* lua.h in Sources */,
+				75D409472588C68C0052FFFE /* luaconf.h in Sources */,
+				75D409482588C68C0052FFFE /* lualib.h in Sources */,
+				75D409492588C68C0052FFFE /* lundump.h in Sources */,
+				75D4094A2588C68C0052FFFE /* lvm.h in Sources */,
+				75D4094B2588C68C0052FFFE /* lzio.h in Sources */,
+				75D4094C2588C68C0052FFFE /* tolua-Prefix.pch in Sources */,
 				84EF23A81C4CCD3F0093A49A /* lundump.c in Sources */,
 				75FDFC502588C29F00F50F6A /* GData.cpp in Sources */,
 				75FDFC422588C28900F50F6A /* luasocket.c in Sources */,

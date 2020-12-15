@@ -73,10 +73,6 @@ public sealed class LuaManager : IUpdateManager
         luaState.OpenLibs(LuaDLL.luaopen_pb);
         luaState.OpenLibs(LuaDLL.luaopen_struct);
         luaState.OpenLibs(LuaDLL.luaopen_lpeg);
-#if UNITY_EDITOR //这两个库在编辑器下打开使用,发布模式不使用.
-        OpenLuaSocket();      
-        OpenZbsDebugger();
-#endif
     }
     
     //给 Lua 添加 Update 方法
@@ -120,51 +116,6 @@ public sealed class LuaManager : IUpdateManager
     {
         return GameManager.QueryManager<LuaManager>().luaState;
     }
-
-
-    #region Open Zip Debuger
-
-    public void OpenZbsDebugger(string ip = "localhost")
-    {
-        if (!Directory.Exists(LuaConst.zbsDir))
-        {
-            Debugger.LogWarning("ZeroBraneStudio not install or LuaConst.zbsDir not right");
-            return;
-        }
-
-        if (!string.IsNullOrEmpty(LuaConst.zbsDir))
-        {
-            luaState.AddSearchPath(LuaConst.zbsDir);
-        }
-
-        luaState.LuaDoString(string.Format("DebugServerIp = '{0}'", ip), "@LuaManager.cs");
-    }
-
-    #endregion
-    
-    #region Open Lua Socket
-
-    private void OpenLuaSocket()
-    {
-        luaState.BeginPreLoad();
-        luaState.RegFunction("socket.core", LuaOpen_Socket_Core);
-        luaState.RegFunction("mime.core", LuaOpen_Mime_Core);                
-        luaState.EndPreLoad();                     
-    }
-    
-    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-    private static int LuaOpen_Socket_Core(IntPtr L)
-    {        
-        return LuaDLL.luaopen_socket_core(L);
-    }
-
-    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
-    private static int LuaOpen_Mime_Core(IntPtr L)
-    {
-        return LuaDLL.luaopen_mime_core(L);
-    }
-
-    #endregion
 
     #region Open Lua cjson
 
