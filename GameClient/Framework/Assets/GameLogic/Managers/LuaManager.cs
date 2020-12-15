@@ -38,7 +38,7 @@ public sealed class LuaManager : IUpdateManager
         AddLuaUpdate();
         //Call Lua Function
         AddCallMainLua();
-        
+        //场景重新加载的时候,刷新一下数据
         SceneManager.sceneLoaded += UpdateOnSceneLoaded;
     }
 
