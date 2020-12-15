@@ -14,7 +14,9 @@ public sealed class ConfigManager  : IManager
 
     public void Start()
     {
-        
+        //Excel 的配置文件
+        GDataCPPRelated.Started = false;
+        GDataCPPRelated.OnGameStart();
     }
 
     public void OnDestroy()

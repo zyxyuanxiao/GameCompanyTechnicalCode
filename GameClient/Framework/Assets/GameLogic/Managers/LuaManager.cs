@@ -22,9 +22,6 @@ public sealed class LuaManager : IUpdateManager
 
     public void Start()
     {
-        //Excel 的配置文件
-        GDataCPPRelated.Started = false;
-        GDataCPPRelated.OnGameStart();
         //初始化 LuaState
         luaState = new LuaState();
         //打开初始化库
