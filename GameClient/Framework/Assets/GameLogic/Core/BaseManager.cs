@@ -11,7 +11,7 @@ using UnityEngine;
 /// </summary>
 public abstract class BaseManager : MonoBehaviour
 {
-    private static Dictionary<Type, IManager> dictManager;
+    private static Dictionary<Type, IManager> _dictManager;
     private static IManager[] _managers; 
     private static IUpdateManager[] _updateManagers; 
 
@@ -44,6 +44,8 @@ public abstract class BaseManager : MonoBehaviour
     {
         for (int i = 0; i < _managers.Length; i++) _managers[i].OnDestroy();
         _managers = null;
+        _dictManager = null;
+        _updateManagers = null;
     }
 
     protected virtual void OnApplicationQuit()
@@ -59,7 +61,7 @@ public abstract class BaseManager : MonoBehaviour
     /// </summary>
     private void AddInitManager()
     {
-        dictManager= new Dictionary<Type, IManager>();
+        _dictManager= new Dictionary<Type, IManager>();
         Dictionary<Type, IUpdateManager> dictUpdate= new Dictionary<Type, IUpdateManager>();
         Assembly assembly = typeof(BaseManager).Assembly;
         foreach (Type type in assembly.GetTypes())
@@ -69,7 +71,7 @@ public abstract class BaseManager : MonoBehaviour
                 //创建实例,并添加到管理者集合中
                 IManager manager = Activator.CreateInstance(type) as IManager;
                 //manager.ID = IdGenerater.GenerateId();
-                dictManager.Add(type, manager);
+                _dictManager.Add(type, manager);
                 if (typeof(IUpdateManager).IsAssignableFrom(type))
                 {
                     dictUpdate.Add(type,manager as IUpdateManager);
@@ -79,8 +81,8 @@ public abstract class BaseManager : MonoBehaviour
 
         int count = 0;
         //使用数组,提高查询效率,统计所有IManager
-        _managers = new IManager[dictManager.Count];
-        foreach (IManager item in dictManager.Values)
+        _managers = new IManager[_dictManager.Count];
+        foreach (IManager item in _dictManager.Values)
         {
             _managers[count] = item;
             count++;
@@ -103,7 +105,7 @@ public abstract class BaseManager : MonoBehaviour
     /// <returns></returns>
     public static T QueryManager<T>() where T : IManager
     {
-        if (dictManager.TryGetValue(typeof(T), out IManager manager))
+        if (_dictManager.TryGetValue(typeof(T), out IManager manager))
         {
             return (T)manager;
         }

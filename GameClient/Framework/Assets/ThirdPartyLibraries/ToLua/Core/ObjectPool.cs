@@ -25,6 +25,9 @@ using System.Collections.Generic;
 
 namespace LuaInterface
 {
+    /// <summary>
+    /// 保存 C# 对象的池子
+    /// </summary>
     public class LuaObjectPool
     {        
         class PoolNode

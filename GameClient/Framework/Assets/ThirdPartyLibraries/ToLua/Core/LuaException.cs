@@ -28,6 +28,7 @@ using UnityEngine;
 
 namespace LuaInterface
 {
+    //封装 Lua 堆栈中的debug 调试信息,将其转成 C#格式的类型.
     public class LuaException : Exception
     {
         public static Exception luaStack = null;
@@ -35,7 +36,7 @@ namespace LuaInterface
         public static int InstantiateCount = 0;
         public static int SendMsgCount = 0;
         public static IntPtr L = IntPtr.Zero;
-
+        //调用堆栈信息
         public override string StackTrace
         {
             get
@@ -185,9 +186,6 @@ namespace LuaInterface
             FieldInfo field = type.GetField("projectFolder", BindingFlags.Static | BindingFlags.GetField | BindingFlags.NonPublic);
             LuaException.projectFolder = (string)field.GetValue(null);
             projectFolder = projectFolder.Replace('\\', '/');
-#if DEVELOPER
-            Debugger.Log("projectFolder is {0}", projectFolder);
-#endif
         }
     }
 }

@@ -26,6 +26,8 @@ using System.Collections;
 
 namespace LuaInterface
 {
+    //将 lua_State 栈上的数据,转成 C ,然后 C 再转成 C#对应类型的数据
+    //将 C# 的数据,转成 C 对应的数据,通过 tolua.c 的方法转到 lua_State 栈上面,中间涉及到栈扩容,然后在 Lua 代码中使用.
     public class LuaStackOp
     {
         public sbyte ToSByte(IntPtr L, int stackPos)

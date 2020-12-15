@@ -19,7 +19,7 @@ public partial class GameSceneManager : IUpdateManager
     {
         Load(Scene_GameManager, (SceneLoadingType type) =>
         {
-            Debug.Log(type);
+            Debug.Log("场景加载回调" + type);
         });
     }
 

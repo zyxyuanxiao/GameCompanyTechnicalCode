@@ -26,8 +26,14 @@ using UnityEngine;
 
 namespace LuaInterface
 {
+    /// <summary>
+    /// 这个类就是给 Lua 中对 C# 对象的交互提供了基础
+    /// C#中对象在传给 Lua 时并不是直接把对象暴露给 lua,而是在这个类里面注册并返回一个索引,可以理解为指针.
+    /// 并把这个索引包装成一个 userdata 传递给 Lua,并且设置元表.
+    /// </summary>
     public class ObjectTranslator
-    {        
+    {   
+        //GC,objects里面记录的对象,需要被删除,这个类是删除时的记录
         private class DelayGC
         {
             public DelayGC(int id, UnityEngine.Object obj, float time)
@@ -56,9 +62,12 @@ namespace LuaInterface
         }
 
         public bool LogGC { get; set; }
+        //与 objects 形成双向哈希表
         public readonly Dictionary<object, int> objectsBackMap = new Dictionary<object, int>(257, new CompareObject());
-        public readonly LuaObjectPool objects = new LuaObjectPool();
+        public readonly LuaObjectPool objects = new LuaObjectPool();//对象池子
+        //GC 对象
         private List<DelayGC> gcList = new List<DelayGC>();
+        //
         private Action<object, int> removeInvalidObject;
 
 #if !MULTI_STATE
@@ -73,7 +82,8 @@ namespace LuaInterface
 #endif
             removeInvalidObject = RemoveObject;
         }
-
+        
+        //将对象添加进池子里面,为了将这个对象对应的 int 的 key 传入 C 中,然后让 Lua 使用
         public int AddObject(object obj)
         {
             int index = objects.Add(obj);
@@ -85,7 +95,7 @@ namespace LuaInterface
 
             return index;
         }
-
+        
         public static ObjectTranslator Get(IntPtr L)
         {
 #if !MULTI_STATE
@@ -125,7 +135,12 @@ namespace LuaInterface
                 }
             }
         }
-
+        
+        /// <summary>
+        /// 根据 lua_State 栈返回的指针引用,获取 c# 的对象
+        /// </summary>
+        /// <param name="udata"></param>
+        /// <returns></returns>
         public object GetObject(int udata)
         {
             return objects.TryGetValue(udata);         
@@ -209,7 +224,12 @@ namespace LuaInterface
 
             UnityEngine.Object.Destroy(obj);
         }
-
+        
+        /// <summary>
+        /// Lua 层拿到的是一个 int 形式的 userdata,由于 Lua 对 C#对象的应用,导致 C#的 GC 机制无法释放掉对应的内存对象,
+        /// 对于 Lua 层拿到的对象,会重写 __gc 方法,在 LuaState.BeginClass 函数中,所以当 Lua 的 GC 执行时,会调用这个方法,从而释放掉 此类缓存的 C#对象
+        /// 因此对于那些在 Lua 层被访问的对象,在不调用 lua gc 的情况下会一直驻留在此类中
+        /// </summary>
         public void Collect()
         {
             if (gcList.Count == 0)

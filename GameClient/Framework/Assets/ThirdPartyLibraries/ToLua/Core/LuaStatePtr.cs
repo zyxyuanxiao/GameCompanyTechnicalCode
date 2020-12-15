@@ -623,7 +623,7 @@ namespace LuaInterface
 
         public void OpenToLuaLibs()
         {
-            LuaDLL.tolua_openlibs(L);
+            LuaDLL.tolua_openlibs(L);//注册 tolua C 写的方法
             LuaOpenJit();
         }
 

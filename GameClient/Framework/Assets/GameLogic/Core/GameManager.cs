@@ -43,12 +43,15 @@ public sealed class GameManager : BaseManager
     protected override void OnApplicationQuit()
     {
         base.OnApplicationQuit();
+        Quit();
     }
 
     public void Quit()
     {
 #if UNITY_EDITOR
+        DestroyImmediate(this.gameObject, true);
         UnityEditor.EditorApplication.isPlaying = false;
+        Debug.Log("<color=red>Game Quit</color>");
 #else
         Application.Quit();
 #endif
@@ -62,8 +65,7 @@ public sealed class GameManager : BaseManager
     private static void InitializeOnBeforeSceneLoad()
     {
 #if UNITY_EDITOR
-        UnityEditor.EditorApplication.playModeStateChanged -= OnPlayModeStateChanged;
-        UnityEditor.EditorApplication.playModeStateChanged += OnPlayModeStateChanged;
+        Debug.Log("<color=green>Game start</color>");
 #endif
         GameObject go = GameObject.Find("GameManager");
 
@@ -80,23 +82,5 @@ public sealed class GameManager : BaseManager
         //游戏开启后,有2个未显示在Hierarchy的游戏物体,一个是GameManager,一个是HTTP Update Delegator
         DontDestroyOnLoad(go);
     }
-
-
-
-#if UNITY_EDITOR
-    private static void OnPlayModeStateChanged(UnityEditor.PlayModeStateChange playMode)
-    {
-        if (playMode == UnityEditor.PlayModeStateChange.EnteredPlayMode)
-        {
-            Debug.Log("<color=green>Game start</color>");
-        }
-        else if (playMode == UnityEditor.PlayModeStateChange.EnteredEditMode)
-        {
-            Debug.Log("<color=red>Game Quit</color>");
-            GameObject go = GameObject.Find("GameManager");
-            DestroyImmediate(go, true);
-        }
-    }
-#endif
     #endregion
 }

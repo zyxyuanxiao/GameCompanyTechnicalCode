@@ -79,6 +79,8 @@ public static class CustomSettings
         _GT(typeof(LightType)),
         _GT(typeof(SleepTimeout)),
         _GT(typeof(Animator)),
+        _GT(typeof(AnimationCurve)),
+        _GT(typeof(Keyframe)),
         _GT(typeof(Input)),
         _GT(typeof(KeyCode)),
         _GT(typeof(SkinnedMeshRenderer)),

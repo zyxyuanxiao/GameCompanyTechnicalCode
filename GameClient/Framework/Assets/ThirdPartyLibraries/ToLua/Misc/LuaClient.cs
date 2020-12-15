@@ -60,16 +60,9 @@ public abstract class LuaClient : MonoBehaviour
 #if UNITY_STANDALONE_OSX || UNITY_EDITOR_OSX
         luaState.OpenLibs(LuaDLL.luaopen_bit);
 #endif
+        OpenLuaSocket();            
+        OpenZbsDebugger();
 
-        if (LuaConst.openLuaSocket)
-        {
-            OpenLuaSocket();            
-        }        
-
-        if (LuaConst.openLuaDebugger)
-        {
-            OpenZbsDebugger();
-        }
     }
 
     public void OpenZbsDebugger(string ip = "localhost")
@@ -78,11 +71,6 @@ public abstract class LuaClient : MonoBehaviour
         {
             Debugger.LogWarning("ZeroBraneStudio not install or LuaConst.zbsDir not right");
             return;
-        }
-
-        if (!LuaConst.openLuaSocket)
-        {                            
-            OpenLuaSocket();
         }
 
         if (!string.IsNullOrEmpty(LuaConst.zbsDir))
@@ -107,7 +95,6 @@ public abstract class LuaClient : MonoBehaviour
 
     protected void OpenLuaSocket()
     {
-        LuaConst.openLuaSocket = true;
 
         luaState.BeginPreLoad();
         luaState.RegFunction("socket.core", LuaOpen_Socket_Core);
@@ -174,9 +161,7 @@ public abstract class LuaClient : MonoBehaviour
         luaInstance = this;
         Init();
         
-#if UNITY_5_4_OR_NEWER
         SceneManager.sceneLoaded += OnSceneLoaded;
-#endif  
     }
 
 
@@ -207,45 +192,35 @@ public abstract class LuaClient : MonoBehaviour
         }
     }
 
-#if UNITY_5_4_OR_NEWER
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         OnLevelLoaded(scene.buildIndex);
     }
-#else
-    protected void OnLevelWasLoaded(int level)
-    {
-        OnLevelLoaded(level);
-    }
-#endif
+
 
     public virtual void Destroy()
     {
-        if (luaState != null)
+        if (luaState == null) return;
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        luaState.Call("OnApplicationQuit", false);
+        DetachProfiler();
+        LuaState state = luaState;
+        luaState = null;
+
+        if (onSocketfunc != null)
         {
-#if UNITY_5_4_OR_NEWER
-            SceneManager.sceneLoaded -= OnSceneLoaded;
-#endif    
-            luaState.Call("OnApplicationQuit", false);
-            DetachProfiler();
-            LuaState state = luaState;
-            luaState = null;
-
-            if (onSocketfunc != null)
-            {
-                onSocketfunc.Dispose();
-                onSocketfunc = null;
-            }
-
-            if (loop != null)
-            {
-                loop.Destroy();
-                loop = null;
-            }
-
-            state.Dispose();
-            luaInstance = null;
+            onSocketfunc.Dispose();
+            onSocketfunc = null;
         }
+
+        if (loop != null)
+        {
+            loop.Destroy();
+            loop = null;
+        }
+
+        state.Dispose();
+        luaInstance = null;
     }
 
     protected void OnDestroy()

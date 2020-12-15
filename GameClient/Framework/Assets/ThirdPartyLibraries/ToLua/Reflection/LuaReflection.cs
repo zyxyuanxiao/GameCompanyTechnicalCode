@@ -37,14 +37,20 @@ namespace LuaInterface
 #if !MULTI_STATE
             _reflection = this;
 #endif
-            LoadAssembly("mscorlib");
-            LoadAssembly("UnityEngine");
+            //多语言标准对象运行时库(Microsoft standard common object runtime library)
+            //反射的Assembly类在 mscorlib.dll 中
+            LoadAssembly("mscorlib");//加载 DLL 
+            LoadAssembly("UnityEngine");//加载 DLL
             //注释避免放在插件目录无法加载，需要可从lua代码loadassembly
             //LoadAssembly("Assembly-CSharp"); 
         }
         
         /// <summary>
         /// 加载一些 C# 的反射方法
+        /// 向 lua_State 中加载一个 tolua 的表,表中有
+        /// tolua.findtype/tolua.loadassembly/tolua.getmethod/tolua.getconstructor/tolua.gettypemethod/
+        /// tolua.getfield/tolua.getproperty/tolua.createinstance 等方法
+        /// 提前预加载tolua.reflection方法
         /// </summary>
         /// <param name="L"></param>
         public static void OpenLibs(IntPtr L)
@@ -90,7 +96,8 @@ namespace LuaInterface
             state.AddPreLoad("tolua.reflection", OpenReflectionLibs);            
             state.EndPreLoad();
         }
-
+        
+        //反射实例
         public static LuaReflection Get(IntPtr L)
         {
 #if !MULTI_STATE
@@ -99,7 +106,8 @@ namespace LuaInterface
             return LuaState.GetReflection(L);
 #endif
         }
-
+        
+        //C# 注册反射
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int OpenReflectionLibs(IntPtr L)
         {
@@ -524,7 +532,12 @@ namespace LuaInterface
 
             return 1;
         }
-
+        
+        /// <summary>
+        /// 加载C#的 DLL
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
         bool LoadAssembly(string name)
         {
             for (int i = 0; i < list.Count; i++)

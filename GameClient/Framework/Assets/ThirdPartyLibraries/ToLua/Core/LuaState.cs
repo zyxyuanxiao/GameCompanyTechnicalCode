@@ -35,11 +35,16 @@ namespace LuaInterface
 {
     /// <summary>
     /// tolua 提供的 C#版本的虚拟机,包括 Lua 源码中的 lua_state 虚拟机堆栈
+    /// 从C API的角度来看，将线程想象成一个栈可能更形象些。从实现的观点来看，一个线程的确就是一个栈。
+    /// 每个栈都保留着一个线程中所有未完成的函数调用信息，这些信息包括调用的函数、每个调用的参数和局部变量。也就是说，一个栈拥有一个线程得以继续运行的所有信息。
+    /// 因此，多个线程就意味着多个独立的栈。
+    /// 只要创建一个Lua状态，Lua就会自动在这个状态中创建一个新线程，这个线程称为“主线程”。
+    /// 主线程永远不会被回收。当调用lua_close关闭状态时，它会随着状态一起释放。调用lua_newthread便可以在一个状态中创建其他的线程。
     /// </summary>
     public class LuaState : LuaStatePtr, IDisposable
     {
-        public ObjectTranslator translator = new ObjectTranslator();
-        public LuaReflection reflection = new LuaReflection();
+        public ObjectTranslator translator = new ObjectTranslator();//对象池与 GC,将 Lua 中使用 C#的对象进行缓存与清理
+        public LuaReflection reflection = new LuaReflection();//向 Lua 中注册反射库,可以在 Lua 中使用反射方法
 
         public int ArrayMetatable { get; private set; }
         public int DelegateMetatable { get; private set; }
@@ -72,10 +77,13 @@ namespace LuaInterface
 
         public Action OnDestroy = delegate { };
         
+        //https://www.cnblogs.com/nele/p/7613324.html 
+        //对象被强引用的时，GC无法回收这个对象.
+        //弱引用可以让您保持对对象的引用，同时允许GC在必要时释放对象，回收内存,再次使用时,需要重新创建;
         Dictionary<string, WeakReference> funcMap = new Dictionary<string, WeakReference>();
         Dictionary<int, WeakReference> funcRefMap = new Dictionary<int, WeakReference>();
         Dictionary<long, WeakReference> delegateMap = new Dictionary<long, WeakReference>();
-
+        
         List<GCRef> gcList = new List<GCRef>();
         List<LuaBaseRef> subList = new List<LuaBaseRef>();
 
@@ -87,9 +95,9 @@ namespace LuaInterface
         HashSet<Type> genericSet = new HashSet<Type>();
         HashSet<string> moduleSet = null;
 
-        private static LuaState mainState = null;
+        private static LuaState mainState = null;//主要虚拟机堆栈,一般只有一个.
         private static LuaState injectionState = null;
-        private static Dictionary<IntPtr, LuaState> stateMap = new Dictionary<IntPtr, LuaState>();
+        private static Dictionary<IntPtr, LuaState> stateMap = new Dictionary<IntPtr, LuaState>();//所有的 lua_State
 
         private int beginCount = 0;
         private bool beLogGC = false;
@@ -119,12 +127,12 @@ namespace LuaInterface
             }
 
             float time = Time.realtimeSinceStartup;
-            InitTypeTraits();
-            InitStackTraits();
-            L = LuaNewState();            
-            LuaException.Init(L);
-            stateMap.Add(L, this);                        
-            OpenToLuaLibs();            
+            InitTypeTraits();//初始化常用的类型,用作 Lua 转 C#常用
+            InitStackTraits();//初始化在 lua_State 中操作的一般方法,类似于 pushxxx,toxxx,isxxx 这些方法.
+            L = LuaNewState();//真正的创建一个 C 中的 lua_State
+            LuaException.Init(L);//堆栈信息注册到 lua 中
+            stateMap.Add(L, this);// lua_State 的一个静态字典容器,记录使用     
+            OpenToLuaLibs();//
             ToLua.OpenLibs(L);
             OpenBaseLibs();
             GData.LuaOpen_GData(L);
@@ -237,7 +245,7 @@ namespace LuaInterface
 #if UNITY_EDITOR
             beStart = true;
 #endif
-            Debugger.Log("LuaState start");
+            Debugger.Log("<color=green>LuaState start</color>");
             OpenBaseLuaLibs();
 #if ENABLE_LUA_INJECTION
             Push(LuaDLL.tolua_tag());
@@ -434,7 +442,15 @@ namespace LuaInterface
 
             return t.Name;
         }
-
+        
+        /// <summary>
+        /// 设置类的 __gc 方法为 ObjectTranslator 的 Collect 方法
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="baseType"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        /// <exception cref="LuaException"></exception>
         public int BeginClass(Type t, Type baseType, string name = null)
         {
             if (beginCount == 0)
@@ -648,11 +664,9 @@ namespace LuaInterface
 
         string LuaChunkName(string name)
         {
-            if (LuaConst.openLuaDebugger)
-            {
-                name = LuaFileUtils.Instance.FindFile(name);
-            }
-
+#if UNITY_EDITOR
+            name = LuaFileUtils.Instance.FindFile(name);
+#endif
             return "@" + name;
         }
 
@@ -1311,14 +1325,22 @@ namespace LuaInterface
                 LuaGetRef(lbr.GetReference());
             }
         }
-
+        
+        /// <summary>
+        /// 将一个 C# 对象,以引用的方式使用tolua_pushnewudata传入 Lua 中使用,并在 tolua_pushnewudata 设置元表
+        /// 在这个地方使用 PushUserData 由 C# 传入 C ,由 Lua 调用
+        /// 
+        /// 在 ToLua 中使用 ToLua.CheckObject/ToLua.ToObject 方法,将 userdata(即 index) 转换为 C#对象.
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="reference"></param>
         void PushUserData(object o, int reference)
         {
             int index;
 
-            if (translator.Getudata(o, out index))
+            if (translator.Getudata(o, out index))//如果translator中的objectsBackMap之前有缓存过对象,则将该对象对应的 id 包装成 userdata 
             {
-                if (LuaDLL.tolua_pushudata(L, index))
+                if (LuaDLL.tolua_pushudata(L, index))//并设置元表为原对象,进栈
                 {
                     return;
                 }
@@ -2040,7 +2062,7 @@ namespace LuaInterface
                 missSet.Clear();
 #endif
                 OnDestroy();
-                Debugger.Log("LuaState destroy");
+                Debugger.Log("<color=red>LuaState destroy</color>");
             }
 
             if (mainState == this)

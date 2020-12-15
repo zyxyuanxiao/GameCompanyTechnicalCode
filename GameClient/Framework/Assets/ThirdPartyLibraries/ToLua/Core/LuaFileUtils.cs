@@ -28,6 +28,10 @@ using System.Text;
 
 namespace LuaInterface
 {
+    /// <summary>
+    /// Lua 记录加载的文件,从某一个文件夹内或者从某一个 AssetBundle 内
+    /// 一般情况下不用 AssetBundle,还要 load,加载数据量过多时,造成性能问题.
+    /// </summary>
     public class LuaFileUtils
     {
         public static LuaFileUtils Instance
@@ -38,10 +42,8 @@ namespace LuaInterface
                 {
                     instance = new LuaFileUtils();
                 }
-
                 return instance;
             }
-
             protected set
             {
                 instance = value;
@@ -76,7 +78,7 @@ namespace LuaInterface
             }
         }
 
-        //格式: 路径/?.lua
+        //格式: 路径/?.lua,添加搜索路径
         public bool AddSearchPath(string path, bool front = false)
         {
             int index = searchPaths.IndexOf(path);
@@ -97,7 +99,8 @@ namespace LuaInterface
 
             return true;
         }
-
+        
+        //删除搜索路径
         public bool RemoveSearchPath(string path)
         {
             int index = searchPaths.IndexOf(path);
@@ -110,12 +113,14 @@ namespace LuaInterface
 
             return false;
         }
-
+        
+        //添加搜索 AB 包
         public void AddSearchBundle(string name, AssetBundle bundle)
         {
             zipMap[name] = bundle;
         }
-
+        
+        //在文件路径中查找 lua 文件
         public string FindFile(string fileName)
         {
             if (fileName == string.Empty)
@@ -152,7 +157,8 @@ namespace LuaInterface
 
             return null;
         }
-
+        
+        //读取lua 文件为二进制
         public virtual byte[] ReadFile(string fileName)
         {
             if (!beZip)
@@ -176,7 +182,8 @@ namespace LuaInterface
                 return ReadZipFile(fileName);
             }
         }
-
+        
+        //
         public virtual string FindFileError(string fileName)
         {
             if (Path.IsPathRooted(fileName))
@@ -220,7 +227,8 @@ namespace LuaInterface
                 return sb.ToString();
             }
         }
-
+        
+        //读取 ab 包里面的lua 文件为二进制
         byte[] ReadZipFile(string fileName)
         {
             AssetBundle zipFile = null;

@@ -25,6 +25,7 @@ using System.Collections;
 
 namespace LuaInterface
 {
+    //这个是泛型,将这些泛型转成一个对象的元表来使用
     public static class TypeTraits<T>
     {        
         static public Func<IntPtr, int, bool> Check = DefaultCheck;
@@ -161,7 +162,8 @@ namespace LuaInterface
             return false;
         }
     }    
-
+    
+    //泛型,生成代理的对象,我们将 C#的代理也当成一个对象,这个对象使用 lua 中的 table 与 function 表示
     public static class DelegateTraits<T>
     {        
         static DelegateFactory.DelegateCreate _Create = null;        
@@ -229,7 +231,8 @@ namespace LuaInterface
             return _Create(null, null, true);            
         }
     }
-
+    
+    //泛型,从 lua 中接出来,将其转成 C#对象.
     public static class StackTraits<T>
     {
         static public Action<IntPtr, T> Push = SelectPush();

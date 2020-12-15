@@ -223,12 +223,9 @@ namespace LuaInterface
                     LuaDLL.lua_pushstring(L, error);
                     return 1;
                 }
-
-                if (LuaConst.openLuaDebugger)
-                {
-                    fileName = LuaFileUtils.Instance.FindFile(fileName);
-                }                
-
+#if UNITY_EDITOR
+                fileName = LuaFileUtils.Instance.FindFile(fileName);
+#endif
                 if (LuaDLL.luaL_loadbuffer(L, buffer, buffer.Length, "@"+ fileName) != 0)
                 {
                     string err = LuaDLL.lua_tostring(L, -1);
@@ -602,15 +599,24 @@ namespace LuaInterface
                     return null;
             }
         }
-
+        
+        /// <summary>
+        /// Lua 代码需要调用 C# 对象做事情的时候,在ObjectTranslator类中获取真正的 C#对象
+        /// 由 Lua 调用 C,再从 C 转成 C#
+        /// 
+        /// 在 LuaState 中调用 LuaState.PushUserData 由 C# 传入 C ,由 Lua 调用
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="stackPos"></param>
+        /// <returns></returns>
         public static object ToObject(IntPtr L, int stackPos)
         {
-            int udata = LuaDLL.tolua_rawnetobj(L, stackPos);
+            int udata = LuaDLL.tolua_rawnetobj(L, stackPos);//从栈中取出 index/id/udata 后
 
             if (udata != -1)
             {
                 ObjectTranslator translator = ObjectTranslator.Get(L);
-                return translator.GetObject(udata);
+                return translator.GetObject(udata);//通过这个对象缓存类translator转成原对象
             }
 
             return null;
@@ -1070,7 +1076,13 @@ namespace LuaInterface
             LuaDLL.luaL_typerror(L, stackPos, "Type");
             return null;
         }
-
+        
+        /// <summary>
+        /// Lua 代码需要调用 C# 对象做事情的时候,在ObjectTranslator类中获取真正的 C#对象,
+        /// </summary>
+        /// <param name="L"></param>
+        /// <param name="stackPos"></param>
+        /// <returns></returns>
         public static object CheckObject(IntPtr L, int stackPos)
         {
             int udata = LuaDLL.tolua_rawnetobj(L, stackPos);
