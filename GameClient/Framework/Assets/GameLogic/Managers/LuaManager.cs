@@ -4,6 +4,9 @@ using LuaInterface;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// 不再使用 LuaSocket,后面会将 ToLua src runtime中的 luasocket 也会逐渐删除
+/// </summary>
 public sealed class LuaManager : IUpdateManager
 {
     private LuaState luaState;
