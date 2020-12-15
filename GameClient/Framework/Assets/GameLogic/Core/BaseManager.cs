@@ -36,7 +36,6 @@ public abstract class BaseManager : MonoBehaviour
 
     protected virtual void Update()
     {
-        // yield return GameManager.OneFrame;
         for (int i = 0; i < _updateManagers.Length; i++) _updateManagers[i].Update();
     }
 

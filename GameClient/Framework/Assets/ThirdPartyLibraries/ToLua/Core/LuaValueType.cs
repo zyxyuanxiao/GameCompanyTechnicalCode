@@ -24,6 +24,7 @@ using System.Collections.Generic;
 
 namespace LuaInterface
 {
+    //基础类型
     public partial struct LuaValueType
     {
         public const int None = 0;

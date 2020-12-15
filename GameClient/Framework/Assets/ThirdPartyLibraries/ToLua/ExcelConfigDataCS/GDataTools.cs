@@ -36,9 +36,9 @@ public class GData
     const int BUFFER_SIZE = 65536;
     static byte[] buffer = new byte[BUFFER_SIZE];
 
-    private static uint STRING_CACHE_CAPACITY = 64;
+    // private static uint STRING_CACHE_CAPACITY = 64;
     // private static Best.LRUCache<Int64, string> m_cache = new Best.LRUCache<long, string>("GDataCache",STRING_CACHE_CAPACITY);
-    private static string tmp = null;
+    // private static string tmp = null;
     public static string ReadString(IntPtr data, int offset)
     {
         /*

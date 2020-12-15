@@ -21,12 +21,10 @@ SOFTWARE.
 */
 using UnityEngine;
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Collections.Generic;
 using System.Collections;
 using System.Runtime.InteropServices;
-using System.Text;
+
 
 #if UNITY_EDITOR  
 using UnityEditor;
@@ -36,6 +34,7 @@ using System.Reflection;
 
 namespace LuaInterface
 {
+    //tolua 中的扩展方法,C# 中一般使用这个类的方法,此类封装 tolua c 的代码
     public static class ToLua
     {
         public delegate object LuaTableToVar(IntPtr L, int pos);
@@ -54,7 +53,7 @@ namespace LuaInterface
         private static object logEntry;
         private static FieldInfo logEntryCondition;
 #endif                
-
+        
         static ToLua()
         {
             ToVarMap[LuaValueType.Vector3] = ToObjectVec3;
@@ -66,34 +65,35 @@ namespace LuaInterface
             ToVarMap[LuaValueType.LayerMask] = ToObjectLayerMask;
             ToVarMap[LuaValueType.Bounds] = ToObjectBounds;
         }
-
+        
+        //注册函数
         public static void OpenLibs(IntPtr L)
         {
             AddLuaLoader(L);
             LuaDLL.tolua_atpanic(L, Panic);
             LuaDLL.tolua_pushcfunction(L, Print);
-            LuaDLL.lua_setglobal(L, "print");
+            LuaDLL.lua_setglobal(L, "print");//lua 代码使用的全局方法 print
             LuaDLL.tolua_pushcfunction(L, DoFile);
-            LuaDLL.lua_setglobal(L, "dofile");
+            LuaDLL.lua_setglobal(L, "dofile");//lua 代码使用的全局方法 dofile
             LuaDLL.tolua_pushcfunction(L, LoadFile);
-            LuaDLL.lua_setglobal(L, "loadfile");
+            LuaDLL.lua_setglobal(L, "loadfile");//lua 代码使用的全局方法 loadfile
 
-            LuaDLL.lua_getglobal(L, "tolua");
+            LuaDLL.lua_getglobal(L, "tolua");//lua 代码使用的全局方法 tolua
 
-            LuaDLL.lua_pushstring(L, "isnull");
+            LuaDLL.lua_pushstring(L, "isnull");//lua 代码使用的全局方法 isnull
             LuaDLL.lua_pushcfunction(L, IsNull);
             LuaDLL.lua_rawset(L, -3);
 
             LuaDLL.lua_pushstring(L, "typeof");
-            LuaDLL.lua_pushcfunction(L, GetClassType);
+            LuaDLL.lua_pushcfunction(L, GetClassType);//lua 代码使用的全局方法 typeof 与 lua 中的 type 方法是有区别的
             LuaDLL.lua_rawset(L, -3);
 
             LuaDLL.lua_pushstring(L, "tolstring");
-            LuaDLL.tolua_pushcfunction(L, BufferToString);
+            LuaDLL.tolua_pushcfunction(L, BufferToString);//lua 代码使用的全局方法 tolstring
             LuaDLL.lua_rawset(L, -3);
 
             LuaDLL.lua_pushstring(L, "toarray");
-            LuaDLL.tolua_pushcfunction(L, TableToArray);
+            LuaDLL.tolua_pushcfunction(L, TableToArray);//lua 代码使用的全局方法 toarray
             LuaDLL.lua_rawset(L, -3);
 
             //手动模拟gc
@@ -118,10 +118,12 @@ namespace LuaInterface
 
         /*--------------------------------对于tolua扩展函数------------------------------------------*/
         #region TOLUA_EXTEND_FUNCTIONS
+        
+        //tolua 扩展的函数,使用的是 tolua c,向 Lua 中注册全局方法
         static void AddLuaLoader(IntPtr L)
         {
-            LuaDLL.lua_getglobal(L, "package");
-            LuaDLL.lua_getfield(L, -1, "loaders");
+            LuaDLL.lua_getglobal(L, "package");//lua 代码使用的全局方法 package
+            LuaDLL.lua_getfield(L, -1, "loaders");//lua 代码使用的全局方法 package.loaders
             LuaDLL.tolua_pushcfunction(L, Loader);
 
             for (int i = LuaDLL.lua_objlen(L, -2) + 1; i > 2; i--)
@@ -133,14 +135,16 @@ namespace LuaInterface
             LuaDLL.lua_rawseti(L, -2, 2);
             LuaDLL.lua_pop(L, 2);
         }
-
+        
+        //代码报错方法
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int Panic(IntPtr L)
         {
             string reason = String.Format("PANIC: unprotected error in call to Lua API ({0})", LuaDLL.lua_tostring(L, -1));
             throw new LuaException(reason);
         }
-
+        
+        //全局打印方法
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int Print(IntPtr L)
         {
@@ -163,7 +167,8 @@ namespace LuaInterface
                     }
                     else
                     {
-                        sb.Append('[').Append(filename, offset, filename.Length - offset).Append(':').Append(line).Append("]:");
+                        string _filename  = filename.Replace(Application.dataPath,"Assets");
+                        sb.Append('[').Append(_filename, offset, _filename.Length - offset).Append(':').Append(line).Append("]:");
                     }
 #endif
 
@@ -207,7 +212,8 @@ namespace LuaInterface
                 return LuaDLL.toluaL_exception(L, e);
             }
         }
-
+        
+        //Lua 代码中使用 package.loaders 方法
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int Loader(IntPtr L)
         {
@@ -239,7 +245,8 @@ namespace LuaInterface
                 return LuaDLL.toluaL_exception(L, e);
             }
         }
-
+        
+        //Lua 代码中使用的 DoFile 方法
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         public static int DoFile(IntPtr L)
         {
@@ -277,7 +284,8 @@ namespace LuaInterface
                 return LuaDLL.toluaL_exception(L, e);
             }
         }
-
+        
+        //Lua 代码中使用的 LoadFile 方法
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         public static int LoadFile(IntPtr L)
         {
@@ -308,7 +316,7 @@ namespace LuaInterface
             }
         }
 
-
+        //Lua 代码中使用的 isnull 方法
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int IsNull(IntPtr L)
         {
@@ -334,7 +342,8 @@ namespace LuaInterface
 
             return 1;
         }
-
+        
+        //Lua 代码中使用的 tolstring 方法
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int BufferToString(IntPtr L)
         {
@@ -368,7 +377,8 @@ namespace LuaInterface
                 return LuaDLL.toluaL_exception(L, e);
             }            
         }
-
+        
+        //Lua 代码中使用的 typeof 方法
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int GetClassType(IntPtr L)
         {
@@ -397,7 +407,8 @@ namespace LuaInterface
 
             return 1;
         }
-
+        
+        //Lua 代码中使用的 toarray 方法 
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         static int TableToArray(IntPtr L)
         {
@@ -439,6 +450,7 @@ namespace LuaInterface
         }
 
 #if UNITY_EDITOR
+        //反射获取 Unity 编辑器上面的 Console 窗体中的图形窗口
         private static bool GetConsoleWindowListView()
         {
             if (logListView == null)
@@ -473,7 +485,7 @@ namespace LuaInterface
             return true;
         }
 
-
+        
         private static string GetListViewRowCount(ref int line)
         {
             int row = (int)logListViewCurrentRow.GetValue(logListView);
@@ -584,7 +596,7 @@ namespace LuaInterface
 #endif
 #endregion
                 /*-------------------------------------------------------------------------------------------*/
-
+        //在 C#中,从 luaState 上面获取数据,转成对应的字符串,与 C#中需要打印一个类的所有信息是一样的.
         public static string ToString(IntPtr L, int stackPos)
         {
             LuaTypes luaType = LuaDLL.lua_type(L, stackPos);
@@ -621,7 +633,8 @@ namespace LuaInterface
 
             return null;
         }
-
+        
+        //lua 代码里面的方法转成 C#中记录的方法
         public static LuaFunction ToLuaFunction(IntPtr L, int stackPos)
         {
             LuaTypes type = LuaDLL.lua_type(L, stackPos);
@@ -636,7 +649,8 @@ namespace LuaInterface
             int reference = LuaDLL.toluaL_ref(L);
             return LuaStatic.GetFunction(L, reference);
         }
-
+        
+        //lua 代码里面的Table转成 C#中记录的Table
         public static LuaTable ToLuaTable(IntPtr L, int stackPos)
         {
             LuaTypes type = LuaDLL.lua_type(L, stackPos);
@@ -651,7 +665,8 @@ namespace LuaInterface
             int reference = LuaDLL.toluaL_ref(L);
             return LuaStatic.GetTable(L, reference);
         }
-
+        
+        //lua 代码里面的Thread转成 C#中记录的Thread
         public static LuaThread ToLuaThread(IntPtr L, int stackPos)
         {
             LuaTypes type = LuaDLL.lua_type(L, stackPos);
@@ -666,28 +681,32 @@ namespace LuaInterface
             int reference = LuaDLL.toluaL_ref(L);
             return LuaStatic.GetLuaThread(L, reference);
         }
-
+        
+        //lua 代码里面的Vector3转成 C#中记录的Vector3
         public static Vector3 ToVector3(IntPtr L, int stackPos)
         {
             float x = 0, y = 0, z = 0;
             LuaDLL.tolua_getvec3(L, stackPos, out x, out y, out z);
             return new Vector3(x, y, z);
         }
-
+        
+        //lua 代码里面的ToVector4转成 C#中记录的ToVector4
         public static Vector4 ToVector4(IntPtr L, int stackPos)
         {
             float x, y, z, w;
             LuaDLL.tolua_getvec4(L, stackPos, out x, out y, out z, out w);
             return new Vector4(x, y, z, w);
         }
-
+        
+        //lua 代码里面的ToVector2转成 C#中记录的ToVector2
         public static Vector2 ToVector2(IntPtr L, int stackPos)
         {
             float x, y;
             LuaDLL.tolua_getvec2(L, stackPos, out x, out y);
             return new Vector2(x, y);
         }
-
+        
+        //lua 代码里面的Quaternion转成 C#中记录的Quaternion
         public static Quaternion ToQuaternion(IntPtr L, int stackPos)
         {
             float x, y, z, w;

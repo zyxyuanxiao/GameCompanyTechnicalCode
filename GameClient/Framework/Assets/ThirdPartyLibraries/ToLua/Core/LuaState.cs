@@ -117,7 +117,7 @@ namespace LuaInterface
         /// 4. OpenToLuaLibs,ToLua.OpenLibs,OpenBaseLibs,注册 C, Lua 的基本库,C#的基本库等
         /// 5. InitLuaPath在LuaFileUtils中存储了lua中package.path、LuaConst中一些路径搜索路径。用于查找文件。
         /// </summary>
-        public LuaState()            
+        public LuaState()
         {
             if (mainState == null)
             {
@@ -132,12 +132,12 @@ namespace LuaInterface
             L = LuaNewState();//真正的创建一个 C 中的 lua_State
             LuaException.Init(L);//堆栈信息注册到 lua 中
             stateMap.Add(L, this);// lua_State 的一个静态字典容器,记录使用     
-            OpenToLuaLibs();//
-            ToLua.OpenLibs(L);
-            OpenBaseLibs();
-            GData.LuaOpen_GData(L);
-            LuaSetTop(0);
-            InitLuaPath();
+            OpenToLuaLibs();//注册 tolua C 的函数
+            ToLua.OpenLibs(L);//注册一些全局的方法在 lua 代码中使用,比如 print
+            OpenBaseLibs();//注册 C# 常用类中的方法
+            GData.LuaOpen_GData(L);//注册 读取 Excel 配置表的方法
+            LuaSetTop(0);//全部出栈
+            InitLuaPath();//
             Debugger.Log("Init lua state cost: {0}", Time.realtimeSinceStartup - time);
         }        
 
@@ -717,6 +717,8 @@ namespace LuaInterface
             return o;
         }
 
+        //初始化 lua 的加载路径,lua 中的加载路径记录在LuaFileUtils类中
+        //一般情况这个路径是从根目录查找的 macos是/usr/, window下是C盘
         public void InitPackagePath()
         {
             LuaGetGlobal("package");
@@ -731,6 +733,7 @@ namespace LuaInterface
                     string path = paths[i].Replace('\\', '/');
                     LuaFileUtils.Instance.AddSearchPath(path);
                 }
+                Debugger.Log("-------"+paths[i]);
             }
 
             LuaPushString("");            
