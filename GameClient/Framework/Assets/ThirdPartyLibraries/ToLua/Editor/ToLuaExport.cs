@@ -114,10 +114,12 @@ public static class ToLuaExport
 
     public static List<string> memberFilter = new List<string>
     {
+        "String.get_Chars",
         "String.Chars",
         "Directory.SetAccessControl",
         "File.GetAccessControl",
         "File.SetAccessControl",
+        "Type.IsSZArray",
         //UnityEngine
         "AnimationClip.averageDuration",
         "AnimationClip.averageAngularSpeed",

@@ -889,7 +889,7 @@ public static class ToLuaMenu
         sb.AppendLineEx("{");
         sb.AppendLineEx("\tpublic static void Register(LuaState L)");
         sb.AppendLineEx("\t{");        
-        sb.AppendLineEx("\t\tthrow new LuaException(\"Please click menu Lua/Gen BaseType Wrap first!\");");
+        sb.AppendLineEx("\t\tthrow new LuaException(\"Please click menu ToLua/Gen BaseType Wrap first!\");");
         sb.AppendLineEx("\t}");
         sb.AppendLineEx("}");
 

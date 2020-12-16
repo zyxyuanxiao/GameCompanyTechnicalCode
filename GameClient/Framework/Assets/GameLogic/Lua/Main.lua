@@ -3,7 +3,10 @@ Main = {}
 
 
 function Main.Main()
-	print(tolua)
+	
+	local a = System.String.New("aaaaaa")
+	
+	print(a)
 	
 	print("<color=green>Lua Already Started</color>")
 end
