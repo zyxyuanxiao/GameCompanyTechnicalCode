@@ -199,7 +199,7 @@ namespace GameAssets
             string vcPath = DownloadAssetsDirectory + AssetsHelper.VersionConfigName;
             if (!File.Exists(vcPath))
             {
-                using (File.Create(vcPath)) ;
+                using (File.Create(vcPath)) {};
             }
             // 这个后面不能加 UTF8,因为 Litjson 解析时报错
             File.WriteAllText(vcPath, JsonMapper.ToJson(vc));

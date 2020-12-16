@@ -8,7 +8,7 @@ using UnityEngine;
 /// 采用 任务队列 设计模式
 /// 一个任务即一个 IProcess
 /// </summary>
-public partial class ProcessManager : IUpdateManager
+public partial class ProcessManager : IManager, IUpdate
 {
     public void Awake()
     {

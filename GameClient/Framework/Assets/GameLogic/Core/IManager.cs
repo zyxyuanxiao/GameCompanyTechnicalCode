@@ -7,7 +7,17 @@
     void OnDestroy();
 }
 
-public interface IUpdateManager : IManager
+public interface IUpdate
 {
     void Update();
+}
+
+public interface ILateUpdate
+{
+    void LateUpdate();
+}
+
+public interface IFixedUpdate
+{
+    void FixedUpdate();
 }

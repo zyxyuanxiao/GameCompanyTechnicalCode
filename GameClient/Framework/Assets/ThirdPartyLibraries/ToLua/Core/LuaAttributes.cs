@@ -23,6 +23,9 @@ using System;
 
 namespace LuaInterface
 {
+    //Lua 函数的一些特性,这些特性在反射时使用,一般在开发时使用,用来反射注册 C# 对象,从而去规定一些细节
+    
+    
     [AttributeUsage(AttributeTargets.Method)]
     public sealed class MonoPInvokeCallbackAttribute : Attribute
     {
@@ -66,8 +69,9 @@ namespace LuaInterface
     public sealed class LuaRenameAttribute : Attribute
     {
         public string Name;
-        public LuaRenameAttribute()
+        public LuaRenameAttribute(string name)
         {
+            Name = name;
         }
     }
 }

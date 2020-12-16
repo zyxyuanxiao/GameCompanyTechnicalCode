@@ -96,7 +96,6 @@ namespace LuaInterface
         HashSet<string> moduleSet = null;
 
         private static LuaState mainState = null;//主要虚拟机堆栈,一般只有一个.
-        private static LuaState injectionState = null;
         private static Dictionary<IntPtr, LuaState> stateMap = new Dictionary<IntPtr, LuaState>();//所有的 lua_State
 
         private int beginCount = 0;
@@ -122,8 +121,6 @@ namespace LuaInterface
             if (mainState == null)
             {
                 mainState = this;
-                // MULTI_STATE Not Support
-                injectionState = mainState;
             }
 
             float time = Time.realtimeSinceStartup;
@@ -137,7 +134,7 @@ namespace LuaInterface
             OpenBaseLibs();//注册 C# 常用类中的方法
             GData.LuaOpen_GData(L);//注册 读取 Excel 配置表的方法
             LuaSetTop(0);//全部出栈
-            InitLuaPath();//
+            InitLuaPath();//初始化Lua 文本的路径,开发时与发布平台
             Debugger.Log("Init lua state cost: {0}", Time.realtimeSinceStartup - time);
         }        
 
@@ -234,7 +231,7 @@ namespace LuaInterface
         void OpenBaseLuaLibs()
         {
             DoFile("tolua.lua");            //tolua table名字已经存在了,不能用require
-            LuaUnityLibs.OpenLuaLibs(L);
+            LuaUnityLibs.OpenLuaLibs(L);    //Lua 中使用的基础库
         }
 
         /// <summary>
@@ -245,27 +242,14 @@ namespace LuaInterface
 #if UNITY_EDITOR
             beStart = true;
 #endif
-            Debugger.Log("<color=green>LuaState start</color>");
-            OpenBaseLuaLibs();
-#if ENABLE_LUA_INJECTION
-            Push(LuaDLL.tolua_tag());
-            LuaSetGlobal("tolua_tag");
-#if UNITY_EDITOR
-            if (UnityEditor.EditorPrefs.GetInt(Application.dataPath + "InjectStatus") == 1)
-            { 
-#endif
-                DoFile("System/Injection/LuaInjectionStation.lua");
-                bInjectionInited = true;
-#if UNITY_EDITOR
-            }
-#endif
-#endif
+            OpenBaseLuaLibs();//注册 UnityEngine 的基础库
             PackBounds = GetFuncRef("Bounds.New");
             UnpackBounds = GetFuncRef("Bounds.Get");
             PackRay = GetFuncRef("Ray.New");
             UnpackRay = GetFuncRef("Ray.Get");
             PackRaycastHit = GetFuncRef("RaycastHit.New");
             PackTouch = GetFuncRef("Touch.New");
+            Debugger.Log("<color=green>LuaState Already Started</color>");
         }
 
         public int OpenLibs(LuaCSFunction open)
@@ -414,16 +398,7 @@ namespace LuaInterface
 
             return 0;
         }
-
-        public static bool GetInjectInitState(int index)
-        {
-            if (injectionState != null && injectionState.bInjectionInited)
-            {
-                return true;
-            }
-
-            return false;
-        }
+        
 
         string GetToLuaTypeName(Type t)
         {
@@ -2065,17 +2040,12 @@ namespace LuaInterface
                 missSet.Clear();
 #endif
                 OnDestroy();
-                Debugger.Log("<color=red>LuaState destroy</color>");
+                Debugger.Log("<color=red>LuaState Already Destroy</color>");
             }
 
             if (mainState == this)
             {
                 mainState = null;
-            }
-            if (injectionState == this)
-            {
-                injectionState = null;
-                LuaInjectionStation.Clear();
             }
 
 #if UNITY_EDITOR

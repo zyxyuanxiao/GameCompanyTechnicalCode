@@ -26,6 +26,7 @@ using UnityEngine;
 
 namespace LuaInterface
 {
+    //C# Lua 类的基类,它的子类有 LuaFunction,LuaState, LuaTable,LuaThread
     public abstract class LuaBaseRef : IDisposable
     {
         public string name = null;

@@ -7,13 +7,15 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// 不再使用 LuaSocket,后面会将 ToLua src runtime中的 luasocket 也会逐渐删除
 /// </summary>
-public sealed class LuaManager : IUpdateManager
+public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
 {
     private LuaState luaState;
     
     private LuaBeatEvent UpdateEvent { get; set; }
     
-    
+    private LuaBeatEvent LateUpdateEvent { get; set; }
+
+    private LuaBeatEvent FixedUpdateEvent { get; set; }
     
     public void Awake()
     {
@@ -30,7 +32,9 @@ public sealed class LuaManager : IUpdateManager
         luaState.LuaSetTop(0);
         //绑定 C# 对象
         LuaBinder.Bind(luaState);
+        //注册 C# 代理
         DelegateFactory.Init();   
+        //注册 C# 协程
         LuaCoroutine.Register(luaState, GameManager.Instance);        
         //启动 Lua
         luaState.Start();
@@ -46,10 +50,23 @@ public sealed class LuaManager : IUpdateManager
     {
         SceneManager.sceneLoaded -= UpdateOnSceneLoaded;
         luaState.Call("Main.OnApplicationQuit", false);
-        luaState.Dispose();
+        FixedUpdateEvent.Dispose();
+        FixedUpdateEvent = null;
         UpdateEvent.Dispose();
         UpdateEvent = null;
+        LateUpdateEvent.Dispose();
+        LateUpdateEvent = null;
+        luaState.Dispose();
         luaState = null;
+    }
+
+    public void FixedUpdate()
+    {
+        if (luaState.LuaFixedUpdate(Time.fixedDeltaTime) != 0)
+        {
+            AddThrowException();
+        }
+        luaState.LuaPop(1);
     }
 
     public void Update()
@@ -64,7 +81,16 @@ public sealed class LuaManager : IUpdateManager
         luaState.CheckTop();
 #endif
     }
-
+    
+    public void LateUpdate()
+    {
+        if (luaState.LuaLateUpdate() != 0)
+        {
+            AddThrowException();
+        }
+        luaState.StepCollect();
+        luaState.LuaPop(1);
+    }
     
     //注册库函数到 lua 虚拟机中
     private void AddLibs()
@@ -78,9 +104,19 @@ public sealed class LuaManager : IUpdateManager
     //给 Lua 添加 Update 方法
     private void AddLuaUpdate()
     {
-        LuaTable table = luaState.GetTable("UpdateBeat");
+        LuaTable table = luaState.GetTable("FixedUpdateBeat");
+        if (table == null)throw new LuaException("Lua table UpdateBeat not exists");
+        FixedUpdateEvent = new LuaBeatEvent(table);
+        table.Dispose();
+        
+        table = luaState.GetTable("UpdateBeat");
         if (table == null)throw new LuaException("Lua table UpdateBeat not exists");
         UpdateEvent = new LuaBeatEvent(table);
+        table.Dispose();
+        
+        table = luaState.GetTable("LateUpdateBeat");
+        if (table == null)throw new LuaException("Lua table UpdateBeat not exists");
+        LateUpdateEvent = new LuaBeatEvent(table);
         table.Dispose();
         table = null;
     }
@@ -132,5 +168,4 @@ public sealed class LuaManager : IUpdateManager
     }
     
     #endregion
-    
 }

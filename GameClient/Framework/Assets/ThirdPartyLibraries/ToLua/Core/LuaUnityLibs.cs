@@ -25,6 +25,9 @@ using UnityEngine;
 
 namespace LuaInterface
 {
+    /// <summary>
+    /// Lua 中使用的基础库
+    /// </summary>
     public sealed class LuaUnityLibs
     {
         public static void OpenLibs(IntPtr L)

@@ -3,11 +3,15 @@ Main = {}
 
 
 function Main.Main()
-	print("<color=green>进入了 Lua</color>")
+	print(tolua)
+	
+	print("<color=green>Lua Already Started</color>")
 end
 
 function Main.OnApplicationQuit()
-	print("<color=red>退出了 Lua</color>")
+	
+	
+	print("<color=red>Lua Already Destroy</color>")
 end
 
 

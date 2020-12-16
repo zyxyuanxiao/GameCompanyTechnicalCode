@@ -24,6 +24,7 @@ using LuaInterface;
 
 namespace LuaInterface
 {    
+    //封装的 table,lua 中的 Update 循环方法使用
     public class LuaBeatEvent : IDisposable
     {
         protected LuaState luaState;

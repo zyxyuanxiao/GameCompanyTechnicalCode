@@ -21,18 +21,24 @@ public sealed class GameManager : BaseManager
         Instance = this;
         base.Awake();
     }
-    // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         //其他服务启动完毕之后,开始启动整个游戏的流程,需要流程管理者进行第一步游戏加载,启动一个全局协程
     }
 
-    // Update is called once per frame
+    protected override void FixedUpdate()
+    {
+        base.FixedUpdate();
+    }
     protected override void Update()
     {
-        // yield return OneFrame;
         base.Update();
+    }
+
+    protected override void LateUpdate()
+    {
+        base.LateUpdate();
     }
 
     protected override void OnDestroy()

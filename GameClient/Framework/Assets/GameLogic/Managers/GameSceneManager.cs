@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /// 场景的设计模式
 /// 1:GameManager场景为Root场景,其他场景都是附加在上上面的场景
 /// </summary>
-public partial class GameSceneManager : IUpdateManager
+public partial class GameSceneManager : IManager, IUpdate
 {
 
     public void Awake()

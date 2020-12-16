@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 
 namespace LuaInterface
 {
+    //查看当前有多少 lua 中使用 C# 的对象
     public class LuaSnapShot
     {
         private class CompareObject : IEqualityComparer<object>
