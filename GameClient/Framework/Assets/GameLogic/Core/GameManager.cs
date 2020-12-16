@@ -73,10 +73,8 @@ public sealed class GameManager : BaseManager
 
         if (Instance == null)
         {
-            go = new GameObject("GameManager")
-            {
-                hideFlags = HideFlags.HideAndDontSave
-            };
+            go = new GameObject("GameManager");
+            // go.hideFlags = HideFlags.HideAndDontSave;
             Instance = go.AddComponent<GameManager>();
         }
         //游戏开启后,有2个未显示在Hierarchy的游戏物体,一个是GameManager,一个是HTTP Update Delegator
