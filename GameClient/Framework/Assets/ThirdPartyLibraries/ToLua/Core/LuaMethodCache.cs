@@ -25,6 +25,7 @@ using System.Collections.Generic;
 
 namespace LuaInterface
 {
+    //对象方法缓存,warp 文件中,通过反射调用方法缓存起来.
     public static class LuaMethodCache
     {
         public static Dictionary<Type, Dictionary<string, List<MethodInfo>>> dict = new Dictionary<Type, Dictionary<string, List<MethodInfo>>>();

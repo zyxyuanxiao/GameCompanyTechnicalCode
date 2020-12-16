@@ -1,0 +1,4 @@
+cd xxx/Framework/tolua_runtime/src/luajit-2.1/
+make
+
+在苹果平台,luajit -b t.lua t.lua.bytes 这种方式暂时不能使用

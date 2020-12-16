@@ -25,7 +25,6 @@ SOFTWARE.
 using UnityEngine;
 using UnityEditor;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -33,25 +32,17 @@ using System.IO;
 using System.Diagnostics;
 using LuaInterface;
 
-using Object = UnityEngine.Object;
 using Debug = UnityEngine.Debug;
 using Debugger = LuaInterface.Debugger;
-using System.Threading;
 
-[InitializeOnLoad]
+[InitializeOnLoad]//自动初始化
 public static class ToLuaMenu
 {
     //不需要导出或者无法导出的类型
     public static List<Type> dropType = new List<Type>
     {
         typeof(ValueType),                                  //不需要
-#if UNITY_4_6 || UNITY_4_7
-        typeof(Motion),                                     //很多平台只是空类
-#endif
-
-#if UNITY_5_3_OR_NEWER
         typeof(UnityEngine.CustomYieldInstruction),
-#endif
         typeof(UnityEngine.YieldInstruction),               //无需导出的类      
         typeof(UnityEngine.WaitForEndOfFrame),              //内部支持
         typeof(UnityEngine.WaitForFixedUpdate),
@@ -123,22 +114,16 @@ public static class ToLuaMenu
             beCheck = false;
         }
     }
-
-    static string RemoveNameSpace(string name, string space)
-    {
-        if (space != null)
-        {
-            name = name.Remove(0, space.Length + 1);
-        }
-
-        return name;
-    }
-
+    
+    
+    /// <summary>
+    /// 将绑定的类,转成 wrap 类型的 cs 文件数据,以备之后使用
+    /// </summary>
     public class BindType
     {
         public string name;                 //类名称
-        public Type type;
-        public bool IsStatic;        
+        public Type type;                   //类型
+        public bool IsStatic;               //是否是静态
         public string wrapName = "";        //产生的wrap文件名字
         public string libName = "";         //注册到lua的名字
         public Type baseType = null;
@@ -150,13 +135,15 @@ public static class ToLuaMenu
         {
             if (typeof(System.MulticastDelegate).IsAssignableFrom(t))
             {
-                throw new NotSupportedException(string.Format("\nDon't export Delegate {0} as a class, register it in customDelegateList", LuaMisc.GetTypeName(t)));
+                string ex = string.Format("\nDon't export Delegate {0} as a class, register it in customDelegateList",
+                    LuaMisc.GetTypeName(t));
+                throw new NotSupportedException(ex);
             }            
 
-            //if (IsObsolete(t))
-            //{
-            //    throw new Exception(string.Format("\n{0} is obsolete, don't export it!", LuaMisc.GetTypeName(t)));
-            //}
+            if (IsObsolete(t))
+            {
+                throw new Exception(string.Format("\n{0} is obsolete, don't export it!", LuaMisc.GetTypeName(t)));
+            }
 
             type = t;                        
             nameSpace = ToLuaExport.GetNameSpace(t, out libName);
@@ -337,8 +324,66 @@ public static class ToLuaMenu
 
         return allTypes.ToArray();
     }
+    
+    
+    [MenuItem("ToLua/Generate All", false, 1000)]
+    static void GenLuaAll()
+    {
+        if (EditorApplication.isCompiling)
+        {
+            EditorUtility.DisplayDialog("警告", "请等待编辑器完成编译再执行此功能", "确定");
+            return;
+        }
 
-    [MenuItem("Lua/Gen Lua Wrap Files", false, 1)]
+        beAutoGen = true;
+        GenLuaDelegates();
+        AssetDatabase.Refresh();
+        GenerateClassWraps();
+        GenLuaBinder();
+        beAutoGen = false;
+        AssetDatabase.Refresh();
+    }
+
+    [MenuItem("ToLua/Clear wrap files", false, 1001)]
+    static void ClearLuaWraps()
+    {
+        string[] files = Directory.GetFiles(CustomSettings.saveDir, "*.cs", SearchOption.TopDirectoryOnly);
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            File.Delete(files[i]);
+        }
+
+        ToLuaExport.Clear();
+        List<DelegateType> list = new List<DelegateType>();
+        ToLuaExport.GenDelegates(list.ToArray());
+        ToLuaExport.Clear();
+
+        StringBuilder sb = new StringBuilder();
+        sb.AppendLineEx("using System;");
+        sb.AppendLineEx("using LuaInterface;");
+        sb.AppendLineEx();
+        sb.AppendLineEx("public static class LuaBinder");
+        sb.AppendLineEx("{");
+        sb.AppendLineEx("\tpublic static void Bind(LuaState L)");
+        sb.AppendLineEx("\t{");
+        sb.AppendLineEx("\t\tthrow new LuaException(\"Please generate LuaBinder files first!\");");
+        sb.AppendLineEx("\t}");
+        sb.AppendLineEx("}");
+
+        string file = CustomSettings.saveDir + "LuaBinder.cs";
+
+        using (StreamWriter textWriter = new StreamWriter(file, false, Encoding.UTF8))
+        {
+            textWriter.Write(sb.ToString());
+            textWriter.Flush();
+            textWriter.Close();
+        }
+
+        AssetDatabase.Refresh();
+    }
+    
+    [MenuItem("ToLua/Gen Lua Wrap Files", false, 1002)]
     public static void GenerateClassWraps()
     {
         if (!beAutoGen && EditorApplication.isCompiling)
@@ -452,7 +497,7 @@ public static class ToLuaMenu
         return set;
     }
 
-    [MenuItem("Lua/Gen Lua Delegates", false, 2)]
+    [MenuItem("ToLua/Gen Lua Delegates File", false, 1003)]
     static void GenLuaDelegates()
     {
         if (!beAutoGen && EditorApplication.isCompiling)
@@ -600,7 +645,7 @@ public static class ToLuaMenu
         return str;
     }
      
-    [MenuItem("Lua/Gen LuaBinder File", false, 4)]
+    [MenuItem("ToLua/Gen LuaBinder File", false, 1004)]
     static void GenLuaBinder()
     {
         if (!beAutoGen && EditorApplication.isCompiling)
@@ -774,11 +819,7 @@ public static class ToLuaMenu
         sb.AppendLineEx("\t\t}");
         sb.AppendLineEx("\t}");
     }
-
-    static string GetOS()
-    {
-        return LuaConst.osDir;
-    }
+    
 
     static string CreateStreamDir(string dir)
     {
@@ -792,439 +833,7 @@ public static class ToLuaMenu
         return dir;
     }
 
-    static void BuildLuaBundle(string subDir, string sourceDir)
-    {
-        string[] files = Directory.GetFiles(sourceDir + subDir, "*.bytes");
-        string bundleName = subDir == null ? "lua.unity3d" : "lua" + subDir.Replace('/', '_') + ".unity3d";
-        bundleName = bundleName.ToLower();
-
-#if UNITY_4_6 || UNITY_4_7
-        List<Object> list = new List<Object>();
-
-        for (int i = 0; i < files.Length; i++)
-        {
-            Object obj = AssetDatabase.LoadMainAssetAtPath(files[i]);
-            list.Add(obj);
-        }
-
-        BuildAssetBundleOptions options = BuildAssetBundleOptions.CollectDependencies | BuildAssetBundleOptions.CompleteAssets | BuildAssetBundleOptions.DeterministicAssetBundle;
-
-        if (files.Length > 0)
-        {
-            string output = string.Format("{0}/{1}/" + bundleName, Application.streamingAssetsPath, GetOS());
-            File.Delete(output);
-            BuildPipeline.BuildAssetBundle(null, list.ToArray(), output, options, EditorUserBuildSettings.activeBuildTarget);            
-        }
-#else
-        for (int i = 0; i < files.Length; i++)
-        {
-            AssetImporter importer = AssetImporter.GetAtPath(files[i]);
-
-            if (importer)
-            {
-                importer.assetBundleName = bundleName;
-                importer.assetBundleVariant = null;
-            }
-        }
-#endif
-    }
-
-    static void ClearAllLuaFiles()
-    {
-        string osPath = Application.streamingAssetsPath + "/" + GetOS();
-
-        if (Directory.Exists(osPath))
-        {
-            string[] files = Directory.GetFiles(osPath, "Lua*.unity3d");
-
-            for (int i = 0; i < files.Length; i++)
-            {
-                File.Delete(files[i]);
-            }
-        }
-
-        string path = osPath + "/Lua";
-
-        if (Directory.Exists(path))
-        {
-            Directory.Delete(path, true);
-        }
-
-        path = Application.streamingAssetsPath + "/Lua";
-
-        if (Directory.Exists(path))
-        {
-            Directory.Delete(path, true);
-        }
-
-        path = Application.dataPath + "/temp";
-
-        if (Directory.Exists(path))
-        {
-            Directory.Delete(path, true);
-        }
-
-        path = Application.dataPath + "/Resources/Lua";
-
-        if (Directory.Exists(path))
-        {
-            Directory.Delete(path, true);
-        }
-
-        path = Application.persistentDataPath + "/" + GetOS() + "/Lua";
-
-        if (Directory.Exists(path))
-        {
-            Directory.Delete(path, true);
-        }
-    }
-
-    [MenuItem("Lua/Gen LuaWrap + Binder", false, 4)]
-    static void GenLuaWrapBinder()
-    {
-        if (EditorApplication.isCompiling)
-        {
-            EditorUtility.DisplayDialog("警告", "请等待编辑器完成编译再执行此功能", "确定");
-            return;
-        }
-
-        beAutoGen = true;        
-        AssetDatabase.Refresh();
-        GenerateClassWraps();
-        GenLuaBinder();
-        beAutoGen = false;   
-    }
-
-    [MenuItem("Lua/Generate All", false, 5)]
-    static void GenLuaAll()
-    {
-        if (EditorApplication.isCompiling)
-        {
-            EditorUtility.DisplayDialog("警告", "请等待编辑器完成编译再执行此功能", "确定");
-            return;
-        }
-
-        beAutoGen = true;
-        GenLuaDelegates();
-        AssetDatabase.Refresh();
-        GenerateClassWraps();
-        GenLuaBinder();
-        beAutoGen = false;
-    }
-
-    [MenuItem("Lua/Clear wrap files", false, 6)]
-    static void ClearLuaWraps()
-    {
-        string[] files = Directory.GetFiles(CustomSettings.saveDir, "*.cs", SearchOption.TopDirectoryOnly);
-
-        for (int i = 0; i < files.Length; i++)
-        {
-            File.Delete(files[i]);
-        }
-
-        ToLuaExport.Clear();
-        List<DelegateType> list = new List<DelegateType>();
-        ToLuaExport.GenDelegates(list.ToArray());
-        ToLuaExport.Clear();
-
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLineEx("using System;");
-        sb.AppendLineEx("using LuaInterface;");
-        sb.AppendLineEx();
-        sb.AppendLineEx("public static class LuaBinder");
-        sb.AppendLineEx("{");
-        sb.AppendLineEx("\tpublic static void Bind(LuaState L)");
-        sb.AppendLineEx("\t{");
-        sb.AppendLineEx("\t\tthrow new LuaException(\"Please generate LuaBinder files first!\");");
-        sb.AppendLineEx("\t}");
-        sb.AppendLineEx("}");
-
-        string file = CustomSettings.saveDir + "LuaBinder.cs";
-
-        using (StreamWriter textWriter = new StreamWriter(file, false, Encoding.UTF8))
-        {
-            textWriter.Write(sb.ToString());
-            textWriter.Flush();
-            textWriter.Close();
-        }
-
-        AssetDatabase.Refresh();
-    }
-
-    static void CopyLuaBytesFiles(string sourceDir, string destDir, bool appendext = true, string searchPattern = "*.lua", SearchOption option = SearchOption.AllDirectories)
-    {
-        if (!Directory.Exists(sourceDir))
-        {
-            return;
-        }
-
-        string[] files = Directory.GetFiles(sourceDir, searchPattern, option);
-        int len = sourceDir.Length;
-
-        if (sourceDir[len - 1] == '/' || sourceDir[len - 1] == '\\')
-        {
-            --len;
-        }         
-
-        for (int i = 0; i < files.Length; i++)
-        {
-            string str = files[i].Remove(0, len);
-            string dest = destDir + "/" + str;
-            if (appendext) dest += ".bytes";
-            string dir = Path.GetDirectoryName(dest);
-            Directory.CreateDirectory(dir);
-            File.Copy(files[i], dest, true);
-        }
-    }
-
-
-    [MenuItem("Lua/Copy Lua  files to Resources", false, 51)]
-    public static void CopyLuaFilesToRes()
-    {
-        ClearAllLuaFiles();
-        string destDir = Application.dataPath + "/Resources" + "/Lua";
-        CopyLuaBytesFiles(LuaConst.luaDir, destDir);
-        CopyLuaBytesFiles(LuaConst.toluaDir, destDir);
-        AssetDatabase.Refresh();
-        Debug.Log("Copy lua files over");
-    }
-
-    [MenuItem("Lua/Copy Lua  files to Persistent", false, 52)]
-    public static void CopyLuaFilesToPersistent()
-    {
-        ClearAllLuaFiles();
-        string destDir = Application.persistentDataPath + "/" + GetOS() + "/Lua";
-        CopyLuaBytesFiles(LuaConst.luaDir, destDir, false);
-        CopyLuaBytesFiles(LuaConst.toluaDir, destDir, false);
-        AssetDatabase.Refresh();
-        Debug.Log("Copy lua files over");
-    }
-
-    static void GetAllDirs(string dir, List<string> list)
-    {
-        string[] dirs = Directory.GetDirectories(dir);
-        list.AddRange(dirs);
-
-        for (int i = 0; i < dirs.Length; i++)
-        {
-            GetAllDirs(dirs[i], list);
-        }
-    }
-
-    static void CopyDirectory(string source, string dest, string searchPattern = "*.lua", SearchOption option = SearchOption.AllDirectories)
-    {                
-        string[] files = Directory.GetFiles(source, searchPattern, option);
-
-        for (int i = 0; i < files.Length; i++)
-        {
-            string str = files[i].Remove(0, source.Length);
-            string path = dest + "/" + str;
-            string dir = Path.GetDirectoryName(path);
-            Directory.CreateDirectory(dir);
-            File.Copy(files[i], path, true);
-        }        
-    }
-
-    static void CopyBuildBat(string path, string tempDir)
-    {
-		if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows64)
-		{
-			File.Copy(path + "/Luajit64/Build.bat", tempDir + "/Build.bat", true);			
-		}
-		else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows)
-        {
-            if (IntPtr.Size == 4)
-            {
-                File.Copy(path + "/Luajit/Build.bat", tempDir + "/Build.bat", true);
-            }
-            else if (IntPtr.Size == 8)
-            {
-                File.Copy(path + "/Luajit64/Build.bat", tempDir + "/Build.bat", true);
-            }
-        }
-#if UNITY_5_3_OR_NEWER        
-        else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS)
-#else
-        else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone)
-#endif        
-        {
-            //Debug.Log("iOS默认用64位，32位自行考虑");
-            File.Copy(path + "/Luajit64/Build.bat", tempDir + "/Build.bat", true);
-        }
-        else
-        {
-            File.Copy(path + "/Luajit/Build.bat", tempDir + "/Build.bat", true);
-        }
-
-    }
-
-    [MenuItem("Lua/Build Lua files to Resources (PC)", false, 53)]
-    public static void BuildLuaToResources()
-    {
-        ClearAllLuaFiles();
-        string tempDir = CreateStreamDir("Lua");
-        string destDir = Application.dataPath + "/Resources" + "/Lua";        
-
-        string path = Application.dataPath.Replace('\\', '/');
-        path = path.Substring(0, path.LastIndexOf('/'));
-        CopyBuildBat(path, tempDir);
-        CopyLuaBytesFiles(LuaConst.luaDir, tempDir, false);
-        Process proc = Process.Start(tempDir + "/Build.bat");
-        proc.WaitForExit();
-        CopyLuaBytesFiles(tempDir + "/Out/", destDir, false, "*.lua.bytes");
-        CopyLuaBytesFiles(LuaConst.toluaDir, destDir);
-        
-        Directory.Delete(tempDir, true);        
-        AssetDatabase.Refresh();
-    }
-
-    [MenuItem("Lua/Build Lua files to Persistent (PC)", false, 54)]
-    public static void BuildLuaToPersistent()
-    {
-        ClearAllLuaFiles();
-        string tempDir = CreateStreamDir("Lua");        
-        string destDir = Application.persistentDataPath + "/" + GetOS() + "/Lua/";
-
-        string path = Application.dataPath.Replace('\\', '/');
-        path = path.Substring(0, path.LastIndexOf('/'));        
-        CopyBuildBat(path, tempDir);
-        CopyLuaBytesFiles(LuaConst.luaDir, tempDir, false);
-        Process proc = Process.Start(tempDir + "/Build.bat");
-        proc.WaitForExit();        
-        CopyLuaBytesFiles(LuaConst.toluaDir, destDir, false);
-
-        path = tempDir + "/Out/";
-        string[] files = Directory.GetFiles(path, "*.lua.bytes");
-        int len = path.Length;
-
-        for (int i = 0; i < files.Length; i++)
-        {
-            path = files[i].Remove(0, len);
-            path = path.Substring(0, path.Length - 6);
-            path = destDir + path;
-
-            File.Copy(files[i], path, true);
-        }
-
-        Directory.Delete(tempDir, true);
-        AssetDatabase.Refresh();
-    }
-
-    [MenuItem("Lua/Build bundle files not jit", false, 55)]
-    public static void BuildNotJitBundles()
-    {
-        ClearAllLuaFiles();
-        CreateStreamDir(GetOS());
-
-#if UNITY_4_6 || UNITY_4_7
-        string tempDir = CreateStreamDir("Lua");
-#else
-        string tempDir = Application.dataPath + "/temp/Lua";
-
-        if (!File.Exists(tempDir))
-        {
-            Directory.CreateDirectory(tempDir);
-        }        
-#endif
-        CopyLuaBytesFiles(LuaConst.luaDir, tempDir);
-        CopyLuaBytesFiles(LuaConst.toluaDir, tempDir);
-
-        AssetDatabase.Refresh();
-        List<string> dirs = new List<string>();
-        GetAllDirs(tempDir, dirs);
-
-#if UNITY_5 || UNITY_5_3_OR_NEWER
-		for (int i = 0; i < dirs.Count; i++)
-        {
-            string str = dirs[i].Remove(0, tempDir.Length);
-            BuildLuaBundle(str.Replace('\\', '/'), "Assets/temp/Lua");
-        }
-
-        BuildLuaBundle(null, "Assets/temp/Lua");
-
-        AssetDatabase.SaveAssets();        
-        string output = string.Format("{0}/{1}", Application.streamingAssetsPath, GetOS());        
-        BuildPipeline.BuildAssetBundles(output, BuildAssetBundleOptions.DeterministicAssetBundle, EditorUserBuildSettings.activeBuildTarget);
-
-        //Directory.Delete(Application.dataPath + "/temp/", true);
-#else
-        for (int i = 0; i < dirs.Count; i++)
-        {
-            string str = dirs[i].Remove(0, tempDir.Length);
-            BuildLuaBundle(str.Replace('\\', '/'), "Assets/StreamingAssets/Lua");
-        }
-
-        BuildLuaBundle(null, "Assets/StreamingAssets/Lua");
-        Directory.Delete(Application.streamingAssetsPath + "/Lua/", true);
-#endif
-        AssetDatabase.Refresh();
-    }
-
-    [MenuItem("Lua/Build Luajit bundle files   (PC)", false, 56)]
-    public static void BuildLuaBundles()
-    {
-        ClearAllLuaFiles();                
-        CreateStreamDir(GetOS());
-
-#if UNITY_4_6 || UNITY_4_7
-        string tempDir = CreateStreamDir("Lua");
-#else
-        string tempDir = Application.dataPath + "/temp/Lua";
-
-        if (!File.Exists(tempDir))
-        {
-            Directory.CreateDirectory(tempDir);
-        }
-#endif
-
-        string path = Application.dataPath.Replace('\\', '/');
-        path = path.Substring(0, path.LastIndexOf('/'));        
-        CopyBuildBat(path, tempDir);
-        CopyLuaBytesFiles(LuaConst.luaDir, tempDir, false);
-        Process proc = Process.Start(tempDir + "/Build.bat");
-        proc.WaitForExit();
-        CopyLuaBytesFiles(LuaConst.toluaDir, tempDir + "/Out");
-
-        AssetDatabase.Refresh();
-
-        string sourceDir = tempDir + "/Out";
-        List<string> dirs = new List<string>();        
-        GetAllDirs(sourceDir, dirs);
-
-#if UNITY_5 || UNITY_5_3_OR_NEWER
-		for (int i = 0; i < dirs.Count; i++)
-        {
-            string str = dirs[i].Remove(0, sourceDir.Length);
-            BuildLuaBundle(str.Replace('\\', '/'), "Assets/temp/Lua/Out");
-        }
-
-        BuildLuaBundle(null, "Assets/temp/Lua/Out");
-
-        AssetDatabase.Refresh();
-        string output = string.Format("{0}/{1}", Application.streamingAssetsPath, GetOS());
-        BuildPipeline.BuildAssetBundles(output, BuildAssetBundleOptions.DeterministicAssetBundle, EditorUserBuildSettings.activeBuildTarget);
-        Directory.Delete(Application.dataPath + "/temp/", true);
-#else
-        for (int i = 0; i < dirs.Count; i++)
-        {
-            string str = dirs[i].Remove(0, sourceDir.Length);
-            BuildLuaBundle(str.Replace('\\', '/'), "Assets/StreamingAssets/Lua/Out");
-        }
-
-        BuildLuaBundle(null, "Assets/StreamingAssets/Lua/Out/");
-        Directory.Delete(tempDir, true);
-#endif
-        AssetDatabase.Refresh();
-    }
-
-    [MenuItem("Lua/Clear all Lua files", false, 57)]
-    public static void ClearLuaFiles()
-    {
-        ClearAllLuaFiles();
-    }
-
-
-    [MenuItem("Lua/Gen BaseType Wrap", false, 101)]
+    [MenuItem("ToLua/Gen BaseType Wrap", false, 1005)]
     static void GenBaseTypeLuaWrap()
     {
         if (!beAutoGen && EditorApplication.isCompiling)
@@ -1292,7 +901,7 @@ public static class ToLuaMenu
         }
     }
     
-    [MenuItem("Lua/Clear BaseType Wrap", false, 102)]
+    [MenuItem("ToLua/Clear BaseType Wrap", false, 1006)]
     static void ClearBaseTypeLuaWrap()
     {
         CreateDefaultWrapFile(CustomSettings.toluaBaseType, "System_ObjectWrap");
@@ -1311,146 +920,211 @@ public static class ToLuaMenu
         Debug.Log("Clear base type wrap files over");
         AssetDatabase.Refresh();
     }
-
-    [MenuItem("Lua/Enable Lua Injection &e", false, 102)]
-    static void EnableLuaInjection()
+    
+    
+    
+    
+    /**************下面处理 Lua 文件**********************/
+    
+    /// <summary>
+    /// 清除所有 Lua 代码
+    /// </summary>
+    [MenuItem("ToLua/Clear all Lua files", false, 2000)]
+    static void ClearAllLuaFiles()
     {
-        bool EnableSymbols = false;
-        if (UpdateMonoCecil(ref EnableSymbols) != -1)
+        string osPath = Application.streamingAssetsPath + "/" + LuaConst.osDir;
+
+        if (Directory.Exists(osPath))
         {
-            BuildTargetGroup curBuildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-            string existSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(curBuildTargetGroup);
-            if (!existSymbols.Contains("ENABLE_LUA_INJECTION"))
+            string[] files = Directory.GetFiles(osPath, "Lua*.unity3d");
+
+            for (int i = 0; i < files.Length; i++)
             {
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(curBuildTargetGroup, existSymbols + ";ENABLE_LUA_INJECTION");
+                File.Delete(files[i]);
             }
-
-            AssetDatabase.Refresh();
         }
-    }
 
-#if ENABLE_LUA_INJECTION
-    [MenuItem("Lua/Injection Remove &r", false, 5)]
-#endif
-    static void RemoveInjection()
-    {
-        if (Application.isPlaying)
+        string path = osPath + "/Lua";
+
+        if (Directory.Exists(path))
         {
-            EditorUtility.DisplayDialog("警告", "游戏运行过程中无法操作", "确定");
+            Directory.Delete(path, true);
+        }
+
+        path = Application.streamingAssetsPath + "/Lua";
+
+        if (Directory.Exists(path))
+        {
+            Directory.Delete(path, true);
+        }
+
+        path = Application.dataPath + "/temp";
+
+        if (Directory.Exists(path))
+        {
+            Directory.Delete(path, true);
+        }
+
+        path = Application.dataPath + "/Resources/Lua";
+
+        if (Directory.Exists(path))
+        {
+            Directory.Delete(path, true);
+        }
+
+        path = Application.persistentDataPath + "/" + LuaConst.osDir + "/Lua";
+
+        if (Directory.Exists(path))
+        {
+            Directory.Delete(path, true);
+        }
+        AssetDatabase.Refresh();
+    }
+    
+    static void CopyLuaBytesFiles(string sourceDir, string destDir, bool appendext = true, string searchPattern = "*.lua", SearchOption option = SearchOption.AllDirectories)
+    {
+        if (!Directory.Exists(sourceDir))
+        {
             return;
         }
 
-        BuildTargetGroup curBuildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-        string existSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(curBuildTargetGroup);
-        PlayerSettings.SetScriptingDefineSymbolsForGroup(curBuildTargetGroup, existSymbols.Replace("ENABLE_LUA_INJECTION", ""));
-        Debug.Log("Lua Injection Removed!");
+        string[] files = Directory.GetFiles(sourceDir, searchPattern, option);
+        int len = sourceDir.Length;
+
+        if (sourceDir[len - 1] == '/' || sourceDir[len - 1] == '\\')
+        {
+            --len;
+        }         
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            string str = files[i].Remove(0, len);
+            string dest = destDir + "/" + str;
+            if (appendext) dest += ".bytes";
+            string dir = Path.GetDirectoryName(dest);
+            Directory.CreateDirectory(dir);
+            File.Copy(files[i], dest, true);
+        }
     }
 
-    public static int UpdateMonoCecil(ref bool EnableSymbols)
+    [MenuItem("ToLua/Copy Lua  files to Resources", false, 2001)]
+    public static void CopyLuaFilesToRes()
     {
-        string appFileName = Environment.GetCommandLineArgs()[0];
-        string appPath = Path.GetDirectoryName(appFileName);
-        string directory = appPath + "/Data/Managed/";
-        if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.OSXEditor)
-        {
-            directory = appPath.Substring(0, appPath.IndexOf("MacOS")) + "Managed/";
-        }
-        string suitedMonoCecilPath = directory +
-#if UNITY_2017_1_OR_NEWER
-            "Unity.Cecil.dll";
-#else
-            "Mono.Cecil.dll";
-#endif
-        string suitedMonoCecilMdbPath = directory +
-#if UNITY_2017_1_OR_NEWER
-            "Unity.Cecil.Mdb.dll";
-#else
-            "Mono.Cecil.Mdb.dll";
-#endif
-        string suitedMonoCecilPdbPath = directory +
-#if UNITY_2017_1_OR_NEWER
-            "Unity.Cecil.Pdb.dll";
-#else
-            "Mono.Cecil.Pdb.dll";
-#endif
-        string suitedMonoCecilToolPath = directory + "Unity.CecilTools.dll";
-
-        if (!File.Exists(suitedMonoCecilPath)
-#if UNITY_5_1 || UNITY_5_2 || UNITY_5_3 || UNITY_5_3_OR_NEWER
-            && !File.Exists(suitedMonoCecilMdbPath)
-            && !File.Exists(suitedMonoCecilPdbPath)
-#endif
-        )
-        {
-            EnableSymbols = false;
-            Debug.Log("Haven't found Mono.Cecil.dll!Symbols Will Be Disabled");
-            return -1;
-        }
-
-        bool bInjectionToolUpdated = false;
-        string injectionToolPath = CustomSettings.injectionFilesPath + "Editor/";
-        string existMonoCecilPath = injectionToolPath + Path.GetFileName(suitedMonoCecilPath);
-        string existMonoCecilPdbPath = injectionToolPath + Path.GetFileName(suitedMonoCecilPdbPath);
-        string existMonoCecilMdbPath = injectionToolPath + Path.GetFileName(suitedMonoCecilMdbPath);
-        string existMonoCecilToolPath = injectionToolPath + Path.GetFileName(suitedMonoCecilToolPath);
-
-        try
-        {
-            bInjectionToolUpdated = TryUpdate(suitedMonoCecilPath, existMonoCecilPath) ? true : bInjectionToolUpdated;
-#if UNITY_5_1 || UNITY_5_2 || UNITY_5_3 || UNITY_5_3_OR_NEWER
-            bInjectionToolUpdated = TryUpdate(suitedMonoCecilPdbPath, existMonoCecilPdbPath) ? true : bInjectionToolUpdated;
-            bInjectionToolUpdated = TryUpdate(suitedMonoCecilMdbPath, existMonoCecilMdbPath) ? true : bInjectionToolUpdated;
-#endif
-            TryUpdate(suitedMonoCecilToolPath, existMonoCecilToolPath);
-        }
-        catch (Exception e)
-        {
-            Debug.LogError(e.ToString());
-            return -1;
-        }
-        EnableSymbols = true;
-
-        return bInjectionToolUpdated ? 1 : 0;
+        ClearAllLuaFiles();
+        string destDir = Application.dataPath + "/Resources" + "/Lua";
+        CopyLuaBytesFiles(LuaConst.luaDir, destDir);
+        CopyLuaBytesFiles(LuaConst.toluaDir, destDir);
+        AssetDatabase.Refresh();
+        Debug.Log("Copy lua files over");
     }
 
-    static bool TryUpdate(string srcPath, string destPath)
+    [MenuItem("ToLua/Copy Lua  files to Persistent", false, 2002)]
+    public static void CopyLuaFilesToPersistent()
     {
-        if (GetFileContentMD5(srcPath) != GetFileContentMD5(destPath))
-        {
-            File.Copy(srcPath, destPath, true);
-            return true;
-        }
-
-        return false;
+        ClearAllLuaFiles();
+        string destDir = Application.persistentDataPath + "/" + LuaConst.osDir + "/Lua";
+        CopyLuaBytesFiles(LuaConst.luaDir, destDir, false);
+        CopyLuaBytesFiles(LuaConst.toluaDir, destDir, false);
+        AssetDatabase.Refresh();
+        Debug.Log("Copy lua files over");
     }
 
-    static string GetFileContentMD5(string file)
+    static void CopyBuildBat(string path, string tempDir)
     {
-        if (!File.Exists(file))
+		if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows64)
+		{
+			File.Copy(path + "/Luajit64/Build.bat", tempDir + "/Build.bat", true);			
+		}
+		else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.StandaloneWindows)
         {
-            return string.Empty;
+            if (IntPtr.Size == 4)
+            {
+                File.Copy(path + "/Luajit/Build.bat", tempDir + "/Build.bat", true);
+            }
+            else if (IntPtr.Size == 8)
+            {
+                File.Copy(path + "/Luajit64/Build.bat", tempDir + "/Build.bat", true);
+            }
+        }
+#if UNITY_5_3_OR_NEWER        
+        else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS)
+#else
+        else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iPhone)
+#endif        
+        {
+            //Debug.Log("iOS默认用64位，32位自行考虑");
+            File.Copy(path + "/Luajit64/Build.bat", tempDir + "/Build.bat", true);
+        }
+        else
+        {
+            File.Copy(path + "/Luajit/Build.bat", tempDir + "/Build.bat", true);
         }
 
-        FileStream fs = new FileStream(file, FileMode.Open);
-        System.Security.Cryptography.MD5 md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-        byte[] retVal = md5.ComputeHash(fs);
-        fs.Close();
-
-        StringBuilder sb = StringBuilderCache.Acquire();
-        for (int i = 0; i < retVal.Length; i++)
-        {
-            sb.Append(retVal[i].ToString("x2"));
-        }
-        return StringBuilderCache.GetStringAndRelease(sb);
     }
 
-    #region 生成 Lua 的 API 提示
+    [MenuItem("ToLua/Build Lua files to Resources (PC)", false, 2003)]
+    public static void BuildLuaToResources()
+    {
+        ClearAllLuaFiles();
+        string tempDir = CreateStreamDir("Lua");
+        string destDir = Application.dataPath + "/Resources" + "/Lua";        
+
+        string path = Application.dataPath.Replace('\\', '/');
+        path = path.Substring(0, path.LastIndexOf('/'));
+        CopyBuildBat(path, tempDir);
+        CopyLuaBytesFiles(LuaConst.luaDir, tempDir, false);
+        Process proc = Process.Start(tempDir + "/Build.bat");
+        proc.WaitForExit();
+        CopyLuaBytesFiles(tempDir + "/Out/", destDir, false, "*.lua.bytes");
+        CopyLuaBytesFiles(LuaConst.toluaDir, destDir);
+        
+        Directory.Delete(tempDir, true);        
+        AssetDatabase.Refresh();
+    }
+
+    [MenuItem("ToLua/Build Lua files to Persistent (PC)", false, 2004)]
+    public static void BuildLuaToPersistent()
+    {
+        ClearAllLuaFiles();
+        string tempDir = CreateStreamDir("Lua");        
+        string destDir = Application.persistentDataPath + "/" + LuaConst.osDir + "/Lua/";
+
+        string path = Application.dataPath.Replace('\\', '/');
+        path = path.Substring(0, path.LastIndexOf('/'));        
+        CopyBuildBat(path, tempDir);
+        CopyLuaBytesFiles(LuaConst.luaDir, tempDir, false);
+        Process proc = Process.Start(tempDir + "/Build.bat");
+        proc.WaitForExit();        
+        CopyLuaBytesFiles(LuaConst.toluaDir, destDir, false);
+
+        path = tempDir + "/Out/";
+        string[] files = Directory.GetFiles(path, "*.lua.bytes");
+        int len = path.Length;
+
+        for (int i = 0; i < files.Length; i++)
+        {
+            path = files[i].Remove(0, len);
+            path = path.Substring(0, path.Length - 6);
+            path = destDir + path;
+
+            File.Copy(files[i], path, true);
+        }
+
+        Directory.Delete(tempDir, true);
+        AssetDatabase.Refresh();
+    }
+
+
+
+
+    
+    #region 生成 Lua 的 API 提示 ; EmmyLua 插件
     
     /// <summary>
     /// 将生成的文件夹压缩成 zip 文件,命名随意
     /// 在 rider 里面配置 EmmyLua 的 Lua additional sources root
     /// </summary>
-    [MenuItem("Lua/EmmyLua API提示,联想", false, 103)]
+    [MenuItem("ToLua/EmmyLua API提示,联想", false, 2006)]
     static void GenEmmyLuaApi()
     {
         string path = Application.dataPath + "/GameLogic/Lua/EmmyLuaAPI/CSharpAPI/";
@@ -1642,6 +1316,5 @@ public static class ToLuaMenu
     }
 
     #endregion
-    
     
 }

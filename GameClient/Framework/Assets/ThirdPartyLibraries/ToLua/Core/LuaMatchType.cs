@@ -25,6 +25,7 @@ using System.Collections;
 
 namespace LuaInterface
 {
+    //检查类型使用的
     public class LuaMatchType
     {
         public bool CheckNumber(IntPtr L, int pos)

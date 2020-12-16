@@ -10,6 +10,8 @@ using UnityEngine.SceneManagement;
 public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
 {
     private LuaState luaState;
+
+    private LuaResLoader luaResLoader;
     
     private LuaBeatEvent UpdateEvent { get; set; }
     
@@ -19,7 +21,7 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
     
     public void Awake()
     {
-        
+        luaResLoader = new LuaResLoader();
     }
 
     public void Start()
@@ -126,9 +128,7 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
     {
         luaState.DoFile("Main.lua");
         LuaFunction mainLuaFunction = luaState.GetFunction("Main.Main");
-        mainLuaFunction.BeginPCall();
-        mainLuaFunction.PCall();
-        mainLuaFunction.EndPCall();
+        mainLuaFunction.Call();
         mainLuaFunction.Dispose();
         mainLuaFunction = null;
     }

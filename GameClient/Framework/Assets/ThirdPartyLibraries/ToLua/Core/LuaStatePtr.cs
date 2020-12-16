@@ -6,6 +6,9 @@ using System.Text;
 
 namespace LuaInterface
 {
+    //LuaState 的父类,记录 Lua 中的 lua_State 在 C#中的指针
+    //jit
+    //一些 Lua 基本方法的封装
     public class LuaStatePtr
     {
         protected IntPtr L;

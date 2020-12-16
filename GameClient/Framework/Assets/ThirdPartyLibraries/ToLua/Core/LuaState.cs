@@ -203,28 +203,25 @@ namespace LuaInterface
         {
             InitPackagePath();
 
-            if (!LuaFileUtils.Instance.beZip)
-            {
 #if UNITY_EDITOR
-                if (!Directory.Exists(LuaConst.luaDir))
-                {
-                    string msg = string.Format("luaDir path not exists: {0}, configer it in LuaConst.cs", LuaConst.luaDir);
-                    throw new LuaException(msg);
-                }
+            if (!Directory.Exists(LuaConst.luaDir))
+            {
+                string msg = string.Format("luaDir path not exists: {0}, configer it in LuaConst.cs", LuaConst.luaDir);
+                throw new LuaException(msg);
+            }
 
-                if (!Directory.Exists(LuaConst.toluaDir))
-                {
-                    string msg = string.Format("toluaDir path not exists: {0}, configer it in LuaConst.cs", LuaConst.toluaDir);
-                    throw new LuaException(msg);
-                }
-                //读取开发时的本地 Lua 文件
-                AddSearchPath(LuaConst.toluaDir);
-                AddSearchPath(LuaConst.luaDir);
+            if (!Directory.Exists(LuaConst.toluaDir))
+            {
+                string msg = string.Format("toluaDir path not exists: {0}, configer it in LuaConst.cs", LuaConst.toluaDir);
+                throw new LuaException(msg);
+            }
+            //读取开发时的本地 Lua 文件
+            AddSearchPath(LuaConst.toluaDir);
+            AddSearchPath(LuaConst.luaDir);
 #endif
-                if (LuaFileUtils.Instance.GetType() == typeof(LuaFileUtils))
-                {
-                    AddSearchPath(LuaConst.luaResDir);//读取在发布平台上的 App 空间内的 Lua 文件
-                }
+            if (LuaFileUtils.Instance.GetType() == typeof(LuaFileUtils))
+            {
+                AddSearchPath(LuaConst.luaResDir);//读取在发布平台上的 App 空间内的 Lua 文件
             }
         }
 
@@ -451,7 +448,7 @@ namespace LuaInterface
             if (metaMap.TryGetValue(t, out reference))
             {
                 LuaDLL.tolua_beginclass(L, name, baseMetaRef, reference);
-                RegFunction("__gc", Collect);
+                RegFunction("__gc", Collect);//把这个类的 GC 方法设定为 Collect
             }
             else
             {

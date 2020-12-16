@@ -5,6 +5,30 @@ DelegateFactory={ }
 ---@return void
 function DelegateFactory.Init() end
 ---@public
+---@return void
+function DelegateFactory.Register() end
+---@public
+---@param t Type
+---@param func LuaFunction
+---@return Delegate
+function DelegateFactory.CreateDelegate(t, func) end
+---@public
+---@param t Type
+---@param func LuaFunction
+---@param self LuaTable
+---@return Delegate
+function DelegateFactory.CreateDelegate(t, func, self) end
+---@public
+---@param obj Delegate
+---@param func LuaFunction
+---@return Delegate
+function DelegateFactory.RemoveDelegate(obj, func) end
+---@public
+---@param obj Delegate
+---@param dg Delegate
+---@return Delegate
+function DelegateFactory.RemoveDelegate(obj, dg) end
+---@public
 ---@param func LuaFunction
 ---@param self LuaTable
 ---@param flag boolean

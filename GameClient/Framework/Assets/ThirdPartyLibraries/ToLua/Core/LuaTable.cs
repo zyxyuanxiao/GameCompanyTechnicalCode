@@ -25,6 +25,9 @@ using System.Collections.Generic;
 
 namespace LuaInterface
 {
+    /// <summary>
+    /// lua 中的 table 在 C#中封装的操作.
+    /// </summary>
     public class LuaTable : LuaBaseRef
     {        
         public LuaTable(int reference, LuaState state)
@@ -32,7 +35,8 @@ namespace LuaInterface
             this.reference = reference;
             this.luaState = state;            
         }
-
+        
+        //table 中的 hash 表
         public object this[string key]
         {
             get
@@ -74,7 +78,8 @@ namespace LuaInterface
                 }
             }
         }
-
+        
+        //table 中的 数组
         public object this[int key]
         {
             get

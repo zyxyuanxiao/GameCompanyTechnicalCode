@@ -26,12 +26,11 @@ using LuaInterface;
 using System.IO;
 using System.Text;
 
-public class LuaResLoader : LuaFileUtils
+public sealed class LuaResLoader : LuaFileUtils
 {
     public LuaResLoader()
     {
         instance = this;
-        beZip = false;
     }
 
     public override byte[] ReadFile(string fileName)
@@ -131,11 +130,7 @@ public class LuaResLoader : LuaFileUtils
 
         if (File.Exists(path))
         {
-#if !UNITY_WEBPLAYER
             return File.ReadAllBytes(path);
-#else
-            throw new LuaException("can't run in web platform, please switch to other platform");
-#endif
         }
 
         return null;

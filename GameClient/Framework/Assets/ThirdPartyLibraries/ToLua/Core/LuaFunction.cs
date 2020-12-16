@@ -25,12 +25,15 @@ using UnityEngine;
 
 namespace LuaInterface
 {
+    /// <summary>
+    /// lua 中使用方法在C#中的映射
+    /// </summary>
     public class LuaFunction : LuaBaseRef
     {
-        protected struct FuncData
+        protected struct FuncData//辅助记录方法在栈上的位置
         {
             public int oldTop;
-            public int stackPos;
+            public int stackPos;//在 lua_State 栈上的位置,这个是在运行期间动态变化的
 
             public FuncData(int top, int stack)
             {
@@ -65,7 +68,12 @@ namespace LuaInterface
         {
             return DelegateTraits<T>.Create(this) as T;
         }
-
+        
+        /// <summary>
+        /// 调用方法之前,将辅助信息记录在 本方法的stack上面,然后从 lua_State 栈中获取方法的在栈上的位置
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="LuaException"></exception>
         public virtual int BeginPCall()
         {
             if (luaState == null)
@@ -79,7 +87,11 @@ namespace LuaInterface
             argCount = 0;
             return oldTop;
         }
-
+        
+        /// <summary>
+        /// 调用PCall执行方法,然后将本方法的栈位置+1
+        /// </summary>
+        /// <exception cref="Exception"></exception>
         public void PCall()
         {
 #if UNITY_EDITOR
@@ -101,7 +113,10 @@ namespace LuaInterface
                 throw e;
             }
         }
-
+        
+        /// <summary>
+        /// 结束调用
+        /// </summary>
         public void EndPCall()
         {
             if (oldTop != -1)
@@ -113,14 +128,16 @@ namespace LuaInterface
                 stackPos = data.stackPos;
             }
         }
-
+        
+        /************下面的方法都是对上面方法的简单封装,传入数据等******************/
+        
         public void Call()
         {
             BeginPCall();
             PCall();
             EndPCall();
         }
-
+        
         public void Call<T1>(T1 arg1)
         {
             BeginPCall();

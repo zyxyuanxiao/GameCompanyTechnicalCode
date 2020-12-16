@@ -49,9 +49,7 @@ namespace LuaInterface
                 instance = value;
             }
         }
-
-        //beZip = false 在search path 中查找读取lua文件。否则从外部设置过来bundel文件中读取lua文件
-        public bool beZip = false;
+        
         protected List<string> searchPaths = new List<string>();
         protected Dictionary<string, AssetBundle> zipMap = new Dictionary<string, AssetBundle>();
 
@@ -161,28 +159,17 @@ namespace LuaInterface
         //读取lua 文件为二进制
         public virtual byte[] ReadFile(string fileName)
         {
-            if (!beZip)
-            {
-                string path = FindFile(fileName);
-                byte[] str = null;
+            string path = FindFile(fileName);
+            byte[] str = null;
 
-                if (!string.IsNullOrEmpty(path) && File.Exists(path))
-                {
-#if !UNITY_WEBPLAYER
-                    str = File.ReadAllBytes(path);
-#else
-                    throw new LuaException("can't run in web platform, please switch to other platform");
-#endif
-                }
-
-                return str;
-            }
-            else
+            if (!string.IsNullOrEmpty(path) && File.Exists(path))
             {
-                return ReadZipFile(fileName);
+                str = File.ReadAllBytes(path);
             }
+
+            return str;
         }
-        
+
         //
         public virtual string FindFileError(string fileName)
         {
@@ -207,74 +194,8 @@ namespace LuaInterface
 
                 sb = sb.Replace("?", fileName);
 
-                if (beZip)
-                {
-                    int pos = fileName.LastIndexOf('/');
-
-                    if (pos > 0)
-                    {
-                        int tmp = pos + 1;
-                        sb.Append("\n\tno file '").Append(fileName, tmp, fileName.Length - tmp).Append(".lua' in ").Append("lua_");
-                        tmp = sb.Length;
-                        sb.Append(fileName, 0, pos).Replace('/', '_', tmp, pos).Append(".unity3d");
-                    }
-                    else
-                    {
-                        sb.Append("\n\tno file '").Append(fileName).Append(".lua' in ").Append("lua.unity3d");
-                    }
-                }
-
                 return sb.ToString();
             }
-        }
-        
-        //读取 ab 包里面的lua 文件为二进制
-        byte[] ReadZipFile(string fileName)
-        {
-            AssetBundle zipFile = null;
-            byte[] buffer = null;
-            string zipName = null;
-
-            using (CString.Block())
-            {
-                CString sb = CString.Alloc(256);
-                sb.Append("lua");
-                int pos = fileName.LastIndexOf('/');
-
-                if (pos > 0)
-                {
-                    sb.Append("_");
-                    sb.Append(fileName, 0, pos).ToLower().Replace('/', '_');
-                    fileName = fileName.Substring(pos + 1);
-                }
-
-                if (!fileName.EndsWith(".lua"))
-                {
-                    fileName += ".lua";
-                }
-
-#if UNITY_5 || UNITY_5_3_OR_NEWER
-                fileName += ".bytes";
-#endif
-                zipName = sb.ToString();
-                zipMap.TryGetValue(zipName, out zipFile);
-            }
-
-            if (zipFile != null)
-            {
-#if UNITY_4_6 || UNITY_4_7
-                TextAsset luaCode = zipFile.Load(fileName, typeof(TextAsset)) as TextAsset;
-#else
-                TextAsset luaCode = zipFile.LoadAsset<TextAsset>(fileName);
-#endif
-                if (luaCode != null)
-                {
-                    buffer = luaCode.bytes;
-                    Resources.UnloadAsset(luaCode);
-                }
-            }
-
-            return buffer;
         }
 
         public static string GetOSDir()

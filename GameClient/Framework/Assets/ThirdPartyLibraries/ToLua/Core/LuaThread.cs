@@ -23,6 +23,9 @@ using System;
 
 namespace LuaInterface
 {
+    /// <summary>
+    /// lua 中的 协程 在 C#中封装的操作.
+    /// </summary>
     public class LuaThread : LuaBaseRef
     {        
         public LuaThread(int reference, LuaState state)

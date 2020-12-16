@@ -140,6 +140,11 @@ function LuaFunction:PushArgs(args) end
 ---@return void
 function LuaFunction:PushByteBuffer(buffer, len) end
 ---@public
+---@param buffer Byte[]
+---@param length number
+---@return void
+function LuaFunction:PushByteBufferExt(buffer, length) end
+---@public
 ---@return number
 function LuaFunction:CheckNumber() end
 ---@public

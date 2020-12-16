@@ -1,2 +1,0 @@
-cd xxx/Framework/tolua_runtime/src/luajit-2.1/
-make

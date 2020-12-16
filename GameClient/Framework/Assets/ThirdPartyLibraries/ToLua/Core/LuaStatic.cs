@@ -25,6 +25,9 @@ using System.Text;
 
 namespace LuaInterface
 {
+    /// <summary>
+    /// 辅助函数
+    /// </summary>
     public static class LuaStatic
     {
         public static int GetMetaReference(IntPtr L, Type t)
