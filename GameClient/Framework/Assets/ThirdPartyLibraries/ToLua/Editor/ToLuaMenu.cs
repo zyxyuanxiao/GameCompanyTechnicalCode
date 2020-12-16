@@ -383,7 +383,7 @@ public static class ToLuaMenu
         AssetDatabase.Refresh();
     }
     
-    [MenuItem("ToLua/Gen Lua Wrap Files", false, 1002)]
+    // [MenuItem("ToLua/Gen Lua Wrap Files", false, 1002)]
     public static void GenerateClassWraps()
     {
         if (!beAutoGen && EditorApplication.isCompiling)
@@ -497,7 +497,7 @@ public static class ToLuaMenu
         return set;
     }
 
-    [MenuItem("ToLua/Gen Lua Delegates File", false, 1003)]
+    // [MenuItem("ToLua/Gen Lua Delegates File", false, 1003)]
     static void GenLuaDelegates()
     {
         if (!beAutoGen && EditorApplication.isCompiling)
@@ -645,7 +645,7 @@ public static class ToLuaMenu
         return str;
     }
      
-    [MenuItem("ToLua/Gen LuaBinder File", false, 1004)]
+    // [MenuItem("ToLua/Gen LuaBinder File", false, 1004)]
     static void GenLuaBinder()
     {
         if (!beAutoGen && EditorApplication.isCompiling)
@@ -833,7 +833,7 @@ public static class ToLuaMenu
         return dir;
     }
 
-    [MenuItem("ToLua/Gen BaseType Wrap", false, 1005)]
+    // [MenuItem("ToLua/Gen BaseType Wrap", false, 1005)]
     static void GenBaseTypeLuaWrap()
     {
         if (!beAutoGen && EditorApplication.isCompiling)
@@ -901,7 +901,7 @@ public static class ToLuaMenu
         }
     }
     
-    [MenuItem("ToLua/Clear BaseType Wrap", false, 1006)]
+    // [MenuItem("ToLua/Clear BaseType Wrap", false, 1006)]
     static void ClearBaseTypeLuaWrap()
     {
         CreateDefaultWrapFile(CustomSettings.toluaBaseType, "System_ObjectWrap");
@@ -929,7 +929,7 @@ public static class ToLuaMenu
     /// <summary>
     /// 清除所有 Lua 代码
     /// </summary>
-    [MenuItem("ToLua/Clear all Lua files", false, 2000)]
+    [MenuItem("ToLua/Clear all Lua files", false, 2009)]
     static void ClearAllLuaFiles()
     {
         string osPath = Application.streamingAssetsPath + "/" + LuaConst.osDir;
@@ -1062,7 +1062,7 @@ public static class ToLuaMenu
 
     }
 
-    [MenuItem("ToLua/Build Lua files to Resources (PC)", false, 2003)]
+    [MenuItem("ToLua/Build bytecode Lua files to Resources (PC)", false, 2003)]
     public static void BuildLuaToResources()
     {
         ClearAllLuaFiles();
@@ -1082,7 +1082,7 @@ public static class ToLuaMenu
         AssetDatabase.Refresh();
     }
 
-    [MenuItem("ToLua/Build Lua files to Persistent (PC)", false, 2004)]
+    [MenuItem("ToLua/Build bytecode Lua files to Persistent (PC)", false, 2004)]
     public static void BuildLuaToPersistent()
     {
         ClearAllLuaFiles();
@@ -1123,8 +1123,9 @@ public static class ToLuaMenu
     /// <summary>
     /// 将生成的文件夹压缩成 zip 文件,命名随意
     /// 在 rider 里面配置 EmmyLua 的 Lua additional sources root
+    /// 代码补全
     /// </summary>
-    [MenuItem("ToLua/EmmyLua API提示,联想", false, 2006)]
+    [MenuItem("ToLua/EmmyLua API Completion", false, 2006)]
     static void GenEmmyLuaApi()
     {
         string path = Application.dataPath + "/GameLogic/Lua/EmmyLuaAPI/CSharpAPI/";
