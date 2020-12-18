@@ -100,7 +100,6 @@ namespace LuaInterface
 
         private int beginCount = 0;
         private bool beLogGC = false;
-        private bool bInjectionInited = false;
 #if UNITY_EDITOR
         private bool beStart = false;
 #endif
@@ -503,7 +502,8 @@ namespace LuaInterface
             IntPtr fn = Marshal.GetFunctionPointerForDelegate(func);
             LuaDLL.tolua_function(L, name, fn);            
         }
-
+        
+        //指针注册
         public void RegVar(string name, LuaCSFunction get, LuaCSFunction set)
         {            
             IntPtr fget = IntPtr.Zero;

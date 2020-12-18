@@ -111,7 +111,8 @@ public static class ToLuaExport
 
     public static HashSet<Type> eventSet = new HashSet<Type>();
     public static List<Type> extendList = new List<Type>();    
-
+    
+    //不会导出的方法,lua 代码中,不能使用的方法.
     public static List<string> memberFilter = new List<string>
     {
         "String.get_Chars",
