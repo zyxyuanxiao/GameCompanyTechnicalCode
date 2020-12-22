@@ -22,6 +22,8 @@ ProjectSettings/ProjectVersion.txt
 Packages/packages-lock.json
 ClientFramework.sln
 */*.sln
+*/*/cmake-build-debug/
+
 GameClient/Framework/ProjectSettings/ProjectVersion.txt
 GameClient/Framework/ProjectSettings/ProjectVersion.txt
 GameClient/Framework/ProjectSettings/ProjectVersion.txt
@@ -33,3 +35,4 @@ GameClient/Framework/Assets/Resources/Lua
 GameClient/Framework/Assets/Resources/Lua.meta
 
 
+GameClient/Framework/Framework.sln.DotSettings.user

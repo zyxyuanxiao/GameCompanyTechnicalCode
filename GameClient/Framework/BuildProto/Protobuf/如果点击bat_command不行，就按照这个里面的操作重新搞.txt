@@ -1,0 +1,47 @@
+windows 电脑
+先直接点击setupt.bat
+如果点击bat不行，就按照这个里面的操作重新搞
+将protoc3.14.exe 修改为protoc.exe放入 C:/windows/system32里面，终端查看
+ protoc --version 
+版本，如果版本是3.14则正确，不正常需要重启机器
+
+
+CMD/终端  进入 cd 前面的路径（随意文件夹）/protobuf_Project\protobuf-3.14.0\python/
+
+
+执行：
+
+python setup.py build 
+python setup.py install 
+python setup.py test
+
+验证是否安装成功
+  #python 
+  >>>import google.protobuf
+
+
+如果报错，重复执行上面的步骤测试
+
+
+################################################
+Mac 电脑
+下载protobuf-3.14.0之后,进入protobuf-3.14.0文件夹里面
+
+Mac 环境安装
+brew install automake
+brew install libtool
+brew install make
+
+然后在终端上面
+./autogen.sh 
+./configure
+make
+make install
+
+protoc --version  查看版本,3.14正常才OK
+
+进入 /protobuf-3.14.0/Python 文件夹
+python3 setup.py build
+python3 setup.py install
+python3 setup.py test
+
