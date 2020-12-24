@@ -39,7 +39,7 @@ class BuildConfig:
 
     def Build(self):
         if self.isBuildAll:
-            path = os.path.dirname(os.getcwd()) + "/Assets/GameLogic/Lua/ExcelConfig/ExcelConfig.lua"
+            path = os.path.dirname(os.getcwd()) + "/Assets/GameLogic/Lua/ExcelConfig/excel_config.lua"
             with open(path, "w+", encoding="utf8") as lua_file:
                 pass
             path = os.path.dirname(
@@ -96,7 +96,7 @@ class BuildConfig:
         self.__Build_GenBytesList(sheet)
 
     def __Build_cs(self, sheet):
-        path = os.path.dirname(os.getcwd()) + "/Assets/ThirdPartyLibraries/ToLua/ExcelConfig/"
+        path = os.path.dirname(os.getcwd()) + "/Assets/ThirdPartyLibraries/ExcelConfig/DataConfig/"
         file_path = path + sheet.config_name.lower() + ".cs"
         # 如果不存在则创建
         if not os.path.exists(file_path):
@@ -116,7 +116,7 @@ class BuildConfig:
                     raise
 
     def __Build_lua(self, sheet):
-        path = os.path.dirname(os.getcwd()) + "/Assets/GameLogic/Lua/ExcelConfig/ExcelConfig.lua"
+        path = os.path.dirname(os.getcwd()) + "/Assets/GameLogic/Lua/ExcelConfig/excel_config.lua"
         with open(path, "r+", encoding="utf8") as lua_file:
             delimiter = "---------" + sheet.config_name.lower() + "---------"
             allContent = lua_file.read()

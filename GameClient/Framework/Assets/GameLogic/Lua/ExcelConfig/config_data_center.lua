@@ -83,12 +83,12 @@ GData.GetDataPtr = function(v1, v2, v3, v4)
     return dgp(v1, v2, v3, v4)
 end
 ]]
-local config_env = require "logic.common.gdata_lua_env"
+local config_env = require "ExcelConfig/gdata_lua_env"
 
 local ENABLE_LUA_CACHE = false --FIXME:这个缓存模式需要在考虑
 
 do
-	local loader = loadfile "protobuf_conf_parser/config.lua"
+	local loader = loadfile "ExcelConfig/excel_config.lua"
 	setfenv(loader, config_env)
 	loader()
 end

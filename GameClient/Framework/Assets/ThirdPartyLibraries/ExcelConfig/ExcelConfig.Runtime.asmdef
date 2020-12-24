@@ -1,8 +1,6 @@
 {
-    "name": "ToLua.Runtime",
-    "references": [
-        "GUID:b2a1944b67b93418fa8ae457a4f17440"
-    ],
+    "name": "ExcelConfig.Runtime",
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": true,
