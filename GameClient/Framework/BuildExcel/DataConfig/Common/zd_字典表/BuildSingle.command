@@ -23,11 +23,11 @@ python3 ./Mac/py3-Tools/Misc/add_key_to_csv_tools/add_key_to_csv.py ${absolutePa
 # 修改之后请上传到 SVN
 
 ################ 将 CSV 格式的文件转成 cs 文件 ################
-python3 ./Mac/py3-Tools/EntryPoint.py "China" "CSharp" ${absolutePath}
+# python3 ./Mac/py3-Tools/EntryPoint.py "China" "CSharp" ${absolutePath}
 ################ 将 CSV 格式的文件转成 Lua 文件 ################
 # python3 ./Mac/py3-Tools/EntryPoint.py "China" "Lua" ${absolutePath}
 ################ 将 CSV 格式的文件转成 CSharp和Lua 文件 ################
-# python3 ./Mac/py3-Tools/EntryPoint.py "China" "CSharp,Lua" ${absolutePath}
+python3 ./Mac/py3-Tools/EntryPoint.py "China" "CSharp,Lua" ${absolutePath}
 
 deactivate
 
