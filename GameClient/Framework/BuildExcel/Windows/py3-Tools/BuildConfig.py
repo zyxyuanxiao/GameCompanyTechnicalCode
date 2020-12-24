@@ -39,11 +39,11 @@ class BuildConfig:
 
     def Build(self):
         if self.isBuildAll:
-            path = os.path.dirname(os.getcwd()) + "/Assets/lua/protobuf_conf_parser/config.lua"
+            path = os.path.dirname(os.getcwd()) + "/Assets/GameLogic/Lua/ExcelConfig/excel_config.lua"
             with open(path, "w+", encoding="utf8") as lua_file:
                 pass
             path = os.path.dirname(
-                os.getcwd()) + "/Assets/Extensions/Protobuf/protobuf_config/pbconf_res/gdata_bytes_list.bytes"
+                os.getcwd()) + "/Assets/BuildAssets/Binary/ExcelConfig/gdata_bytes_list.bytes"
             with open(path, 'w+') as bytes_list_file:
                 pass
 
@@ -99,7 +99,7 @@ class BuildConfig:
         self.__Build_GenBytesList(sheet)
 
     def __Build_cs(self, sheet):
-        path = os.path.dirname(os.getcwd()) + "/Assets/Extensions/Protobuf/protobuf_config/ProtoGen/"
+        path = os.path.dirname(os.getcwd()) + "/Assets/ThirdPartyLibraries/ExcelConfig/DataConfig/"
         file_path = path + sheet.config_name.lower() + ".cs"
         # 如果不存在则创建
         if not os.path.exists(file_path):
@@ -119,7 +119,7 @@ class BuildConfig:
                     raise
 
     def __Build_lua(self, sheet):
-        path = os.path.dirname(os.getcwd()) + "/Assets/lua/protobuf_conf_parser/config.lua"
+        path = os.path.dirname(os.getcwd()) + "/Assets/GameLogic/Lua/ExcelConfig/excel_config.lua"
         with open(path, "r+", encoding="utf8") as lua_file:
             delimiter = "---------" + sheet.config_name.lower() + "---------"
             allContent = lua_file.read()
@@ -140,7 +140,7 @@ class BuildConfig:
                 lua_file.write(delimiter + "\n" + "\n")
 
     def __Build_Client_Binary(self, sheet):
-        path = os.path.dirname(os.getcwd()) + "/Assets/Extensions/Protobuf/protobuf_config/pbconf_res/"
+        path = os.path.dirname(os.getcwd()) + "/Assets/BuildAssets/Binary/ExcelConfig/"
         file_path = path + 'dataconfig_{}.bytes'.format(sheet.config_name.lower())
         with open(file_path, 'wb+', ) as bin_file:
             try:
@@ -152,7 +152,7 @@ class BuildConfig:
 
     def __Build_GenBytesList(self, sheet):
         path = os.path.dirname(
-            os.getcwd()) + "/Assets/Extensions/Protobuf/protobuf_config/pbconf_res/gdata_bytes_list.bytes"
+            os.getcwd()) + "/Assets/BuildAssets/Binary/ExcelConfig/gdata_bytes_list.bytes"
         name = 'dataconfig_{}.bytes'.format(sheet.config_name.lower())
         with open(path, 'r+') as bytes_list_file:
             str_bytes = bytes_list_file.read()
