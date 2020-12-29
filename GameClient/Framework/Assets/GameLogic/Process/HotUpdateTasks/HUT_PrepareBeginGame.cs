@@ -1,5 +1,5 @@
 using System.Collections;
-using GameAssets;
+using DLCAssets;
 
 /**
  * 热更流程

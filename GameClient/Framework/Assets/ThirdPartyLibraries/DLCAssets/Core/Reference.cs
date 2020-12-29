@@ -1,9 +1,10 @@
 using UnityEngine;
 
-namespace GameAssets
+namespace DLCAssets
 {
 
     /// <summary>
+    /// 顶级接口
     /// 引用分三层
     /// 第一层是从磁盘上面加载到的 AB 压缩包
     /// 第二层是从 AB 包解压出来的一层对象,这层对象不能直接使用

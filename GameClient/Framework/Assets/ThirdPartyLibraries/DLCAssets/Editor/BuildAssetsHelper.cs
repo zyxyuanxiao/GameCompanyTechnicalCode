@@ -10,7 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using Tool = Common.Tool;
 
-namespace GameAssets
+namespace DLCAssets
 {
     public static class BuildAssetsHelper
     {

@@ -6,7 +6,7 @@ using Common;
 using LitJson;
 using UnityEngine;
 
-namespace GameAssets
+namespace DLCAssets
 {
     /// <summary>
     /// 路径,后缀,配置,辅助

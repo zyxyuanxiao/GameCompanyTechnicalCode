@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace GameAssets
+namespace DLCAssets
 {
     public sealed class PrepareBeginGame  : IBusiness
     {

@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace GameAssets
+namespace DLCAssets
 {
     /// <summary>
     /// 文件夹的搜索模式,

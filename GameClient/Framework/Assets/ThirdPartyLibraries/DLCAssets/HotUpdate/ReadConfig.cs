@@ -7,7 +7,7 @@ using LitJson;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace GameAssets
+namespace DLCAssets
 {
     public sealed class ReadConfig : IBusiness
     {

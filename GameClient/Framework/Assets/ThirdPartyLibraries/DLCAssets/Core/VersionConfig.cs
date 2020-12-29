@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Common;
 using UnityEngine;
 
-namespace GameAssets
+namespace DLCAssets
 {
     // public class ABInfo
     // {

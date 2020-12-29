@@ -4,7 +4,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor;
 
-namespace GameAssets
+namespace DLCAssets
 {
     public static class BuilderMenuItems
     {

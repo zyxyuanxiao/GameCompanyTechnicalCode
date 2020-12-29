@@ -1,5 +1,5 @@
 ﻿using Common;
-using GameAssets;
+using DLCAssets;
 using LitJson;
 using UnityEngine;
 

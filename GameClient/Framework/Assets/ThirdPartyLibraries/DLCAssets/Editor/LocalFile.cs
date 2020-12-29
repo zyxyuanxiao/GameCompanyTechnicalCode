@@ -4,7 +4,7 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace GameAssets
+namespace DLCAssets
 {
     /// <summary>
     /// 在本地Assets/的路径之后,游戏文件夹内的一些文件资源,被统一抽象化为  LocalFile

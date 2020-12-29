@@ -8,7 +8,7 @@ using Common;
 using LitJson;
 using UnityEngine;
 
-namespace GameAssets
+namespace DLCAssets
 {
     /// <summary>
     /// 第一步 先下载远程配置文件 VersionConfig,

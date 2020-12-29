@@ -1,4 +1,4 @@
-namespace GameAssets
+namespace DLCAssets
 {
     /// <summary>
     /// 热更时,对比这些数据,几乎可以防止任何人更改热更数据包.

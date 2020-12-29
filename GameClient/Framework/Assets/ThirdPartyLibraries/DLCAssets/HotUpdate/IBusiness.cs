@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace GameAssets
+namespace DLCAssets
 {
     /* *
      * 热更流程,热更过后启动 Lua,启动登录界面

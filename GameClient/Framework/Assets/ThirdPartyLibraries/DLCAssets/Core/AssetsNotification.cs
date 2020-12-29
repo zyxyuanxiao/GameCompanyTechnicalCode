@@ -2,7 +2,7 @@ using UnityEngine;
 using System;
 using LitJson;
 
-namespace GameAssets
+namespace DLCAssets
 {
     public enum IAssetsNotificationType
     {

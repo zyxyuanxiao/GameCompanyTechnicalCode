@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
-using GameAssets;
 using Common;
-using Tool = Common.Tool;
 
 
-namespace GameAssets
+namespace DLCAssets
 {
     /// <summary>
     /// _BuildAsset 文件夹下的资源,

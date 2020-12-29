@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 
-namespace GameAssets
+namespace DLCAssets
 {
     /// <summary>
     /// 一个此类,一个 AB 包
