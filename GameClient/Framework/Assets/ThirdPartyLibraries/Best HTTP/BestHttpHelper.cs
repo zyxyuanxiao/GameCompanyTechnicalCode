@@ -10,7 +10,7 @@ namespace BestHTTP
         [UnityEditor.MenuItem("Tools/BestHttp/Test Get")]
         public static void TestBestHttp()
         {
-            GET("http://127.0.0.1/DownloadAssets/OSX/VersionConfig.json",(b,s) =>
+            GET("http://127.0.0.1/DLC/OSX/VersionConfig.json",(b,s) =>
             {
                 if (b)//请求成功,应该进行
                 {

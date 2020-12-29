@@ -32,8 +32,8 @@ namespace Common
         public string[] QueryAddress()
         {
             if (BuildConfig == GameBuildType.Local || RemoteWebServerAddress == null || RemoteWebServerAddress.Length <= 0)
-            {//使用的是 HTTP ,本地搭建的 web 服务器,测试使用,默认:http://127.0.0.1:80/DownloadAssets/" 请本地搭建.
-                RemoteWebServerAddress = new string[] {"http://127.0.0.1/DownloadAssets"};
+            {//使用的是 HTTP ,本地搭建的 web 服务器,测试使用,默认:http://127.0.0.1:80/DLC/" 请本地搭建.
+                RemoteWebServerAddress = new string[] {"http://127.0.0.1/DLC"};
             }
             return RemoteWebServerAddress;
         }

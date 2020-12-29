@@ -34,11 +34,11 @@ namespace GameAssets
             BuildAssetsHelper.BuildHotUpdateAsset();
         }
         
-        [MenuItem("Builder/6 Copy Files To StreamingAssets", false, 1005)]
+        [MenuItem("Builder/6 Copy DLC To StreamingAssets", false, 1005)]
         private static void CopyAssetBundlesToStreamingAssets()
         {
             string destDir = Application.streamingAssetsPath + "/";
-            string sourceDir = Application.dataPath.Replace("Assets", "DownloadAssets/");
+            string sourceDir = Application.dataPath.Replace("Assets", "DLC/");
             if (!Directory.Exists(destDir)) Directory.CreateDirectory(destDir);
             Common.EitorTools.CopyDirAndFile(sourceDir, destDir);
             if (!string.IsNullOrEmpty(destDir)) 
@@ -46,17 +46,17 @@ namespace GameAssets
             AssetDatabase.Refresh();
         }
         
-        [MenuItem("Builder/7 Copy Download Files To Web Server", false, 1006)]
+        [MenuItem("Builder/7 Copy DLC To Web Server", false, 1006)]
         public static void CopyAssetBundlesToWebServer()
         {
             //拷贝下载的文件到 web 服务器上面,web 服务器需要自己搭建,mac 上面自带 Apache 服务器.
             string destDir = "";
             if (Application.platform == RuntimePlatform.OSXEditor)
             {
-                destDir = "/Library/WebServer/Documents/DownloadAssets/";
+                destDir = "/Library/WebServer/Documents/DLC/";
             }
             if (!Directory.Exists(destDir)) Directory.CreateDirectory(destDir);
-            string sourceDir = Application.dataPath.Replace("Assets", "DownloadAssets/");
+            string sourceDir = Application.dataPath.Replace("Assets", "DLC/");
             Common.EitorTools.CopyDirAndFile(sourceDir, destDir);
             if (!string.IsNullOrEmpty(destDir))                 
                 EditorUtility.OpenWithDefaultApp(destDir + Common.Tool.QueryPlatform());

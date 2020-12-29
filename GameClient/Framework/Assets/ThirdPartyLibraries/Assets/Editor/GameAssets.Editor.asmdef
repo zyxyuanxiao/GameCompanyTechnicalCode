@@ -9,7 +9,8 @@
         "GUID:9069ac25d95ca17448a247f3bb1c769f"
     ],
     "includePlatforms": [
-        "Editor"
+        "Editor",
+        "PS4"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

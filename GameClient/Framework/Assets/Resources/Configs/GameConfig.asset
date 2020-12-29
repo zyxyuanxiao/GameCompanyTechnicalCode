@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BuildConfig: 0
   version: 1
-  StartHotUpdate: 0
+  StartHotUpdate: 1
   RemoteWebServerAddress: []

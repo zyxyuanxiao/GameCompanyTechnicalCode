@@ -50,8 +50,8 @@ T ReadNumber(const void *data, int offset) {
 	if (data == NULL) {
 		return T{};
 	}
-	const char *pos = (const char *)(((char*)data) + offset);
-	T val = *(T*)(pos);
+	const char *pos = (const char *)(((char*)data) + offset); //拿到数据的当前的地址,根据地址偏移量拿的
+	T val = *(T*)(pos);//使用 * 直接取出值
 	return ntoh(val);
 }
 

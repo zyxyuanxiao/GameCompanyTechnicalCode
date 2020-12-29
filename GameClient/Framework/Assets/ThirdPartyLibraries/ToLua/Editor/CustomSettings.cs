@@ -85,7 +85,7 @@ public static class CustomSettings
         _GT(typeof(KeyCode)),
         _GT(typeof(SkinnedMeshRenderer)),
         _GT(typeof(Space)),
-        _GT(typeof(MeshRenderer)),
+        // _GT(typeof(MeshRenderer)),//不准wrap
         _GT(typeof(BoxCollider)),
         _GT(typeof(MeshCollider)),
         _GT(typeof(SphereCollider)),        

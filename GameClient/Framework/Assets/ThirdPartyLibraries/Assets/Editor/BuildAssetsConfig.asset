@@ -17,14 +17,6 @@ MonoBehaviour:
     SearchPattern: '*.png'
     LocalFilePaths:
     - Assets/BuildAssets/Shader/UIEffect/Default-Transition.png
-    - Assets/BuildAssets/Texture/Png/Brown Stony Light.png
-    - Assets/BuildAssets/Texture/Png/Brown Stony.png
-    - Assets/BuildAssets/Texture/Png/Grass.png
-    - Assets/BuildAssets/Texture/Png/Grey Stones.png
-    - Assets/BuildAssets/Texture/Png/Sandy Orange.png
-    - Assets/BuildAssets/Texture/Png/Sandy.png
-    - Assets/BuildAssets/Texture/Png/Water Deep Blue.png
-    - Assets/BuildAssets/Texture/Png/Water Light Blue.png
   - FileType: TTF
     SearchPattern: '*.ttf'
     LocalFilePaths:
@@ -34,7 +26,8 @@ MonoBehaviour:
     - Assets/BuildAssets/Font/SZ.ttf
   - FileType: Asset
     SearchPattern: '*.asset'
-    LocalFilePaths: []
+    LocalFilePaths:
+    - Assets/BuildAssets/Config/UIWidgets Style Default.asset
   - FileType: Hdr
     SearchPattern: '*.hdr'
     LocalFilePaths:
@@ -85,19 +78,15 @@ MonoBehaviour:
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Brown Stony Light.mat
       depsPath:
-      - Assets/BuildAssets/Texture/Png/Brown Stony Light.png
-  - assetBundleName: brown stony light.png.unity3d
-    assetPathAndDepPaths:
-    - filePath: Assets/BuildAssets/Texture/Png/Brown Stony Light.png
-      depsPath: []
+      - Assets/Editor Default Resources/Texture/Png/Brown Stony Light.png
   - assetBundleName: brown stony.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Brown Stony.mat
       depsPath:
-      - Assets/BuildAssets/Texture/Png/Brown Stony.png
-  - assetBundleName: brown stony.png.unity3d
+      - Assets/Editor Default Resources/Texture/Png/Brown Stony.png
+  - assetBundleName: button_texture.png.unity3d
     assetPathAndDepPaths:
-    - filePath: Assets/BuildAssets/Texture/Png/Brown Stony.png
+    - filePath: Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/button_texture.png
       depsPath: []
   - assetBundleName: daytime.hdr.unity3d
     assetPathAndDepPaths:
@@ -132,20 +121,12 @@ MonoBehaviour:
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Grass.mat
       depsPath:
-      - Assets/BuildAssets/Texture/Png/Grass.png
-  - assetBundleName: grass.png.unity3d
-    assetPathAndDepPaths:
-    - filePath: Assets/BuildAssets/Texture/Png/Grass.png
-      depsPath: []
+      - Assets/Editor Default Resources/Texture/Png/Grass.png
   - assetBundleName: grey stones.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Grey Stones.mat
       depsPath:
-      - Assets/BuildAssets/Texture/Png/Grey Stones.png
-  - assetBundleName: grey stones.png.unity3d
-    assetPathAndDepPaths:
-    - filePath: Assets/BuildAssets/Texture/Png/Grey Stones.png
-      depsPath: []
+      - Assets/Editor Default Resources/Texture/Png/Grey Stones.png
   - assetBundleName: loginscene.unity.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Scene/LoginScene.unity
@@ -154,20 +135,12 @@ MonoBehaviour:
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Sandy Orange.mat
       depsPath:
-      - Assets/BuildAssets/Texture/Png/Sandy Orange.png
-  - assetBundleName: sandy orange.png.unity3d
-    assetPathAndDepPaths:
-    - filePath: Assets/BuildAssets/Texture/Png/Sandy Orange.png
-      depsPath: []
+      - Assets/Editor Default Resources/Texture/Png/Sandy Orange.png
   - assetBundleName: sandy.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Sandy.mat
       depsPath:
-      - Assets/BuildAssets/Texture/Png/Sandy.png
-  - assetBundleName: sandy.png.unity3d
-    assetPathAndDepPaths:
-    - filePath: Assets/BuildAssets/Texture/Png/Sandy.png
-      depsPath: []
+      - Assets/Editor Default Resources/Texture/Png/Sandy.png
   - assetBundleName: scenecamera.prefab.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Prefab/Scene/SceneCamera.prefab
@@ -261,21 +234,62 @@ MonoBehaviour:
       - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Drag-and-Drop/ListViewStringDropSupport.cs
       - Packages/com.unity.ugui/Runtime/EventSystem/InputModules/StandaloneInputModule.cs
       - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/button_border.png
+  - assetBundleName: uiwidgets style default.asset.unity3d
+    assetPathAndDepPaths:
+    - filePath: Assets/BuildAssets/Config/UIWidgets Style Default.asset
+      depsPath:
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/input_input.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/dialog_border.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_inactive_texture_h.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/progressbar_texture.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/progressbar_border.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/progressbar_mask.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/input_input_selected.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_active_border_h.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/button_mask.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_inactive_texture.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_inactive_mask_h.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/checkmark.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/listview_mask.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/iprogressbar_mask.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/iprogressbar_texture.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/button_texture.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_active_border.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_inactive_border_h.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_inactive_border.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/progressbar_background_01.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/spinner_down.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/pause.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/canvas_background.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/listview_background.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/scrollbar_handle.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/spinner_up.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tooltip.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_active_mask.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/iprogressbar_border.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/notify_background.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/scrollbar_background.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/scrollbar_horizontal_background.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_active_texture_h.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/progressbar_background_02.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/scrollbar_horizontal_handle.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_background.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Scripts/Style/Style.cs
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_active_texture.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/arrow.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_active_mask_h.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/notify_close.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/dialog_delimiter.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/tab_inactive_mask.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/button_border.png
+      - Assets/ThirdPartyLibraries/New UI Widgets/Styles/DefaultStyle/listview_background_selected.png
   - assetBundleName: water deep blue.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Water Deep Blue.mat
       depsPath:
-      - Assets/BuildAssets/Texture/Png/Water Deep Blue.png
-  - assetBundleName: water deep blue.png.unity3d
-    assetPathAndDepPaths:
-    - filePath: Assets/BuildAssets/Texture/Png/Water Deep Blue.png
-      depsPath: []
+      - Assets/Editor Default Resources/Texture/Png/Water Deep Blue.png
   - assetBundleName: water light blue.mat.unity3d
     assetPathAndDepPaths:
     - filePath: Assets/BuildAssets/Material/Surface/Water Light Blue.mat
       depsPath:
-      - Assets/BuildAssets/Texture/Png/Water Light Blue.png
-  - assetBundleName: water light blue.png.unity3d
-    assetPathAndDepPaths:
-    - filePath: Assets/BuildAssets/Texture/Png/Water Light Blue.png
-      depsPath: []
+      - Assets/Editor Default Resources/Texture/Png/Water Light Blue.png

@@ -35,7 +35,7 @@ namespace Common
 		[UnityEditor.MenuItem("Tools/SVN/SVN Version")]
 		static string SvnInfoUpdateOSX()
 		{
-			string cmd = Application.dataPath + "/../shell/svn_info.command";
+			string cmd = Application.dataPath + "/../BuildShell/svn_info.command";
 			System.Diagnostics.Process process = new System.Diagnostics.Process();
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.FileName = cmd;
@@ -64,7 +64,7 @@ namespace Common
 		/// </summary>
 		static string SvnBlameOSX(string filePath)
 		{
-			string cmd = Application.dataPath + "/../shell/svn_blame.command";
+			string cmd = Application.dataPath + "/../BuildShell/svn_blame.command";
 			System.Diagnostics.Process process = new System.Diagnostics.Process();
 			process.StartInfo.UseShellExecute = false;
 			process.StartInfo.FileName = cmd;
@@ -93,7 +93,7 @@ namespace Common
 		[UnityEditor.MenuItem("Tools/SVN/Open UserPath")]
 		static void OpenUserPath()
 		{
-			string cmd = Application.dataPath + "/../shell/open_userpath.command";
+			string cmd = Application.dataPath + "/../BuildShell/open_userpath.command";
 			System.Diagnostics.Process sh = new System.Diagnostics.Process();
 			sh.StartInfo.UseShellExecute = true;
 			sh.StartInfo.FileName = cmd;
@@ -120,7 +120,7 @@ namespace Common
 
 			path += cmds[i] + "\\";
 		}
-		path += "shell\\svn_info.bat";
+		path += "BuildShell\\svn_info.bat";
 		process.StartInfo.UseShellExecute = false;
 		process.StartInfo.FileName = path;
 		process.StartInfo.Arguments = Application.dataPath + "/../";
@@ -157,7 +157,7 @@ namespace Common
 
 			path += cmds[i] + "\\";
 		}
-		path += "shell\\svn_blame.bat";
+		path += "BuildShell\\svn_blame.bat";
 		process.StartInfo.UseShellExecute = false;
 		process.StartInfo.FileName = path;
 		process.StartInfo.Arguments = filePath;
@@ -183,7 +183,7 @@ namespace Common
 		[UnityEditor.MenuItem("Tools/SVN/SVN Update(OSX) %#u")]
 		public static void SvnUpdateOSX()
 		{
-			string cmd = Application.dataPath + "/../shell/svn_update.command";
+			string cmd = Application.dataPath + "/../BuildShell/svn_update.command";
 			System.Diagnostics.Process sh = new System.Diagnostics.Process();
 			sh.StartInfo.UseShellExecute = true;
 			sh.StartInfo.FileName = cmd;
@@ -214,7 +214,7 @@ namespace Common
 
 			path += cmds[i] + "\\";
 		}
-		path += "shell\\svn_update.bat";
+		path += "BuildShell\\svn_update.bat";
 		process.StartInfo.FileName = path;
 //		process.StartInfo.CreateNoWindow = true;
 //		process.StartInfo.UseShellExecute = false;

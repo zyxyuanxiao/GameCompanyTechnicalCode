@@ -14,11 +14,11 @@ namespace GameAssets
 {
     public static class BuildAssetsHelper
     {
-        public static string DownloadAssetsDirectory
+        public static string DLCDirectory
         {
             get
             {  
-                string path = Application.dataPath.Replace("Assets", "DownloadAssets/") + 
+                string path = Application.dataPath.Replace("Assets", "DLC/") + 
                               Common.Tool.QueryPlatform() + "/";
                 if (!Directory.Exists(path))
                     Directory.CreateDirectory(path);
@@ -32,6 +32,8 @@ namespace GameAssets
         public static void BuildDefaultStreamingAssets()
         {
             BuildAllAssets();
+            //将 AB 数据以及二进制数据,版本配置文件拷贝到StreamingAssets文件夹里面.
+            CopyFileToStreamingAssets();
         }
 
         /// <summary>
@@ -66,7 +68,7 @@ namespace GameAssets
             Debug.Log("从资源服务器下载 VersionConfig.json 成功");
             VersionConfig remoteVersionConfig = JsonMapper.ToObject<VersionConfig>(s);
             
-            string vcPath = DownloadAssetsDirectory + AssetsHelper.VersionConfigName;
+            string vcPath = DLCDirectory + AssetsHelper.VersionConfigName;
             string localVC = File.ReadAllText(vcPath, Encoding.UTF8);
             VersionConfig localVersionConfig = JsonMapper.ToObject<VersionConfig>(localVC);
             
@@ -104,11 +106,11 @@ namespace GameAssets
             foreach (string name in copyFileNames)
             {
                 Debug.Log("覆盖上传文件:"+ name);
-                string localPath = DownloadAssetsDirectory + name;
+                string localPath = DLCDirectory + name;
                 string remotePath = "";
                 if (Application.platform == RuntimePlatform.OSXEditor)
                 {
-                    remotePath = "/Library/WebServer/Documents/DownloadAssets/";
+                    remotePath = "/Library/WebServer/Documents/DLC/";
                 }
                 
                 remotePath = remotePath + Common.Tool.QueryPlatform() + "/" + name;
@@ -122,12 +124,16 @@ namespace GameAssets
         
         /// <summary>
         /// 打所有的包,最新的包,包括 ab 包与 app (执行程序)
+        /// BuildAssetBundleOptions.None：使用 LZMA 算法压缩，压缩的包更小，但是加载时间更长
+        /// BuildAssetBundleOptions.UncompressedAssetBundle：不压缩，包大，加载快
+        /// BuildAssetBundleOptions.ChunkBasedCompression：使用 LZ4 压缩，压缩率没有 LZMA 高，但是我们可以加载指定资源而不用解压全部。目前 caiy9ong 的方式
+        /// 全部使用  AssetBundle.LoadFromFileAsync 从本地下载后再加载,最大占用内存就是 AB 与 AB解压缩后对象 的内存，不会导致内存峰值
         /// </summary>
         public static void BuildAllAssets()
         {
             //配置路径
-            if (Directory.Exists(DownloadAssetsDirectory))
-                Directory.Delete(DownloadAssetsDirectory, true);
+            if (Directory.Exists(DLCDirectory))
+                Directory.Delete(DLCDirectory, true);
             
             //根据配置文件进行初始化 AB 包的名字以及资源
             BuildAssetsConfig assetsConfig = BuildAssetsConfig.QueryAssetsConfig();
@@ -141,7 +147,7 @@ namespace GameAssets
             var targetPlatform = EditorUserBuildSettings.activeBuildTarget;
             //开始打包
             AssetBundleManifest assetBundleManifest = BuildPipeline.BuildAssetBundles(
-                DownloadAssetsDirectory, 
+                DLCDirectory, 
                 assetsConfig.QueryAssetBundleBuilds(), 
                 options, 
                 targetPlatform);
@@ -153,10 +159,8 @@ namespace GameAssets
             
             //输出版本配置文件
             BuildVersionConfig(assetBundleManifest);
-            //将 AB 数据以及二进制数据,版本配置文件拷贝到StreamingAssets文件夹里面.
-            CopyFileToStreamingAssets();
-            
-            EditorUtility.OpenWithDefaultApp(DownloadAssetsDirectory);
+
+            EditorUtility.OpenWithDefaultApp(DLCDirectory);
         }
 
         /// <summary>
@@ -166,7 +170,6 @@ namespace GameAssets
         {
             //先设置游戏配置包,如果没有就直接获取 SVN 版本
             string version = Common.SVNHelper.GetSvnVersion();
-            version = "2";
             Resources.Load<GameConfig>("Configs/GameConfig").version = version;//没有就屏蔽
             
             VersionConfig vc = new VersionConfig()
@@ -180,23 +183,23 @@ namespace GameAssets
             string[] abNames = assetBundleManifest.GetAllAssetBundles();
             foreach (string name in abNames)
             {
-                string abPath = DownloadAssetsDirectory + name;
+                string abPath = DLCDirectory + name;
                 vc.FileInfos[name] = new File_V_MD5()
                     {Version = version, MD5Hash = Common.SecurityTools.GetMD5Hash(abPath)};
                 
             }
 
             //将 assetBundleManifest 文件也装载进配置文件中
-            string abm = DownloadAssetsDirectory + Tool.QueryPlatform();
+            string abm = DLCDirectory + Tool.QueryPlatform();
             vc.FileInfos[Tool.QueryPlatform()] = new File_V_MD5()
                 {Version = version, MD5Hash = Common.SecurityTools.GetMD5Hash(abm)};
             
             //将 zip 文件也装载进配置文件中
-            string zip = DownloadAssetsDirectory + Tool.QueryPlatform();
+            string zip = DLCDirectory + Tool.QueryPlatform();
             vc.FileInfos[FileFilter.AllText] = new File_V_MD5()
                 {Version = version, MD5Hash = Common.SecurityTools.GetMD5Hash(zip)};
             
-            string vcPath = DownloadAssetsDirectory + AssetsHelper.VersionConfigName;
+            string vcPath = DLCDirectory + AssetsHelper.VersionConfigName;
             if (!File.Exists(vcPath))
             {
                 using (File.Create(vcPath)) {};
@@ -211,8 +214,13 @@ namespace GameAssets
         /// </summary>
         private static void CopyFileToStreamingAssets()
         {
-            string[] files = Directory.GetFiles(DownloadAssetsDirectory, "*");
+            string[] files = Directory.GetFiles(DLCDirectory, "*");
             string destFileName = AssetsHelper.CSharpFilePath(AssetsHelper.QueryStreamingFilePath());
+            if (Directory.Exists(destFileName))
+            {
+                Directory.Delete(destFileName,true);   
+            }
+            Directory.CreateDirectory(destFileName);
             foreach (string file in files)
             {
                 if (Path.GetExtension(file).ToLower().Contains("manifest"))

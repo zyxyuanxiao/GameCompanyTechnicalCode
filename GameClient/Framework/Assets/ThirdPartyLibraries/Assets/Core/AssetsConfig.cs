@@ -187,7 +187,7 @@ namespace GameAssets
                    Tool.QueryPlatform() + "/" +
                    path;
         }
-
+        
         #region Zip
         
         public static void DecompressBinary(string zipPath)
