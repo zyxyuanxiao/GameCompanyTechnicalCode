@@ -1,19 +1,15 @@
 {
-    "name": "GameAssets.Editor",
+    "name": "DLCAssets",
     "references": [
-        "GUID:2e7ee367bd693494daefdd95fe5c5c0f",
-        "GUID:64db44c30a4e5454ca73b62ef0d127a5",
         "GUID:8c08cd3b08dd4894980e53c63c714136",
-        "GUID:5cc946686df574b0cab70b7d8bfbc39e",
+        "GUID:64db44c30a4e5454ca73b62ef0d127a5",
+        "GUID:9069ac25d95ca17448a247f3bb1c769f",
         "GUID:981022a2f47254f27b80f8d35c3ebaef",
-        "GUID:9069ac25d95ca17448a247f3bb1c769f"
+        "GUID:038a05803effd40daa5d6762a434a932"
     ],
-    "includePlatforms": [
-        "Editor",
-        "PS4"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
-    "allowUnsafeCode": false,
+    "allowUnsafeCode": true,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,

@@ -48,7 +48,8 @@ namespace Best
             public List<Action<TAsset>> OnLoadeds;
             public InstancePool<TAsset> Pool;
             public AssetCache<TAsset> Cache;
-            [NoToLua]public float StartNoRefTime;
+            [NoToLua]
+            public float StartNoRefTime;
             public TAsset GetAsset()
             {
                 if (Asset == null)

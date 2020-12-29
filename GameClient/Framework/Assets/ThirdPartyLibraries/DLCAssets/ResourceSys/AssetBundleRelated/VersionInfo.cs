@@ -7,9 +7,6 @@
 	purpose:	资源版本信息
 *********************************************************************/
 
-using System.Collections;
-using System.Collections.Generic;
-
 namespace Best
 {
     //版本文件
