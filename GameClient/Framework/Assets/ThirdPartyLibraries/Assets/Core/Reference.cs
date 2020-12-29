@@ -17,16 +17,17 @@ namespace GameAssets
         //AssetBundle的对象
         AssetBundle AssetBundle { get; set; }
         
-        //加压缩 AB 的引用对象,只能是缓存
+        //解压缩 AB 的引用对象,只能是缓存
         UnityEngine.Object UncompressObject { get; set; }
         
         /// <summary>
         /// 可以在其他任何地方使用,也可以放进资源池子;
         /// 但是当任何其他资源被卸载时,必须要知道本物体中是否有资源也被卸载了;
-        /// 这个对象里面的引用的资源,是否已被卸载,是无法立即知道的;
+        /// 这个对象里面的引用的资源,是否已被卸载,是无法立即知道的,无法在加载之前知道引用的资源是否被卸载了;例如使用了AssetBundle.Unload(true);
+        /// 此对象已不属于 AB 
         /// </summary>
         UnityEngine.Object obj { get; set; }
-
+        
         //增加引用计数
         void Retain();
 
