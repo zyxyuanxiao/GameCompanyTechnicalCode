@@ -16,37 +16,44 @@ namespace DLCAssets
             }
         }
 
-        
+        /// <summary>
+        /// 初始化记录引用的对象
+        /// </summary>
+        /// <param name="abName"></param>
+        /// <param name="assetBundle"></param>
+        /// <param name="uncompressAsset"></param>
         public ABRefrence(string abName, UnityEngine.AssetBundle assetBundle, UnityEngine.Object uncompressAsset)
         {
-            ReInit(abName,assetBundle,uncompressAsset);
+            Reset(abName,assetBundle,uncompressAsset);
         }
-
-        public void ReInit(string abName, UnityEngine.AssetBundle assetBundle, UnityEngine.Object uncompressAsset)
-        {
-            this.ABName = abName;
-            this.AssetBundle = assetBundle;
-            this.UncompressAsset = uncompressAsset;
-            m_refCount = 0;
-        }
-        
-        
+    
+        /// <summary>
+        /// 增加引用
+        /// </summary>
         public void Retain()
         {
             m_refCount++;
         }
-
+        
+        /// <summary>
+        /// 减小引用
+        /// </summary>
         public void Release()
         {
             m_refCount--;
         }
-
-        public void Reset()
+        
+        /// <summary>
+        /// 重置引用的对象
+        /// </summary>
+        /// <param name="abName"></param>
+        /// <param name="assetBundle"></param>
+        /// <param name="uncompressAsset"></param>
+        public void Reset(string abName = null, UnityEngine.AssetBundle assetBundle = null, UnityEngine.Object uncompressAsset = null)
         {
-
-            ABName = null;
-            AssetBundle = null;
-            UncompressAsset = null;
+            ABName = abName;
+            AssetBundle = assetBundle;
+            UncompressAsset = uncompressAsset;
             m_refCount = 0;
         }
 

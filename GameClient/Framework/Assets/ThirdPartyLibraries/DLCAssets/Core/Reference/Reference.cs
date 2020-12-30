@@ -36,6 +36,6 @@ namespace DLCAssets
         void Release();
 
         //重置
-        void Reset();
+        void Reset(string abName = null, UnityEngine.AssetBundle assetBundle = null, UnityEngine.Object uncompressAsset = null);
     }
 }
