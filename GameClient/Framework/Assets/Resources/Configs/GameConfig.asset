@@ -14,5 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BuildConfig: 0
   version: 1
-  StartHotUpdate: 1
-  RemoteWebServerAddress: []
+  StartHotUpdate: 0
+  RemoteWebServerAddress:
+  - http://127.0.0.1/DLC

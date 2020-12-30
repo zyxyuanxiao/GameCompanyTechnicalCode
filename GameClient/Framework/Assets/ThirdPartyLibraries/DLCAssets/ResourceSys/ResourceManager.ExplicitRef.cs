@@ -52,15 +52,15 @@ namespace Best
                 {
                     m_refCount += count;
 
-                    //if (!BuildManifestUtility.GetBuildManifest().IsReleaseVer && m_resMgr.IsDebugTarget(AssetName))
-                    //{
-                    //    StringBuilder sb29 = SBC.Acquire();
-                    //    sb29.Append("ExplicitRef: ");
-                    //    sb29.Append(AssetName);
-                    //    sb29.Append(" increase ref: ");
-                    //    sb29.Append(m_refCount);
-                    //    LogModule.Instance.Trace(LogModule.LogModuleCode.ResRefStatus, SBC.GetStringAndRelease(sb29));
-                    //}
+                    if (!BuildManifestUtility.GetBuildManifest().IsReleaseVer && m_resMgr.IsDebugTarget(AssetName))
+                    {
+                        StringBuilder sb29 = SBC.Acquire();
+                        sb29.Append("ExplicitRef: ");
+                        sb29.Append(AssetName);
+                        sb29.Append(" increase ref: ");
+                        sb29.Append(m_refCount);
+                        LogModule.Instance.Trace(LogModule.LogModuleCode.ResRefStatus, SBC.GetStringAndRelease(sb29));
+                    }
                 }
 
                 public void IncreaseRefRecursively(int count = 1)
