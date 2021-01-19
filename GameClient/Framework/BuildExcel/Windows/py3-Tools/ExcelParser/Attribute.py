@@ -285,7 +285,7 @@ class Required(Attribute):
 
         comment = ParsingEnv.GetCommentRow()[self.col_number]
         return GenComment(comment, indent) \
-            + GenIndent(indent) + 'required {} {} = {};\n'.format(self.value_type.GenProto(), self.name, index), index + 1
+            + GenIndent(indent) + 'required {} {} = {} [ default = {}];\n'.format(self.value_type.GenProto(), self.name, index, self.value_type.GenProtoDefault()), index + 1
 
     def MarshalPB(self, key_index, binary_stream):
         if not ExportToServer(self.export_mask):
@@ -661,7 +661,7 @@ class Struct:
         用于root struct产生message
     '''
     def GenMessage(self):
-        message_str = '/**\n* @file:   dataconfig_{}.proto\n* @brief:  ----auto generate----\n*/\n\npackage dataconfig;\n\n'.format(self.name.lower()) 
+        message_str = '/**\n* @file:   dataconfig_{}.proto\n* @brief: ----auto generate----\n*/\n\npackage dataconfig;\n\n'.format(self.name.lower()) 
 
         message_str += 'message %s{\n' % (self.name)
         proto_index = 1

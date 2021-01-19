@@ -1,11 +1,11 @@
-import io
-import math
 
 '''
     只支持有限的pb的数据类型（像是浮点数和枚举在打表中都没用到)
     wire type:
     0	Varint	int32, int64, uint32, uint64, sint32, sint64, bool
+    1	64-bit	fixed64, sfixed64, double #不支持
     2	Length-delimited	string, bytes, embedded messages, packed repeated fields
+    5	32-bit	fixed32, sfixed32, float #不支持 目前客户端与服务器都支持float类型,单独做的处理
 '''
 
 '''

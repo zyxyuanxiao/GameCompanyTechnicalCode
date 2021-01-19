@@ -285,7 +285,7 @@ class Required(Attribute):
 
         comment = ParsingEnv.GetCommentRow()[self.col_number]
         return GenComment(comment, indent) \
-            + GenIndent(indent) + 'required {} {} = {};\n'.format(self.value_type.GenProto(), self.name, index), index + 1
+            + GenIndent(indent) + 'required {} {} = {} [ default = {}];\n'.format(self.value_type.GenProto(), self.name, index, self.value_type.GenProtoDefault()), index + 1
 
     def MarshalPB(self, key_index, binary_stream):
         if not ExportToServer(self.export_mask):

@@ -190,10 +190,13 @@ def GetExportMask(content):
 
     return export_mask
 
-                    
+
+global IsServerBuild
 
 class Sheet:
     def __init__(self):
+        global IsServerBuild
+        IsServerBuild = False
         self.config_name = ""
         self.file_full_path = ""
 
@@ -446,20 +449,32 @@ class Sheet:
         return self.root_struct.GenCSharp(0)
 
     def GenProto(self):
-        return self.root_struct.GenMessage()
+        global IsServerBuild
+        IsServerBuild = True
+        content = self.root_struct.GenMessage()
+        IsServerBuild = False
+        return content
     
     def MarshalPB(self, binary_stream, region):
+        global IsServerBuild
+        IsServerBuild = True
         ParsingEnv.SetCurCSVData(self.full_csv_datas)
         for i in range(self.data_row_num):
-            data_row = self.data_rows[i]
+            data_row = list(self.data_rows[i]) # 深拷贝对象,防止串数据
             real_row_number = self.real_row_number[i]
+            for index in range(len(data_row)):
+                if "float" in str(self.third_line[index]):
+                    # raise Exception("\nfloat 类型不能用于服务器打表上面,将 Excel 的 CS 中的S 去除,或者换成int格式\n")
+                    data_row[index] = str(float(data_row[index])/4294967296)
+                    # print(index, self.third_line[index], data_row[index])
             self.root_struct.Parse(data_row, real_row_number, region)
             bs = io.BytesIO()
             self.root_struct.MarshalMessage(bs)
-            key_encoding(binary_stream, 1, 2) #message的wire type是2， index永远是1
+            key_encoding(binary_stream, 1, 2)  # message的wire type是2， index永远是1
             buffer = bs.getbuffer()
             varint_encoding(binary_stream, len(buffer))
             binary_stream.write(buffer)
+        IsServerBuild = False
 
     #产生二进制数据
     def Marshal(self, byte_file_writer, region):

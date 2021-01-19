@@ -1,7 +1,10 @@
 from .Env import StringMgr, ParsingEnv
 from .PB_Wire import *
+from . import Sheet as She
 from Misc.Util import *
+import struct
 import re
+
 
 gDecimalPartner = re.compile("^\d+\.\d+$")
 
@@ -231,11 +234,28 @@ class Int64(Number):
 
 class Float(Number):
     def __init__(self):
-        Number.__init__(self, True, 8)
+        if She.IsServerBuild:
+            Number.__init__(self, True, 4)
+        else:
+            Number.__init__(self, True, 8)
+
+    def Parse(self, string):
+        if len(string) == 0:
+            self.value = 0
+            return
+        if She.IsServerBuild:
+            self.value = float(string)
+        else:
+            if '.' in string:
+                string = string.split('.')[0]
+            self.value = int(string)
 
     @staticmethod
     def GetSize():
-        return 8
+        if She.IsServerBuild:
+            return 4
+        else:
+            return 8
 
     @staticmethod
     def GenLua():
@@ -258,10 +278,23 @@ class Float(Number):
         return "0"
 
     def MarshalPB(self, key_index, binary_stream):
-        key_encoding(binary_stream, key_index, 0)
-        varint_encoding(binary_stream, TransferInt(self.value, 64))
+        if She.IsServerBuild:
+            key_value = key_index << 3 | 0
+            key_value = key_value + 5
+            binary_stream.write(key_value.to_bytes(1, byteorder='big', signed=False))
+            bs = struct.pack("f", self.value)
+            binary_stream.write(bytes((bs[0], bs[1], bs[2], bs[3])))
+        else:
+            key_encoding(binary_stream, key_index, 0)
+            varint_encoding(binary_stream, TransferInt(self.value, 64))
 
-
+    def Marshal(self, binary_stream):
+        if She.IsServerBuild:
+            bs = struct.pack("f", self.value)
+            binary_stream.write(bytes((bs[0], bs[1], bs[2], bs[3])))
+        else:
+            binary_stream.write(self.value.to_bytes(self.size, byteorder="big", signed=self.signed))
+        return self.size
 
 class Bool(ValueObj):
     def __init__(self):

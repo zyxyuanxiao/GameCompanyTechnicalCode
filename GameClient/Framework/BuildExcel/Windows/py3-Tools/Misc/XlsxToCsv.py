@@ -20,6 +20,7 @@ import codecs
 import sys
 import re
 from Misc.Util import *
+from tkinter import messagebox
 
 EXCEL_PATH = os.getcwd() + "/DataConfig/"
 
@@ -49,9 +50,13 @@ def xlsx_to_csv(excelPath, csvPath):
         # 如果sheet名是汉字开头不转化成csv
         if is_contains_chinese(sheet.name):
             continue
-        # 如果当前的 Excel 表中的数据为空,或者前 6 行没有数据,前 2 列没有数据,则不能进行转表
-        if sheet.nrows < 6 or sheet.ncols < 2:
+        # 如果当前的 Excel 表中的数据为空,或者前 6 行没有数据
+        if sheet.nrows < 6:
             continue
+        # 第一行如果是 c,并且只有 1 列,则不能打表.也就是客户端只有 1 列 key 值,没有数据
+        if sheet.ncols == 1 and str(sheet.cell_value(0, 0)) == "C":
+            continue
+
         csvFileName = csvPath + "/" + sheet.name + ".csv"
         with codecs.open(csvFileName, 'w', encoding='UTF-8-sig') as csvFile:
             write = csv.writer(csvFile)
@@ -79,6 +84,10 @@ def xlsx_to_csv(excelPath, csvPath):
                             result = value.match(col)
                             if col.endswith(".0") and result:
                                 col = col.replace(".0", "")
+
+                        # if ('\n' in str(col) or '\r' in str(col)) and (row_num+1 != 5) and (sheet.name=="DirtyConf"):
+                        #     messagebox.showerror(sheet.name,
+                        #              "如果修复不好,请找程序处理:\n" + "打表:{}  失败!, 错误为: {} 第{}行,第{}列\n".format(sheet.name, "有换行符",row_num+1, col_num+1))
 
                         data.append(col)
                     except IndexError:

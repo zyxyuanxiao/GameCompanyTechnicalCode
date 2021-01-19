@@ -39,11 +39,11 @@ class BuildConfig:
 
     def Build(self):
         if self.isBuildAll:
-            path = os.path.dirname(os.getcwd()) + "/Assets/GameLogic/Lua/ExcelConfig/excel_config.lua"
+            path = os.path.dirname(os.getcwd()) + "/Assets/lua/protobuf_conf_parser/config.lua"
             with open(path, "w+", encoding="utf8") as lua_file:
                 pass
             path = os.path.dirname(
-                os.getcwd()) + "/Assets/BuildAssets/Binary/ExcelConfig/gdata_bytes_list.bytes"
+                os.getcwd()) + "/Assets/Extensions/Protobuf/protobuf_config/pbconf_res/gdata_bytes_list.bytes"
             with open(path, 'w+') as bytes_list_file:
                 pass
 
@@ -84,19 +84,33 @@ class BuildConfig:
         sheet = Sheet.Sheet()
         sheet.Init(config_name, full_path)
         # print(self.CSharpLuaFlag, config_name, full_path)
-        for flag in self.CSharpLuaFlag:
-            if flag == "Lua":
-                self.__Build_lua(sheet)
-            if flag == "CSharp":
-                self.__Build_cs(sheet)
 
-        # 不管怎样,打 lua或者 打 cs 都会打二进制文件
-        self.__Build_Client_Binary(sheet)
-        # 不管怎样,都会打这个gdata_bytes_list
-        self.__Build_GenBytesList(sheet)
+        #有服务器使用的数据
+        strLine = str(sheet.first_line)
+
+        #有客户端使用的数据
+        if "C" in strLine:
+            for flag in self.CSharpLuaFlag:
+                if flag == "Lua":
+                    self.__Build_lua(sheet)
+                if flag == "CSharp":
+                    self.__Build_cs(sheet)
+
+            # 不管怎样,打 lua或者 打 cs 都会打二进制文件
+            self.__Build_Client_Binary(sheet)
+            # 不管怎样,都会打这个gdata_bytes_list
+            self.__Build_GenBytesList(sheet)
+
+        if "S" in strLine:
+            # 不管怎样,都会打服务器的proto文件
+            self.__Build_Server_Proto(sheet)
+            # 不管怎样,都会打服务器的二进制文件
+            self.__Build_Server_Bin(sheet)
+
+
 
     def __Build_cs(self, sheet):
-        path = os.path.dirname(os.getcwd()) + "/Assets/ThirdPartyLibraries/ExcelConfig/DataConfig/"
+        path = os.path.dirname(os.getcwd()) + "/Assets/Extensions/Protobuf/protobuf_config/ProtoGen/"
         file_path = path + sheet.config_name.lower() + ".cs"
         # 如果不存在则创建
         if not os.path.exists(file_path):
@@ -116,7 +130,7 @@ class BuildConfig:
                     raise
 
     def __Build_lua(self, sheet):
-        path = os.path.dirname(os.getcwd()) + "/Assets/GameLogic/Lua/ExcelConfig/excel_config.lua"
+        path = os.path.dirname(os.getcwd()) + "/Assets/lua/protobuf_conf_parser/config.lua"
         with open(path, "r+", encoding="utf8") as lua_file:
             delimiter = "---------" + sheet.config_name.lower() + "---------"
             allContent = lua_file.read()
@@ -137,7 +151,7 @@ class BuildConfig:
                 lua_file.write(delimiter + "\n" + "\n")
 
     def __Build_Client_Binary(self, sheet):
-        path = os.path.dirname(os.getcwd()) + "/Assets/BuildAssets/Binary/ExcelConfig/"
+        path = os.path.dirname(os.getcwd()) + "/Assets/Extensions/Protobuf/protobuf_config/pbconf_res/"
         file_path = path + 'dataconfig_{}.bytes'.format(sheet.config_name.lower())
         with open(file_path, 'wb+', ) as bin_file:
             try:
@@ -149,7 +163,7 @@ class BuildConfig:
 
     def __Build_GenBytesList(self, sheet):
         path = os.path.dirname(
-            os.getcwd()) + "/Assets/BuildAssets/Binary/ExcelConfig/gdata_bytes_list.bytes"
+            os.getcwd()) + "/Assets/Extensions/Protobuf/protobuf_config/pbconf_res/gdata_bytes_list.bytes"
         name = 'dataconfig_{}.bytes'.format(sheet.config_name.lower())
         with open(path, 'r+') as bytes_list_file:
             str_bytes = bytes_list_file.read()
@@ -160,3 +174,25 @@ class BuildConfig:
                 bytes_list_file.seek(0)
                 bytes_list_file.truncate()
                 bytes_list_file.write(str_bytes)
+
+    # 打服务器的proto文件
+    def __Build_Server_Proto(self, sheet):
+        path = os.path.dirname(os.getcwd()) + "/BuildDataConfig/Data/Server/server_proto/"
+        file_path = path + 'dataconfig_{}.proto'.format(sheet.config_name.lower())
+        with open(file_path, 'w+', encoding='utf-8') as proto_file:
+            proto_file.write(sheet.GenProto())
+
+    # 打服务器的二进制文件
+    def __Build_Server_Bin(self, sheet):
+        path = os.path.dirname(os.getcwd()) + "/BuildDataConfig/Data/Server/server_bytes/" + self.region + "/"
+        bin_file_path = path + 'dataconfig_{}.bytes'.format(sheet.config_name.lower())
+        with open(bin_file_path, 'wb+', ) as bin_file:
+            try:
+                sheet.MarshalPB(bin_file, self.region)
+            except:
+                bin_file.close()
+                os.remove(bin_file_path)
+                raise
+
+
+
