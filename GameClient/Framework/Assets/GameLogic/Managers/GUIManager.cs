@@ -4,6 +4,7 @@ using UnityEngine;
 
 public sealed class GUIManager : IManager
 {
+    public long InstanceId { get; set; }
     public GameObject UIRoot { get; private set; }
     public void Awake()
     {

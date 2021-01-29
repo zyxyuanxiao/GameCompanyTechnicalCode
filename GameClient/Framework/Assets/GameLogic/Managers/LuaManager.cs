@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// 不再使用 LuaSocket,后面会将 ToLua src runtime中的 luasocket 也会逐渐删除
 /// </summary>
-public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
+public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate,ICommandFirstReceiver
 {
     private LuaState luaState;
     
@@ -16,7 +16,8 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
     private LuaBeatEvent LateUpdateEvent { get; set; }
 
     private LuaBeatEvent FixedUpdateEvent { get; set; }
-    
+    public long InstanceId { get; set; }
+
     public void Awake()
     {
         
@@ -24,26 +25,7 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
 
     public void Start()
     {
-        //初始化 LuaState
-        luaState = new LuaState();
-        //打开初始化库
-        AddLibs();
-        //设置空栈
-        luaState.LuaSetTop(0);
-        //绑定 C# 对象
-        LuaBinder.Bind(luaState);
-        //注册 C# 代理
-        DelegateFactory.Init();   
-        //注册 C# 协程
-        LuaCoroutine.Register(luaState, GameManager.Instance);        
-        //启动 Lua
-        luaState.Start();
-        //给 Lua 添加 Update 方法
-        AddLuaUpdate();
-        //Call Lua Function
-        AddCallMainLua();
-        //场景重新加载的时候,刷新一下数据
-        SceneManager.sceneLoaded += UpdateOnSceneLoaded;
+        
     }
 
     public void OnDestroy()
@@ -62,6 +44,7 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
 
     public void FixedUpdate()
     {
+        if (FixedUpdateEvent == null)return;
         if (luaState.LuaFixedUpdate(Time.fixedDeltaTime) != 0)
         {
             AddThrowException();
@@ -71,6 +54,7 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
 
     public void Update()
     {
+        if (UpdateEvent == null)return;
         if (luaState.LuaUpdate(Time.deltaTime, Time.unscaledDeltaTime) != 0)
         {
             AddThrowException();
@@ -84,6 +68,7 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
     
     public void LateUpdate()
     {
+        if (LateUpdateEvent == null)return;
         if (luaState.LuaLateUpdate() != 0)
         {
             AddThrowException();
@@ -131,7 +116,6 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
         mainLuaFunction = null;
     }
     
-    
     //错误输出
     private void AddThrowException()
     {
@@ -151,6 +135,32 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
         return GameManager.QueryManager<LuaManager>().luaState;
     }
 
+    
+    public void ReceiverCommand(ICommandFirstLevel command)
+    {
+        if (!(command is StartLuaCommand)) return;
+        //初始化 LuaState
+        luaState = new LuaState();
+        //打开初始化库
+        AddLibs();
+        //设置空栈
+        luaState.LuaSetTop(0);
+        //绑定 C# 对象
+        LuaBinder.Bind(luaState);
+        //注册 C# 代理
+        DelegateFactory.Init();   
+        //注册 C# 协程
+        LuaCoroutine.Register(luaState, GameManager.Instance);        
+        //启动 Lua
+        luaState.Start();
+        //给 Lua 添加 Update 方法
+        AddLuaUpdate();
+        //场景重新加载的时候,刷新一下数据
+        SceneManager.sceneLoaded += UpdateOnSceneLoaded;
+        //Call Lua Function
+        AddCallMainLua();
+    }
+    
     #region Open Lua cjson
 
     

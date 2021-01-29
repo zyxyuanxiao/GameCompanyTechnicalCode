@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Common;
 using UnityEngine;
 
 /// <summary>
@@ -13,21 +14,29 @@ public abstract class BaseManager : MonoBehaviour
 {
     //严格控制这个地方的内存大小与性能
     private static Dictionary<Type,IManager>_managers = new Dictionary<Type,IManager>();//方便并且性能需求不高
-    private static IFixedUpdate[] _fixedUpdate = new IFixedUpdate[1]; //性能需求高,并且清楚知道有多少个 IFixedUpdate
-    private static IUpdate[] _update = new IUpdate[3]; //性能需求高,并且清楚知道有多少个 IUpdate
+    private static IFixedUpdate[] _fixedUpdate = new IFixedUpdate[2]; //性能需求高,并且清楚知道有多少个 IFixedUpdate
+    private static IUpdate[] _update = new IUpdate[4]; //性能需求高,并且清楚知道有多少个 IUpdate
     private static ILateUpdate[] _lateUpdate = new ILateUpdate[1]; //性能需求高,并且清楚知道有多少个 ILateUpdate
+    private static ICommandFirstReceiver[] _commandReceiver = new ICommandFirstReceiver[3]; //性能需求高,并且清楚知道有多少个 ICommandFirstReceiver
 
     //一帧,协程中使用
     public static WaitForEndOfFrame OneFrame = new WaitForEndOfFrame();
     
+    //私有身份证 ID,如果没有就是黑户
+    public long InstanceId { get; private set; }
+    
     #region 生命周期
 
     protected virtual void Awake()
-    {
+    { 
+        //生成个人 id
+        this.InstanceId = IdGenerater.GenerateId();
+
+
         //当前线程的地区设置为美国，避免因为切换不同地区，数字，日期时间，字符串匹配的结果不一样
         System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
         this.AddInitManager();
-        foreach (var item in _managers.Values)
+        foreach (IManager item in _managers.Values)
         {
             item.Awake();
         }
@@ -36,7 +45,7 @@ public abstract class BaseManager : MonoBehaviour
 
     protected virtual void Start()
     {
-        foreach (var item in _managers.Values)
+        foreach (IManager item in _managers.Values)
         {
             item.Start();
         }
@@ -59,7 +68,7 @@ public abstract class BaseManager : MonoBehaviour
 
     protected virtual void OnDestroy()
     {
-        foreach (var item in _managers.Values)
+        foreach (IManager item in _managers.Values)
         {
             item.OnDestroy();
         }
@@ -86,13 +95,14 @@ public abstract class BaseManager : MonoBehaviour
         int index_F = 0;
         int index_U = 0;
         int index_L = 0;
+        int index_C = 0;
         foreach (Type type in assembly.GetTypes())
         {
             if (type.IsClass && typeof(IManager).IsAssignableFrom(type))
             {
                 //创建实例,并添加到管理者集合中
                 IManager manager = Activator.CreateInstance(type) as IManager;
-                //manager.ID = IdGenerater.GenerateId();
+                manager.InstanceId = IdGenerater.GenerateId();
                 _managers.Add(type,manager);
                 if (typeof(IFixedUpdate).IsAssignableFrom(type))
                 {
@@ -108,6 +118,11 @@ public abstract class BaseManager : MonoBehaviour
                 {
                     _lateUpdate[index_L]=manager as ILateUpdate;
                     index_L++;
+                }
+                if (typeof(ICommandFirstReceiver).IsAssignableFrom(type))
+                {
+                    _commandReceiver[index_C]= manager as ICommandFirstReceiver;
+                    index_C++;
                 }
             }
         }
@@ -125,5 +140,10 @@ public abstract class BaseManager : MonoBehaviour
             return (T)manager;
         }
         return default;
+    }
+
+    public static ICommandFirstReceiver[] QueryCommandReceiver()
+    {
+        return _commandReceiver;
     }
 }

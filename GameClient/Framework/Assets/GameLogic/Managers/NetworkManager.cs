@@ -1,8 +1,9 @@
 ﻿using Network;
 
-public sealed class NetworkManager : IManager
+public sealed class NetworkManager : IManager, IUpdate
 {
     private Network.Network network;
+    public long InstanceId { get; set; }
 
 
     public void Awake()

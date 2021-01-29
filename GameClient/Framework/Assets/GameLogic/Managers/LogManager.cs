@@ -5,6 +5,7 @@ public sealed class LogManager : IManager
 {
     private float LastTime = 0;
     private static int LastGCCount = 0;
+    public long InstanceId { get; set; }
     public void Awake()
     {
         

@@ -1,5 +1,6 @@
 ﻿public sealed class DataManager : IManager
 {
+    public long InstanceId { get; set; }
     public void Awake()
     {
 

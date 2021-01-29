@@ -14,8 +14,10 @@ using DLCAssets;
 ///    下载一个包,将版本配置文件,信息检查文件更新一次,防止网络直接被杀死,所有数据要从头开始下载的情况.不支持下载大文件的断点下载
 /// 4. 解压压缩包到本地,再次将所有的文件信息输出到一个文件内,等待下次使用.如果期间出现了
 /// </summary>
-public sealed class HotUpdateManager : IManager
+public sealed class HotUpdateManager : IManager ,ICommandFirstReceiver
 {
+    public long InstanceId { get; set; }
+
     private static List<IBusiness> huBusiness = new List<IBusiness>()
     {
         new ReadConfig(),
@@ -31,14 +33,7 @@ public sealed class HotUpdateManager : IManager
     
     public void Start()
     {
-        if (ConfigManager.GameConfig.StartHotUpdate)
-        {
-            GameManager.QueryManager<ProcessManager>().AddExecute(TaskProcessLayer.HotUpdate, hotUpdateEnd);
-        }
-        else
-        {
-            hotUpdateEnd();
-        }
+
     }
 
     public void OnDestroy()
@@ -47,6 +42,20 @@ public sealed class HotUpdateManager : IManager
         huBusiness = null;
     }
     
+    
+    public void ReceiverCommand(ICommandFirstLevel command)
+    {
+        if (!(command is HotUpdateCommand)) return;
+        if (ConfigManager.GameConfig.StartHotUpdate)
+        {
+            //开始执行热更
+            GameManager.QueryManager<ProcessManager>().AddExecute(TaskProcessLayer.HotUpdate, hotUpdateEnd);
+        }
+        else
+        {
+            hotUpdateEnd();
+        }
+    }
     
     public static IBusiness QueryBusiness(int index)
     {
@@ -57,5 +66,6 @@ public sealed class HotUpdateManager : IManager
     private void hotUpdateEnd()
     {
         Debug.Log("<color=green>热更流程结束</color>");
+        GameManager.QueryManager<CommandManager>().AddCommand(new StartLuaCommand());
     }
 }

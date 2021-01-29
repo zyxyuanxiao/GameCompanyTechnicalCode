@@ -6,6 +6,16 @@ using SM = UnityEngine.SceneManagement.SceneManager;
 /// <summary>
 /// 唯一游戏启动,退出,生命周期的管理器
 /// </summary>
+///
+/**
+ * 分级概念,中央集权,热插拔模式设计
+ *      一级管理者:皇帝      GameManager  永生
+ *      二级管理者:中央官员   各类型的 Managers,由 GameManager 控制其生命周期
+ *      三级业务员:各地官员   第三方库,大型模块,具体固定的模块,必要玩法,必须实现的模块
+ *      四级协作员:村长      具体模块,小型模块组成大型模块(易推翻,模块)
+ *      五级办事人:公民      具体小模块的实现人员(随时被推翻)
+ * 上级严格控制下级的生命周期,不能越级控制.
+ */
 public sealed class GameManager : BaseManager
 {
     #region 静态变量
@@ -25,7 +35,8 @@ public sealed class GameManager : BaseManager
     protected override void Start()
     {
         base.Start();
-        //其他服务启动完毕之后,开始启动整个游戏的流程,需要流程管理者进行第一步游戏加载,启动一个全局协程
+        //其他服务启动完毕之后,开始启动整个游戏的流程
+        GameManager.QueryManager<CommandManager>().AddCommand(new InitSceneCommand());
     }
 
     protected override void FixedUpdate()
@@ -68,8 +79,8 @@ public sealed class GameManager : BaseManager
 
     #region 初始化运行逻辑
     
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void InitializeOnBeforeSceneLoad()
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
+    private static void Main()
     {
 #if UNITY_EDITOR
         Debug.Log("<color=green>Game start</color>");

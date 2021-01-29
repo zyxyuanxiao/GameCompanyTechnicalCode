@@ -1,5 +1,6 @@
 ﻿public sealed class SkillManager : IManager
 {
+    public long InstanceId { get; set; }
     public void Awake()
     {
 

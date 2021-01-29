@@ -1,5 +1,6 @@
 ﻿public sealed class AudioManager : IManager
 {
+    public long InstanceId { get; set; }
     public void Awake()
     {
 

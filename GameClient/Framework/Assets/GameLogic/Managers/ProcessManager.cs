@@ -10,6 +10,7 @@ using UnityEngine;
 /// </summary>
 public partial class ProcessManager : IManager, IUpdate
 {
+    public long InstanceId { get; set; }
     public void Awake()
     {
         //初始化流程任务,次流程只限于在启动 APP 的时候初始化使用,启动游戏-结束/重启游戏之间只会启动一次

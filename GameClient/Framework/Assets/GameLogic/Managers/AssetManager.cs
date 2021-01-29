@@ -8,6 +8,7 @@ using UnityEngine;
 /// </summary>
 public sealed class AssetManager : IManager
 {
+    public long InstanceId { get; set; }
     public void Awake()
     {
         AssetsNotification.AssetsMessageReceived += AssetsMessageReceived;
@@ -21,11 +22,6 @@ public sealed class AssetManager : IManager
     public void OnDestroy()
     {
         AssetsNotification.AssetsMessageReceived -= AssetsMessageReceived;
-    }
-
-    public void Update()
-    {
-
     }
 
 

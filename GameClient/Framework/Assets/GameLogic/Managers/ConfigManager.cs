@@ -6,7 +6,8 @@ using Common;
 public sealed class ConfigManager  : IManager
 {
     public static GameConfig GameConfig;
-    
+    public long InstanceId { get; set; }
+
     public void Awake()
     {
         ConfigManager.GameConfig = Resources.Load<GameConfig>("Configs/GameConfig");

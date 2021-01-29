@@ -1,5 +1,6 @@
 ﻿public sealed class VideoManager : IManager
 {
+    public long InstanceId { get; set; }
     public void Awake()
     {
 

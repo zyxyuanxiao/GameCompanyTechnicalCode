@@ -1,5 +1,7 @@
 ﻿public sealed class AnimateManager : IManager
 {
+    public long InstanceId { get; set; }
+    
     public void Awake()
     {
 
@@ -17,6 +19,7 @@
 
     public void Update()
     {
-
+        
     }
+
 }
