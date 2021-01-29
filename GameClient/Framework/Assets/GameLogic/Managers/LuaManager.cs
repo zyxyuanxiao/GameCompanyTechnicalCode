@@ -165,5 +165,25 @@ public sealed class LuaManager : IManager, IUpdate,IFixedUpdate,ILateUpdate
         luaState.LuaSetField(-2, "cjson.safe");                               
     }
     
+    //socket,这个地方使用 tcp,可以用来搞纯业务代码
+    private void OpenSocket()
+    {
+        luaState.BeginPreLoad();
+        luaState.RegFunction("socket.core", LuaOpen_Socket_Core);
+        luaState.RegFunction("mime.core", LuaOpen_Mime_Core);                
+        luaState.EndPreLoad();                     
+    }
+    
+    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+    private static int LuaOpen_Socket_Core(IntPtr L)
+    {        
+        return LuaDLL.luaopen_socket_core(L);
+    }
+
+    [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+    private static int LuaOpen_Mime_Core(IntPtr L)
+    {
+        return LuaDLL.luaopen_mime_core(L);
+    }
     #endregion
 }
